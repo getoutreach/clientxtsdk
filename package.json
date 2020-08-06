@@ -1,0 +1,32 @@
+{
+  "name": "@outreach/client-addon-sdk",
+  "license": "MIT",
+  "version": "0.0.10",
+  "private": true,
+  "contributors": [
+    "Martin Sevcik <martin.sevcik@outreach.io>",
+    "Nikola Malovic <nikola.malovicy@outreach.io>"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "npx webpack --mode=development --watch=true",
+    "build": "npx webpack --mode=production",
+    "deploy": "npm run build && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getoutreach/client-ext-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getoutreach/client-ext-sdk/issues"
+  },
+  "homepage": "https://github.com/getoutreach/client-ext-sdk#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  }
+}

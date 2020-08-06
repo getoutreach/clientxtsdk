@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "lib": ["es5", "es6", "dom"],
+      "module": "commonjs",
+      "outDir": "dist",
+      "sourceMap": true,
+      "declaration": true,
+      "strictNullChecks": true,
+      "noImplicitAny": true,
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "noImplicitUseStrict": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true
+       
+    },
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  }
