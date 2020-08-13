@@ -18,6 +18,7 @@ jobs:
             root: ~/artifacts
             paths: .
   deploy:
+    <<: *defaults
     steps:
         - attach_workspace:
             at: ~/artifacts
