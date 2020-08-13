@@ -18,7 +18,8 @@ jobs:
             root: ~/artifacts
             paths: .
   deploy:
-    <<: *defaults
+    docker:
+        - image: circleci/node:latest
     steps:
         - attach_workspace:
             at: ~/artifacts
