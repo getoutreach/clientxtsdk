@@ -21,6 +21,4 @@ jobs:
             command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
         - run:
             name: Publish package
-            command: npm publish
-        - store_artifacts:
-            path: ~/repo
+            command: npm publish --access=restricted
