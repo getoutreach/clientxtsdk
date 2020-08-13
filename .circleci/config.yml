@@ -18,7 +18,7 @@ jobs:
             command: yarn build
         - run:
             name: Assocciate scope with registry
-            command: npm config set @outreach:registry //registry.npmjs.org
+            command: npm config set @outreach:registry https://registry.npmjs.org
         - run:
             name: Authenticate with registry
             command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
