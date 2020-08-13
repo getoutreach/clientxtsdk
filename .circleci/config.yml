@@ -5,6 +5,9 @@ jobs:
         - image: circleci/node:latest
     steps:
         - checkout
+        - restore_cache:
+            keys:
+            - v1-dependencies-{{ checksum "package.json" }}.
         - run:
             name: Installing package dependencies
             command: yarn install --frozen-lockfile
@@ -14,5 +17,20 @@ jobs:
         - run:
             name: Building SDK
             command: yarn build
-        - store_artifacts:
-            path: ~/artifacts
+        - save_cache:
+            paths:
+                - node_modules
+            key: v1-dependencies-{{ checksum "package.json" }}
+        - persist_to_workspace:
+            root: ~/artifacts
+            paths: .
+  deploy:
+    steps:
+        - attach_workspace:
+            at: ~/artifacts
+        - run:
+            name: Authenticate with registry
+            command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+        - run:
+            name: Publish package
+            command: npm publish
