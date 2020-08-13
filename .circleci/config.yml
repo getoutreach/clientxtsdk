@@ -1,20 +1,12 @@
 version: 2.1
 
-defaults: $defaults 
-  working_directory: ~/dist
-  docker: 
-    - image: circleci/node:latest 
-
 jobs:
   build:
-    <<: *defaults
+    working_directory: ~/dist
+    docker:
+        - image: circleci/node:latest
     steps:
         - checkout
-        - restore_cache:
-            keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
         - run:
             name: Installing package dependencies
             command: yarn install --frozen-lockfile
@@ -24,22 +16,11 @@ jobs:
         - run:
             name: Building SDK
             command: yarn build
-        - save_cache:
-            paths:
-                - node_modules
-            key: v1-dependencies-{{ checksum "package.json" }}
-      
-        - persist_to_workspace:
-            root: ~/dist
-            paths: .
-  deploy:
-    <<: *defaults
-    steps:
-        - attach_workspace:
-            at: ~/dist
         - run:
             name: Authenticate with registry
             command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
         - run:
             name: Publish package
             command: npm publish
+        - store_artifacts:
+            path: ~/dist
