@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ~/dist
+    working_directory: ~/repo
     docker:
         - image: circleci/node:latest
     steps:
@@ -23,4 +23,4 @@ jobs:
             name: Publish package
             command: npm publish
         - store_artifacts:
-            path: ~/dist
+            path: ~/repo
