@@ -18,7 +18,7 @@ jobs:
             command: yarn build
         - run:
             name: Authenticate with registry
-            command: echo "//registry.npmjs.org/:_authToken=$_TOKEN" > ~/repo/.npmrc
+            command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
         - run:
             name: Debug
             command: cat ~/repo/.npmrc
