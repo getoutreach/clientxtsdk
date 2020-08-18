@@ -1,8 +1,8 @@
 {
     "name": "@outreach/client-addon-sdk",
     "license": "MIT",
-    "version": "0.0.10",
-    "private": true,
+    "version": "0.0.12",
+    "private": false,
     "contributors": [
       "Martin Sevcik <martin.sevcik@outreach.io>",
       "Nikola Malovic <nikola.malovicy@outreach.io>"

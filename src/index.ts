@@ -71,8 +71,7 @@ export class AddonsSdk {
         // tslint:disable-next-line: no-console
         console.log('[XT]::ready - origin: *', postMessage)
       }
-      // NOTE: nimal, 8/6/2020 - We will know the host origin only after init message so we send to everyone.
-      //                         Should this be hardcoded to outreach prod value?
+
       window.parent.postMessage(postMessage, '*')
     }
 

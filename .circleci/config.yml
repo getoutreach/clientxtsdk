@@ -1,6 +1,8 @@
 version: 2.1
+
 jobs:
   build:
+    working_directory: ~/repo
     docker:
         - image: circleci/node:latest
     steps:
@@ -14,5 +16,12 @@ jobs:
         - run:
             name: Building SDK
             command: yarn build
-        - store_artifacts:
-            path: ~/artifacts
+        - run:
+            name: Authenticate with registry
+            command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+        - run:
+            name: Publish package
+            command: npm publish --access=restricted
+
+
+            
