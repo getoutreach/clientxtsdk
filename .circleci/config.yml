@@ -17,11 +17,8 @@ jobs:
             name: Building SDK
             command: yarn build
         - run:
-            name: Assocciate scope with registry
-            command: echo "@outreach:registry=https://registry.npmjs.org/"> ~/repo/.npmrc
-        - run:
             name: Authenticate with registry
-            command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+            command: echo "@outreach:registry=https://registry.npmjs.org/ \n //registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
         - run:
             name: Debug
             command: cat ~/repo/.npmrc
