@@ -16,7 +16,7 @@ jobs:
         - run:
             name: Building SDK
             command: yarn build
-å        - run:
+        - run:
             name: Assocciate scope with registry
             command: echo "@outreach:registry=https://registry.npmjs.org/"> ~/repo/.npmrc
         - run:
