@@ -16,10 +16,7 @@ jobs:
         - run:
             name: Building SDK
             command: yarn build
-        - run:
-            name: Assocciate scope with registry
-            command: npm adduser --registry=https://registry.npmjs.com --scope=@outreach
-        - run:
+å        - run:
             name: Assocciate scope with registry
             command: echo "@outreach:registry=https://registry.npmjs.org/"> ~/repo/.npmrc
         - run:
