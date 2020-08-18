@@ -20,9 +20,6 @@ jobs:
             name: Authenticate with registry
             command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
         - run:
-            name: Debug
-            command: cat ~/repo/.npmrc
-        - run:
             name: Publish package
             command: npm publish --access=restricted
 
