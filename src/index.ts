@@ -181,8 +181,7 @@ declare global {
 }
 
 // exposing sdk as  a global variable
-const w = window as any
-w.outreach = w.outreach || {}
-w.outreach.addonSdk = w.vivani.addonSdk || new AddonsSdk()
+window.outreach = window.outreach || {}
+window.outreach.addonSdk = window.outreach.addonSdk || new AddonsSdk()
 
-export default w.vivani.ext
+export default window.outreach.addonSdk
