@@ -182,6 +182,6 @@ declare global {
 
 // exposing sdk as  a global variable
 window.outreach = window.outreach || {}
-window.outreach.addonSdk = window.outreach.addonSdk || new AddonsSdk()
+window.outreach.addonSdk = new AddonsSdk()
 
 export default window.outreach.addonSdk
