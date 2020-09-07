@@ -181,4 +181,6 @@ declare global {
 window.outreach = window.outreach || {}
 window.outreach.addonSdk = new AddonsSdk()
 
+console.log('xxx', window.outreach.addonSdk)
+
 export default window.outreach.addonSdk
