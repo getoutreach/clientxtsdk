@@ -12,7 +12,7 @@ export enum LogLevel {
     Errors = 9
 }
 
-export class AddonsSdk {
+export default class AddonsSdk {
     private origin?: string;
 
     public logging: LogLevel = window.outreach.log || LogLevel.Errors;
@@ -180,8 +180,3 @@ declare global {
     }
 }
 
-// exposing sdk as  a global variable
-window.outreach = window.outreach || {}
-window.outreach.addonSdk = new AddonsSdk()
-
-export default window.outreach.addonSdk
