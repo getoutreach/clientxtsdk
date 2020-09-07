@@ -12,7 +12,7 @@ export enum LogLevel {
     Errors = 9
 }
 
-export class AddonsSdk {
+class AddonsSdk {
     private origin?: string;
 
     public logging: LogLevel = window.outreach.log || LogLevel.Errors;
@@ -54,9 +54,6 @@ export class AddonsSdk {
         console.log('[XT]::ctor - observing messages: *', postMessage)
       }
       window.addEventListener('message', this.handleReceivedMessage)
-
-      // send to host signal that addon is ready
-      this.ready()
     }
 
     /**
@@ -182,6 +179,6 @@ declare global {
 
 // exposing sdk as  a global variable
 window.outreach = window.outreach || {}
-window.outreach.addonSdk = window.outreach.addonSdk || new AddonsSdk()
+window.outreach.addonSdk = new AddonsSdk()
 
 export default window.outreach.addonSdk
