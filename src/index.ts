@@ -3,6 +3,9 @@ import { AddonMessage, AddonMessageType, InitMessage } from './messages'
 // eslint-disable-next-line no-unused-vars
 import { Context } from './context'
 
+export * from './context'
+export * from './messages'
+
 export enum LogLevel {
     // eslint-disable-next-line no-unused-vars
     Trace = 1,
@@ -180,7 +183,5 @@ declare global {
 // exposing sdk as  a global variable
 window.outreach = window.outreach || {}
 window.outreach.addonSdk = new AddonsSdk()
-
-console.log('xxx', window.outreach.addonSdk)
 
 export default window.outreach.addonSdk
