@@ -54,9 +54,6 @@ class AddonsSdk {
         console.log('[XT]::ctor - observing messages: *', postMessage)
       }
       window.addEventListener('message', this.handleReceivedMessage)
-
-      // send to host signal that addon is ready
-      this.ready()
     }
 
     /**
