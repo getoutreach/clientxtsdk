@@ -89,7 +89,7 @@ Here is the sample manifest file of the hello world addon
     ],
     "description": [
         "en": "This is a sample addon created as a guide for Outreach addon creators ",
-        "en": "Il s’agit d’un addon échantillon créé comme 
+        "fr": "Il s’agit d’un addon échantillon créé comme
                un guide pour les créateurs addon Outreach",
     ],
     "host": {
@@ -179,7 +179,7 @@ In this section, the addon author defines a list of predefined context informati
 initialization process.
 It is a string array of predefined Outreach properties describing attributes of the Outreach user loading the addon.
 
-e.g. ["opportunity.id", "account.id"]
+_e.g. ["opportunity.id", "account.id"]_
 
 Outreach User will be asked to consent with sharing this information with the addon on the addon's first use.  If the future version of the manifest addon creator will add additional contextual fields, the Outreach user will consent again.
 
@@ -347,7 +347,7 @@ In order to do that, the addon host has to respond to the original request, with
 
 As described in [manifest host.auth endpoint](#auth-endpoint) section, if addon wants to support Outreach API access it has to implement additional endpoint which will support refresh token flow. The purpose of this endpoint is to be used as API endpoint which will return only a new token info if possible without any content etc.
 
-Wehen called, this endpoint will be called with a UID query parameter containing a unique user id value (same one as used in [caching the tokens](#caching-the-tokens) section) and endpoint implementation has to check if it has previously cached tokens for that given user id.
+When called, this endpoint will be called with a UID query parameter containing a unique user id value (same one as used in [caching the tokens](#caching-the-tokens) section) and endpoint implementation has to check if it has previously cached tokens for that given user id.
 
 If there is a cached **access token** and it still didn't expire, the addon host should just return back the 200 OK result with payload containing token and expirationAt values.
 
@@ -378,7 +378,9 @@ Response
 }
 ```
 
-Once this is received, the addon host should [cache the tokens](#caching-the-tokens) and then just return back the 200 OK result with payload containing token and expirationAt values.
+Once this is received, the addon host should [cache the tokens](#caching-the-tokens) and then just return back the **200 (OK)** result with payload containing token and expirationAt values.
+
+In case addon host is not having any cached token information and thus it can not obtain access token, it will return **404 (NOT FOUND)** status code.
 
 # Add-on SDK
 
