@@ -11,20 +11,21 @@ In case you have any questions/comments/concerns about the extensibility, please
   - [How it works](#how-it-works)
   - [How to create an addon](#how-to-create-an-addon)
 - [Manifest file](#manifest-file)
-    - [Basic manifest properties](#basic-manifest-properties)
-      - [identifier](#identifier)
-      - [type](#type)
-      - [title](#title)
-      - [description](#description)
-      - [host](#host)
-        - [type (host)](#type-host)
-        - [url](#url)
-        - [icon](#icon)
-      - [author](#author)
-    - [Integration manifest properties](#integration-manifest-properties)
-      - [context](#context)
-      - [scopes](#scopes)
-    - [Uploading the manifest](#uploading-the-manifest)
+  - [Basic manifest properties](#basic-manifest-properties)
+    - [identifier](#identifier)
+    - [type](#type)
+    - [title](#title)
+    - [description](#description)
+    - [host](#host)
+      - [type (host)](#type-host)
+      - [url](#url)
+      - [auth endpoint](#auth-endpoint)
+      - [icon](#icon)
+    - [author](#author)
+  - [Integration manifest properties](#integration-manifest-properties)
+    - [context](#context)
+    - [scopes](#scopes)
+  - [Uploading the manifest](#uploading-the-manifest)
 - [Addon host](#addon-host)
   - [Query parameters](#query-parameters)
     - [404 (NOT FOUND)](#404-not-found)
@@ -36,10 +37,10 @@ In case you have any questions/comments/concerns about the extensibility, please
     - [Initial authentication flow](#initial-authentication-flow)
       - [User consent](#user-consent)
       - [Authorization code handling](#authorization-code-handling)
-      - [Caching the refresh token](#caching-the-refresh-token)
+      - [Caching the tokens](#caching-the-tokens)
       - [Passing back access token to addon](#passing-back-access-token-to-addon)
     - [Refresh token flow](#refresh-token-flow)
-- [Addon SDK](#addon-sdk)
+- [Add-on SDK](#add-on-sdk)
   - [Addon initialization](#addon-initialization)
     - [Init event handler](#init-event-handler)
     - [Info event handler (optional)](#info-event-handler-optional)
@@ -47,6 +48,10 @@ In case you have any questions/comments/concerns about the extensibility, please
   - [Additional addon functions](#additional-addon-functions)
     - [Notify function](#notify-function)
     - [Decorate function](#decorate-function)
+  - [Add-on authentication](#add-on-authentication)
+    - [Auth temp cookie creation](#auth-temp-cookie-creation)
+    - [Caching access token](#caching-access-token)
+    - [Obtaining an access token](#obtaining-an-access-token)
 
 ## How it works
 
@@ -69,7 +74,7 @@ The process of creating addon usually requires the next steps:
 # Manifest file
 
 Manifest is a simple JSON file that the addon developer uploads to Outreach and which contains all of the data needed for Outreach to host addon in an iframe.
- 
+
 Here is the sample manifest file of the hello world addon
 
 ```json
@@ -90,6 +95,7 @@ Here is the sample manifest file of the hello world addon
     "host": {
         "type": "tab-opportunity",
         "url": "https://addon-host.com/hello-world",
+        "auth": "https://addon-host.com/token",
         "icon": "https://addon-host.com/icon.png"
     },
     "context":  [ "user.id", "opportunity.id", "prospect.customField12" ],
@@ -102,13 +108,13 @@ Here is the sample manifest file of the hello world addon
 }
 ```
 
-### Basic manifest properties
+## Basic manifest properties
 
-#### identifier
+### identifier
 
 Unique identifier of the addon as defined by the addon creator
 
-#### type
+### type
 
 Type of addon:
 
@@ -124,17 +130,17 @@ Type of addon:
   
   The addon is going to be available only to a developer who uploaded the manifest.
 
-#### title
+### title
 
 The localized addon title is shown in the addon store and Outreach app as a tab tile.
 
-#### description
+### description
 
-A localized addon description is shown in the addon store to explain what addon does and why someone would want to install it.
+A localized addon description is shown in the addon store to explain what the addon does and why someone would want to install it.
 
-#### host
+### host
 
-##### type (host)
+#### type (host)
 
 Outreach application supports different types of addons which can be loaded in different parts of the application.
 Type property defines what the type of addon is and where it should be loaded.
@@ -147,21 +153,27 @@ Supported addon types (we will expand this list as the time goes):
 - tab-opportunity
 - tab-prospect
 
-##### url
+#### url
 
 Address where the addon hosting web page is hosted.
 
-##### icon
+#### auth endpoint
+
+Address of the endpoint, which will return support [refresh token flow](#refresh-token-flow). 
+
+*In case addon doesn't need to access Outreach API, this section can be omitted.*
+
+#### icon
 
 base64 string represents the icon to be shown in the addon store and (if possible) in Outreach client.
 
-#### author
+### author
 
 This section contains information to be presented to a user of the addon in the marketplace and on the consent screen: addon creator name, website URL, privacy policy document URL, and terms of use document URL.
 
-### Integration manifest properties
+## Integration manifest properties
 
-#### context
+### context
 
 In this section, the addon author defines a list of predefined context information that addon needs from Outreach to be sent during the 
 initialization process.
@@ -177,7 +189,7 @@ Here is the list of currently supported context information (we will add more):
 - **user**: id, name, custom1 ... custom5
 - **opportunity**: id, custom1...custom100,
 
-#### scopes
+### scopes
 
 (If the addon creator needs no API access, this section can be omitted.)
 
@@ -191,7 +203,7 @@ This list of scopes defined in the manifest will be reviewed during the addon ap
 
 Scopes are period-separated strings containing two parts: the first part is a pluralized resource name (e.g., prospects); the second part is a token — read, write, delete, or all — that describes the level of access permitted. For example, the scopes prospects.read and prospects.all would both grant access to read prospects, while only the latter would permit write and delete access. Scopes are not additive; the prospects.write scope does not grant read access."
 
-### Uploading the manifest
+## Uploading the manifest
 
 Once the manifest file is created, it has to be uploaded to Outreach so it can be tested and optimized in the Outreach app.
 
@@ -210,7 +222,7 @@ There are two major integration features addon host has to support:
 - Query parameters parsing
 - Authentication support
 
-## Query parameters 
+## Query parameters
 
 Any time when the Outreach app loads an addon, it will fetch it from the URL created out of:
 
@@ -227,16 +239,18 @@ That's how the resulting URL which Outreach will set as a source of iframe will 
 On the addon hosting side, when the addon loading request comes, the addon has to parse out of request query parameter values and return some of the possible responses.
 
 ### 404 (NOT FOUND)
-In case the addon determines that, with a received set of parameters, there is nothing to be shown, it will return **404 (NOT FOUND)** response and the Outreach app will not load the addon in that case.
+
+In case the addon determines that, with a received set of parameters, there is nothing to be shown, it will return **404 (NOT FOUND)** response, and the Outreach app will not load the addon in that case.
 
 ### 302 (FOUND)
-In case the request URL has a **"code"** query parameter value, the addon host goes through the initial auth flow of obtaining access token and, as a result, will send a 302 status code as described in "Addon host initial OAuth flow."  
 
-In case the addon host has cached refresh token for a given uid it will go through the auth flow of refreshing access token and, as a result, will send a 302 status code as described in "Addon host OAuth flow."
+In case the request URL has a **"code"** query parameter value, the addon host goes through the initial auth flow of obtaining access token and, as a result, will send a 302 status code as described in [Passing back access token](#passing-back-access-token-to-addon) section.
+
+In case the addon host has cached refresh token for a given uid, it will go through the [refresh token flow](#refresh-token-flow) and, as a result, in the end, it will send a same 302 status code as described in [Passing back access token](#passing-back-access-token-to-addon) section.
 
 ### 200 (OK)
-In case when none of the 302 and 404 and cases are eligible, the addon host uses the received values initialize the addon in a proper state and return it back as **200 (OK)** response with the addon page content.
 
+In case when none of the 302 and 404 and cases are eligible, the addon host uses the received values initialize the addon in a proper state and return it back as **200 (OK)** response with the addon page content.
 
 ## Authentication
 
@@ -244,10 +258,11 @@ If an addon needs to make an impersonalized call to Outreach API  in the context
 
 **How it works?**
 
-All [Outreach API](https://api.outreach.io/api/v2/docs#authentication) requests must be authenticated with a token in the request’s HTTP Authorization header. 
+All [Outreach API](https://api.outreach.io/api/v2/docs#authentication) requests must be authenticated with a token in the request's HTTP Authorization header.
 To enable obtaining of that token, Outreach API supports OAuth flow where the Outreach user needs to consent for giving API access rights with the scopes defined in the addon manifest. Once a user consent to that, a short-lived authorization token will be sent to the addon host, which then uses it with its app secret and the key to obtaining the user access token, which then can be used to access Outreach API in the context of a user who granted those rights.
 
 There are a few things addon host needs to implement for supporting the authentication scenario:
+
 - [Define manifest scopes](#manifest-scopes)
 - [Setup Outreach OAuth application](#setup-outreach-oauth-application)
 - [Initial authentication flow](#initial-authentication-flow)
@@ -259,25 +274,28 @@ In order for the addon to be OAuth enabled, it needs to have a list of required 
 
 ### Setup Outreach OAuth application
 
-You will need to create a dedicated Outreach OAuth application for your addon, and to achieve that, please contact platform@outreach.io for assistance.
+You will need to create a dedicated Outreach OAuth application for your addon and to achieve that, please contact platform@outreach.io for assistance.
 With that addon OAuth application created, you will have:
+
 - application identifier
 - application secret
-- redirect URI 
+- redirect URI
 
 The redirect URI has to be the same as the addon host URL defined in the manifest.
 
 ### Initial authentication flow
 
-#### User consent 
-On a first load of the addon, addon sdk will invoke [addonSdk.authenticate()](#authentication), and the Outreach user will be shown an OAuth screen where he will be asked to approve access with requested scopes.
+#### User consent
 
-[INSERT OAUTH SCREEN HERE] 
+On a first load of the addon, addon sdk will invoke [addonSdk.authenticate()](#addon-sdk), and the Outreach user will be shown an OAuth screen where he will be asked to approve access with requested scopes.
+
+[INSERT OAUTH SCREEN HERE]
 
 Once a user consents on this screen, the result will be a request made to 
 REDIRECT_URI address with a single additional parameter "code" containing short-lived authorization token. 
 
 #### Authorization code handling
+
 As described in [Outreach API documentation](https://api.outreach.io/api/v2/docs#authentication), the addon host has to use authorization code with application id and the secret to obtaining a token.
 
 Request
@@ -305,11 +323,11 @@ The response will contain all the data needed for accessing the token.
 }
 ```
 
-#### Caching the refresh token
+#### Caching the tokens
 
-Now when the addon host has obtained this data, it needs to store somewhere refresh token of this user, so later, when the user will load addon again, it could generate a new access token without forcing the user to go through [user consenting ](#user-consent) phase.
+Now when the addon host has obtained this data, it needs to store somewhere access and refresh tokens of this user, so later, when the user loads addon again, it could generate a new access token without forcing the user to go through [user consent](#user-consent) phase.
 
-In order to implement that caching, the addon host has to read a value stored in a request cookie "cxt-uid" which contains a unique identifier of a user and store received refresh token linked to that user id.
+In order to implement that caching, the addon host has to read a value stored in a request ["cxt-temp" auth cookie](#auth-temp-cookie), which contains a unique identifier of a user and cache received access and refresh tokens linked to that user id.
 
 #### Passing back access token to addon
 
@@ -325,28 +343,51 @@ In order to do that, the addon host has to respond to the original request, with
 - ACCESS_TOKEN - it is the value of the access token retrieved from the Outreach API
 - EXPIRES_AT - it is the value of expiration of the access token retrieved from Outreach API
 
-When addon loads with the access token in params, addon sdk will store it locally and invoke the addonSdk.onAuthenticate event handler with the token info.
-
-```javascript
-addonSdk.authenticate()
-    .then( (e: AuthInfo) => {
-    // e.success, e.token, e.expiresAt
-  } )
-```
-
 ### Refresh token flow
 
-First time when the addon invokes the authenticate() function, 
+As described in [manifest host.auth endpoint](#auth-endpoint) section, if addon wants to support Outreach API access it has to implement additional endpoint which will support refresh token flow. The purpose of this endpoint is to be used as API endpoint which will return only a new token info if possible without any content etc.
 
+Wehen called, this endpoint will be called with a UID query parameter containing a unique user id value (same one as used in [caching the tokens](#caching-the-tokens) section) and endpoint implementation has to check if it has previously cached tokens for that given user id.
 
+If there is a cached **access token** and it still didn't expire, the addon host should just return back the 200 OK result with payload containing token and expirationAt values.
 
-# Addon SDK
+If there is a cached **refresh token**, it will use that refresh token to obtain a new version of the application token as described in [Outreach API documentation](https://api.outreach.io/api/v2/docs#authentication)
+
+Request (with a refresh token, application id, and secret)
+
+```http
+curl https://api.outreach.io/oauth/token
+  -X POST
+  -d client_id=<Application_Identifier>
+  -d client_secret=<Application_Secret>
+  -d redirect_uri=<Application_Redirect_URI>
+  -d grant_type=refresh_token
+  -d refresh_token=<Refresh_Token>
+```
+
+Response
+
+```json
+{
+  "access_token": <Access_Token>,
+  "token_type": "bearer",
+  "expires_in": 7200,
+  "refresh_token": <Refresh_Token>,
+  "scope": <Scope1+Scope2+Scope3>,
+  "created_at": 1503308300
+}
+```
+
+Once this is received, the addon host should [cache the tokens](#caching-the-tokens) and then just return back the 200 OK result with payload containing token and expirationAt values.
+
+# Add-on SDK
 
 The outreach host is using iframes to load addons due to security and performance reasons. Once an addon is loaded, the Outreach host communicates with it using POST messages. 
 
-Outreach client extensibility SDK is created as a thin wrapper around this communication, so the addon creator doesn't need to think about how this is implemented, but in case you would prefer your own integration library, that is totally ok too.
+Outreach client extensibility SDK is created as a thin wrapper around this communication, so the addon creator doesn't need to think about how this is implemented, but in case you would prefer your own integration library, that is totally OK too.
 
-The code from this repository is packaged into an NPM package, which can be found here. 
+The code from this repository is packaged into an NPM package, which can be found here.
+
 ```http
 https://www.npmjs.com/package/@outreach/client-addon-sdk
 ```
@@ -392,7 +433,7 @@ None| Debug  | Info | Warn | Error.
 addonSdk.logLevel = LogLevel.Debug;
 ```
 
-### Ready function 
+### Ready function
 
 Once all the handlers are defined, and as soon as possible, addon sends a message to the host that it is ready for initialization by directly calling the ready method.
 
@@ -404,7 +445,7 @@ This will result in an iframe post message being sent to the host informing the 
 
 ## Additional addon functions
 
-Addon sdk has a few additional functions allowing to addon to request a certain action to be performed by a host. Using these functions is optional, and it is ok if the addon creator decides not to use them.
+Add-on sdk has a few additional functions allowing to addon to request a certain action to be performed by a host. Using these functions is optional, and it is OK if the addon creator decides not to use them.
 
 ### Notify function
 
@@ -423,3 +464,37 @@ In case when an addon would like to update its decoration of the addon entry poi
 ```javascript
 addonSdk.decorate({text:’Messages (2)’);
 ```
+
+## Add-on authentication
+
+In order to support addons needing Outreach API access, addon SDK implements a few supporting features.
+
+### Auth temp cookie creation
+
+Every time when addon starts, it will read the uid query parameter and store it in a cookie called "ctx-temp", so the addon host can later read it when it is [caching the retrieved tokens](#caching-the-tokens).
+
+*This is happening automatically without the need for any coding from the addon creator.*
+
+### Caching access token
+
+Every time when addon starts, it will also check for token and expiresAt parameters (as defined in [passing back](#pass)), and if the URL contains them, it will take those values and cache them locally in browser local storage and use them from there as long the token doesn't expire. 
+
+*This is happening automatically without the need for any coding from the addon creator.*
+
+### Obtaining an access token
+
+Every time when addon creator wants to call Outreach API, it needs a valid access token, and to obtain it, addon SDK defines the getToken method.
+
+```javascript
+    addonSdk.getToken = (skipCache?: bool) => Promise<string> {
+        ...
+    }
+```
+
+If there is a **token in local storage** and the token didn't expire, the function just returns that token immediately.
+
+If no valid access token in local cache, addon sdk will try to **refresh access token** by calling the [refresh token endpoint](#refresh-token-flow), cache it, and return it.
+
+If the token refresh call will will fail to **obtain a new access token**, addon sdk will ask the Outreach host to start the authentication process, so the user will see the Outreach API OAuth consent screen, and the flow will go as described in [initial auth flow](#initial-authentication-flow) section. At the end of this initial auth flow, the addon will load again, but this time it will have a locally cached access token, and getToken() will this time resolve with a valid access token.
+
+_if **skipCache** parameter is passed with true value, locally cached value will be ignored and new access token will be retrieved from server through refreshing or outreach user consrent flows._
