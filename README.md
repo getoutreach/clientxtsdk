@@ -9,7 +9,8 @@ In case you have any questions/comments/concerns about the extensibility, please
 - [Outreach client extensibility SDK](#outreach-client-extensibility-sdk)
   - [What is in this document?](#what-is-in-this-document)
   - [How it works](#how-it-works)
-  - [How to create an addon](#how-to-create-an-addon)
+  - [How much coding is there?](#how-much-coding-is-there)
+  - [How the development process looks like?](#how-the-development-process-looks-like)
 - [Manifest file](#manifest-file)
   - [Basic manifest properties](#basic-manifest-properties)
     - [identifier](#identifier)
@@ -61,7 +62,17 @@ When Outreach user goes to a specific part of the Outreach application (e.g., op
 - an iframe will be added with the source pointing to a page where the addon is hosted
 - Outreach application will send the current user contextual information to the addon so that the addon can initialize itself into a proper state.
 
-## How to create an addon
+##  How much coding is there?
+
+Every addon needs to have a web server that will serve the web page surfacing addon functionality to Outreach users - **no coding needed**. 
+
+Most of the addons will choose to be able to initialize the addon on loading to the desired state for a given Outreach user, and to achieve that, the addon creator will have to simply **parse URL query parameter values on the addon host side**.
+
+Some of the addons will choose to be able to send and receive messages from the Outreach app, and in other to do that, the addon creator would have to integrate the Outreach SDK package by doing **a few lines of javascript code on the addon client side**.
+
+Some of the addons will need access to Outreach API, and in order for that, addon creator will need to **upgrade their addon host code** to support the Outreach API authentication. This is the only non-trivial part for coding, but it is still not rocket science, so, with this document and our support, addon creator should be able to implement this in a few hours.
+
+## How the development process looks like?
 
 The process of creating addon usually requires the next steps:
 
