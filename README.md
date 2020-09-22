@@ -66,11 +66,11 @@ When Outreach user goes to a specific part of the Outreach application (e.g., op
 
 Every addon needs to have a web server that will serve the web page surfacing addon functionality to Outreach users - **no coding needed**. 
 
-Most of the addons will choose to be able to initialize the addon on loading to the desired state for a given Outreach user, and to achieve that, the addon creator will have to simply **parse URL query parameter values on the addon host side**.
+Most of the addons will choose to be able to initialize the addon on loading to the desired state for a given Outreach user, and to achieve that, the addon creator will have to simply **parse URL query parameter values on the addon host side** - an hour of work.
 
-Some of the addons will choose to be able to send and receive messages from the Outreach app, and in other to do that, the addon creator would have to integrate the Outreach SDK package by doing **a few lines of javascript code on the addon client side**.
+Some of the addons will choose to be able to send and receive messages from the Outreach app, and in other to do that, the addon creator would have to integrate the Outreach SDK package by doing **a few lines of javascript code on the addon client side** - a few hours of work.
 
-Some of the addons will need access to Outreach API, and in order for that, addon creator will need to **upgrade their addon host code** to support the Outreach API authentication. This is the only non-trivial part for coding, but it is still not rocket science, so, with this document and our support, addon creator should be able to implement this in a few hours.
+Some of the addons will need access to Outreach API, and in order for that, addon creator will need to **upgrade their addon host code** to support the Outreach API authentication. This is the only non-trivial part for coding, but it is still not rocket science, so, with this document and our support, addon creator should be able to implement this in a day.
 
 ## How the development process looks like?
 
