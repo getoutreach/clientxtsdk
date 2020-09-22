@@ -9,8 +9,8 @@ In case you have any questions/comments/concerns about the extensibility, please
 - [Outreach client extensibility SDK](#outreach-client-extensibility-sdk)
   - [What is in this document?](#what-is-in-this-document)
   - [How it works](#how-it-works)
-  - [How much coding is there?](#how-much-coding-is-there)
   - [How the development process looks like?](#how-the-development-process-looks-like)
+  - [How much coding is needed?](#how-much-coding-is-needed)
 - [Manifest file](#manifest-file)
   - [Basic manifest properties](#basic-manifest-properties)
     - [identifier](#identifier)
@@ -62,16 +62,6 @@ When Outreach user goes to a specific part of the Outreach application (e.g., op
 - an iframe will be added with the source pointing to a page where the addon is hosted
 - Outreach application will send the current user contextual information to the addon so that the addon can initialize itself into a proper state.
 
-##  How much coding is there?
-
-Every addon needs to have a web server that will serve the web page surfacing addon functionality to Outreach users - **no coding needed**. 
-
-Most of the addons will choose to be able to initialize the addon on loading to the desired state for a given Outreach user, and to achieve that, the addon creator will have to simply **parse URL query parameter values on the addon host side** - an hour of work.
-
-Some of the addons will choose to be able to send and receive messages from the Outreach app, and in other to do that, the addon creator would have to integrate the Outreach SDK package by doing **a few lines of javascript code on the addon client side** - a few hours of work.
-
-Some of the addons will need access to Outreach API, and in order for that, addon creator will need to **upgrade their addon host code** to support the Outreach API authentication. This is the only non-trivial part for coding, but it is still not rocket science, so, with this document and our support, addon creator should be able to implement this in a day.
-
 ## How the development process looks like?
 
 The process of creating addon usually requires the next steps:
@@ -81,6 +71,22 @@ The process of creating addon usually requires the next steps:
 - The manifest file gets [uploaded to the Outreach](#uploading-the-manifest), and the addon is visible only to a developer for dev/testing
 - The developer [integrates the addon](#addon-integration)  with the Outreach client extensibility framework
 - Once tested and approved, the developer makes the addon visible in the store to other Outreach users.
+- 
+##  How much coding is needed?
+
+Every addon needs to have a web server that will serve the same web page surfacing addon functionality to Outreach users - **no coding needed** just to [create a manifest](#manifest-file). 
+
+_Examples of such addon could be stateless addons (think: currency exchange calculator addon) or addons which will rely on its own ways to recognize the user (e.g., rely on the addon cookie saved from the previous attempt)_
+
+Most of the addons will likely want to be initialized to the desired state for a given Outreach user, and to achieve that, the addon creator will have to simply **parse URL query parameter values on the addon host side** - probably an hour of work.
+
+_An example of this will be an addon, which wants to initialize itself only once during the loading and from that moment, it works independently of the Outreach app._
+
+Some of the addons will choose to be able to send and receive messages from the Outreach app, and in other to do that, the addon creator would have to integrate the Outreach SDK package by doing **a few lines of javascript code on the addon client-side** - probably a few hours of work.
+
+_An example of this will be an addon which wants to show an information toast to the Outreach user or an addon which will want to know when Outreach application context changes (e.g., user switched to another prospect)._
+
+Some of the addons will need access to Outreach API, and in order for that, addon creator will need to **upgrade their addon host code** to support the Outreach API authentication. This is the only non-trivial part for coding, but it is still not rocket science, so, with this document and our support, addon creator should probably be able to implement this in a day.
 
 # Manifest file
 
@@ -298,7 +304,7 @@ The redirect URI has to be the same as the addon host URL defined in the manifes
 
 #### User consent
 
-On a first load of the addon, addon sdk will invoke [addonSdk.authenticate()](#addon-sdk), and the Outreach user will be shown an OAuth screen where he will be asked to approve access with requested scopes.
+On a first load of the addon when addon sdk will invoke [addonSdk.getToken()](#obtaining-an-access-token), and the Outreach user will be shown an OAuth screen where he will be asked to approve access with requested scopes.
 
 [INSERT OAUTH SCREEN HERE]
 
