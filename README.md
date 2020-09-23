@@ -20,11 +20,12 @@ In case you have any questions/comments/concerns about the extensibility, please
     - [host](#host)
       - [type (host)](#type-host)
       - [url](#url)
-      - [auth endpoint](#auth-endpoint)
       - [icon](#icon)
     - [author](#author)
   - [Integration manifest properties](#integration-manifest-properties)
     - [context](#context)
+  - [api](#api)
+    - [token endpoint](#token-endpoint)
     - [scopes](#scopes)
   - [Uploading the manifest](#uploading-the-manifest)
 - [Addon host](#addon-host)
@@ -112,11 +113,13 @@ Here is the sample manifest file of the hello world addon
     "host": {
         "type": "tab-opportunity",
         "url": "https://addon-host.com/hello-world",
-        "auth": "https://addon-host.com/token",
         "icon": "https://addon-host.com/icon.png"
     },
+    "api": {
+      "token": "https://addon-host.com/token",
+      "scopes": "prospects.read, opportunity.read" ,
+    }
     "context":  [ "user.id", "opportunity.id", "prospect.customField12" ],
-    "scopes": "prospects.read, opportunity.read" ,
     "author": {
         "websiteUrl": "https://addon-host.com",
         "privacyUrl": "https://addon-host.com/privacy",
@@ -174,11 +177,6 @@ Supported addon types (we will expand this list as the time goes):
 
 Address where the addon hosting web page is hosted.
 
-#### auth endpoint
-
-Address of the endpoint, which will return support [refresh token flow](#refresh-token-flow). 
-
-*In case addon doesn't need to access Outreach API, this section can be omitted.*
 
 #### icon
 
@@ -206,6 +204,14 @@ Here is the list of currently supported context information (we will add more):
 - **user**: id, name, custom1 ... custom5
 - **opportunity**: id, custom1...custom100,
 
+## api
+
+### token endpoint
+
+Address of the endpoint, which will return support [refresh token flow](#refresh-token-flow). 
+
+*In case addon doesn't need to access Outreach API, this section can be omitted.*
+
 ### scopes
 
 (If the addon creator needs no API access, this section can be omitted.)
@@ -225,8 +231,7 @@ Scopes are period-separated strings containing two parts: the first part is a pl
 Once the manifest file is created, it has to be uploaded to Outreach so it can be tested and optimized in the Outreach app.
 
 At the moment, there are two ways you can upload the manifest:
-emailing it support email cxt-sdk@outreach.io
-using the Outreach API to POST manifest file
+emailing it support email cxt-sdk@outreach.io or by using the Outreach API to POST manifest file.
 
 _In the near future, we will have a section in the Outreach application where you would be able to upload it using the application UI._
 
