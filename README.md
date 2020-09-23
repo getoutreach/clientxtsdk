@@ -24,7 +24,7 @@ In case you have any questions/comments/concerns about the extensibility, please
     - [author](#author)
   - [Integration manifest properties](#integration-manifest-properties)
     - [context](#context)
-  - [api](#api)
+  - [api (optional)](#api-optional)
     - [token endpoint](#token-endpoint)
     - [scopes](#scopes)
   - [Uploading the manifest](#uploading-the-manifest)
@@ -204,7 +204,9 @@ Here is the list of currently supported context information (we will add more):
 - **user**: id, name, custom1 ... custom5
 - **opportunity**: id, custom1...custom100,
 
-## api
+## api (optional)
+
+This section is optional - if addon doesn't need access to outreach API, this section can be omitted.
 
 ### token endpoint
 
