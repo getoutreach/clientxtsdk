@@ -133,13 +133,7 @@ class AddonsSdk {
         // do nothing - ignore the noise
         return
       }
-      
-      this.onInfo({
-        level: LogLevel.Trace,
-        message: '[CXT]::handleReceivedMessage',
-        context: [ messageEvent ]
-      })
-
+     
 
       if (this.origin && messageEvent.origin !== this.origin) {
         
@@ -171,6 +165,12 @@ class AddonsSdk {
 
         return
       }
+
+      this.onInfo({
+        level: LogLevel.Trace,
+        message: '[CXT]::handleReceivedMessage',
+        context: [ messageEvent ]
+      })
 
       switch (hostMessage.type) {
         case AddonMessageType.INIT: {
