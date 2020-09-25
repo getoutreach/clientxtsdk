@@ -1,27 +1,51 @@
 // eslint-disable-next-line no-unused-vars
-import { AddonMessage, AddonMessageType, InitMessage } from './messages'
+import { InitMessage } from "./messages/InitMessage";
+import { AddonMessage } from "./messages/AddonMessage";
+import { AddonMessageType } from "./messages/AddonMessageType";
 // eslint-disable-next-line no-unused-vars
-import { Context } from './context'
+import { OutreachContext } from './context/OutreachContext'
 
 export enum LogLevel {
     // eslint-disable-next-line no-unused-vars
-    Trace = 1,
+    Trace = 'trace',
     // eslint-disable-next-line no-unused-vars
-    Debug = 2,
+    Debug = 'debug',
     // eslint-disable-next-line no-unused-vars
-    Errors = 9
+    Info = 'info',
+    // eslint-disable-next-line no-unused-vars
+    Warning = 'warning',
+    // eslint-disable-next-line no-unused-vars
+    Error = 'error'
+}
+
+export class Event {
+  /**
+   * Message describing the event.
+   *
+   * @type {string}
+   * @memberof Event
+   */
+  message?: string;
+
+  /**
+   * Type of the event.
+   *
+   * @type {LogLevel}
+   * @memberof Event
+   */
+  level: LogLevel;
 }
 
 class AddonsSdk {
     private origin?: string;
 
-    public logging: LogLevel = window.outreach.log || LogLevel.Errors;
+    public logging: LogLevel = window.outreach.log || LogLevel.Error;
 
-    public onInit: (context: Context) => void;
+    public onInit: (context: OutreachContext) => void;
 
     public onMessage: (message: AddonMessage) => void;
 
-    public errorHandler: (message: string, ...optionalParams: any[]) => void;
+    public onInfo: (event: Event) => void;
 
     /**
      * Creates an instance of AddonsSdk.
@@ -29,29 +53,29 @@ class AddonsSdk {
      */
     constructor () {
       // define default handlers
-      this.onInit = (context: Context) => {
+      this.onInit = (context: OutreachContext) => {
         if (this.logging <= LogLevel.Trace) {
           // tslint:disable-next-line: no-console
-          console.log('[XT]::onInit-NOP', context)
+          console.log('[CXT]::onInit-NOP', context)
         }
       }
 
-      this.onMessage = (_message: AddonMessage) => {
+      this.onMessage = (message: AddonMessage) => {
         if (this.logging <= LogLevel.Trace) {
           // tslint:disable-next-line: no-console
-          console.log('[XT]::onMessage-NOP', _message)
+          console.log('[CXT]::onMessage-NOP', message)
         }
       }
 
-      this.errorHandler = (_message: string, ..._optionalParams: any[]) => {
+      this.onInfo = (event: Event) => {
         // tslint:disable-next-line: no-console
-        console.error(['[XT]::onError-NOP', _message, _optionalParams])
+        console.error('[CXT]::onInfo-NOP', event)
       }
 
       // subscribe to host messages
       if (this.logging <= LogLevel.Debug) {
         // tslint:disable-next-line: no-console
-        console.log('[XT]::ctor - observing messages: *', postMessage)
+        console.log('[CXT]::ctor - observing messages: *', postMessage)
       }
       window.addEventListener('message', this.handleReceivedMessage)
     }
@@ -66,7 +90,7 @@ class AddonsSdk {
       const postMessage = JSON.stringify(new AddonMessage(AddonMessageType.READY))
       if (this.logging <= LogLevel.Debug) {
         // tslint:disable-next-line: no-console
-        console.log('[XT]::ready - origin: *', postMessage)
+        console.log('[CXT]::ready - origin: *', postMessage)
       }
 
       window.parent.postMessage(postMessage, '*')
@@ -83,7 +107,10 @@ class AddonsSdk {
 
     public sendMessage<T extends AddonMessage> (message: T) {
       if (!this.origin) {
-        this.errorHandler('You can not send messages before SDK is initialized')
+        this.onInfo({
+          message: 'You can not send messages before SDK is initialized',
+          level: LogLevel.Error
+        })
         return
       }
 
@@ -91,7 +118,7 @@ class AddonsSdk {
 
       if (this.logging <= LogLevel.Debug) {
         // tslint:disable-next-line: no-console
-        console.warn('[XT][Index]::sendMessage', postMessage, this.origin)
+        console.warn('[CXT][Index]::sendMessage', postMessage, this.origin)
       }
 
       window.parent.postMessage(postMessage, this.origin)
@@ -100,13 +127,13 @@ class AddonsSdk {
     private handleReceivedMessage = (messageEvent: MessageEvent) => {
       if (this.logging <= LogLevel.Trace) {
         // tslint:disable-next-line: no-console
-        console.log('[XT][Index]::handleReceivedMessage', messageEvent)
+        console.log('[CXT][Index]::handleReceivedMessage', messageEvent)
       }
 
       if (!messageEvent || messageEvent.source === window || !messageEvent.data || !messageEvent.origin) {
         if (this.logging <= LogLevel.Trace) {
           // tslint:disable-next-line: no-console
-          console.error('[XT]::handleReceivedMessage-invalid source, data or origin', messageEvent)
+          console.error('[CXT]::handleReceivedMessage-invalid source, data or origin', messageEvent)
         }
         return
       }
@@ -114,7 +141,7 @@ class AddonsSdk {
       if (this.origin && messageEvent.origin !== this.origin) {
         if (this.logging <= LogLevel.Trace) {
           // tslint:disable-next-line: no-console
-          console.error('[XT]::handleReceivedMessage-invalid message origin', messageEvent)
+          console.error('[CXT]::handleReceivedMessage-invalid message origin', messageEvent)
         }
         return
       }
@@ -122,7 +149,7 @@ class AddonsSdk {
       if (typeof messageEvent.data !== 'string') {
         if (this.logging <= LogLevel.Trace) {
           // tslint:disable-next-line: no-console
-          console.error('[XT]::handleReceivedMessage - message event data is not a string', messageEvent.data)
+          console.error('[CXT]::handleReceivedMessage - message event data is not a string', messageEvent.data)
         }
         return
       }
@@ -131,7 +158,7 @@ class AddonsSdk {
       if (!hostMessage || !hostMessage.type) {
         if (this.logging <= LogLevel.Trace) {
           // tslint:disable-next-line: no-console
-          console.error('[XT]::handleReceivedMessage- invalid message data format', messageEvent)
+          console.error('[CXT]::handleReceivedMessage- invalid message data format', messageEvent)
         }
         return
       }
@@ -148,12 +175,18 @@ class AddonsSdk {
         case AddonMessageType.REQUEST_NOTIFY:
         case AddonMessageType.REQUEST_RELOAD:
           if (this.logging <= LogLevel.Debug) {
-            this.errorHandler('[XT]:onReceived - Client event received from host' + hostMessage.type)
+            this.onInfo({
+              message: '[CXT]:onReceived - Client event received from host' + hostMessage.type,
+              level: LogLevel.Debug
+            })
           }
           return
         default:
           if (this.logging <= LogLevel.Debug) {
-            this.errorHandler('[XT]:onReceived - Unknown host message of type:' + hostMessage.type)
+            this.onInfo({
+              message: '[CXT]:onReceived - Unknown host message of type:' + hostMessage.type,
+              level: LogLevel.Debug
+            })
           }
       }
     }
@@ -163,7 +196,7 @@ class AddonsSdk {
 
       if (this.logging <= LogLevel.Trace) {
         // tslint:disable-next-line: no-console
-        console.log('[XT][Index]::preprocessInitMessage-> origin', this.origin)
+        console.log('[CXT][Index]::preprocessInitMessage-> origin', this.origin)
       }
     }
 }
