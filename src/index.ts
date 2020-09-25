@@ -136,13 +136,7 @@ class AddonsSdk {
       })
 
       if (!messageEvent || messageEvent.source === window || !messageEvent.data || !messageEvent.origin) {
-        
-        this.onInfo({
-          level: LogLevel.Warning,
-          message: '[CXT]::handleReceivedMessage-invalid source, data or missing origin',
-          context: [ messageEvent ]
-        })
-
+        // do nothing - ignore the noise
         return
       }
 
