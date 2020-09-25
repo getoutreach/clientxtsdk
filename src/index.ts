@@ -129,16 +129,17 @@ class AddonsSdk {
 
     private handleReceivedMessage = (messageEvent: MessageEvent) => {
 
+      if (!messageEvent || messageEvent.source === window || !messageEvent.data || !messageEvent.origin) {
+        // do nothing - ignore the noise
+        return
+      }
+      
       this.onInfo({
         level: LogLevel.Trace,
         message: '[CXT]::handleReceivedMessage',
         context: [ messageEvent ]
       })
 
-      if (!messageEvent || messageEvent.source === window || !messageEvent.data || !messageEvent.origin) {
-        // do nothing - ignore the noise
-        return
-      }
 
       if (this.origin && messageEvent.origin !== this.origin) {
         
