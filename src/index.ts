@@ -4,6 +4,9 @@ import { AddonMessage } from "./messages/AddonMessage";
 import { AddonMessageType } from "./messages/AddonMessageType";
 // eslint-disable-next-line no-unused-vars
 import { OutreachContext } from './context/OutreachContext'
+import { NotificationType } from "./messages/NotificationType";
+import { NotificationMessage } from "./messages/NotificationMessage";
+import { DecorationMessage } from "./messages/DecorationMessage";
 
 export enum LogLevel {
     None = 0,
@@ -106,7 +109,46 @@ class AddonsSdk {
       this.sendMessage(new AddonMessage(AddonMessageType.REQUEST_RELOAD))
     }
 
-    public sendMessage<T extends AddonMessage> (message: T) {
+    /**
+     * Sends request to Outreach hosting app to notify Outreach user 
+     * about a certain even happening in addon.
+     *
+     * @memberof AddonsSdk
+     */
+    public notify = (text: string, type: NotificationType) => {
+
+      this.onInfo({
+        level: LogLevel.Info,
+        message: '[CXT]::notify',
+        context: [text, type]
+      })
+
+      const message = new NotificationMessage();
+      message.notificationText = text;
+      message.notificationType = type;
+      this.sendMessage(message, true);
+    }
+
+    /**
+     * Sends request to Outreach hosting app to notify Outreach user 
+     * about a certain even happening in addon.
+     *
+     * @memberof AddonsSdk
+     */
+    public decorate = (text: string) => {
+      
+      this.onInfo({
+        level: LogLevel.Info,
+        message: '[CXT]::decorate',
+        context: [text]
+      })      
+
+      const message = new DecorationMessage();
+      message.decorationText = text;
+      this.sendMessage(message, true);
+    }
+
+    public sendMessage<T extends AddonMessage> (message: T, logged?: boolean) {
       if (!this.origin) {
         this.onInfo({
           message: 'You can not send messages before SDK is initialized',
@@ -118,11 +160,13 @@ class AddonsSdk {
 
       const postMessage = JSON.stringify(message)
       
-      this.onInfo({
-        level: LogLevel.Debug,
-        message: '[CXT]::sendMessage',
-        context: [postMessage, this.origin]
-      })
+      if (!logged) {
+        this.onInfo({
+          level: LogLevel.Debug,
+          message: '[CXT]::sendMessage',
+          context: [message, this.origin]
+        })
+      }
 
       window.parent.postMessage(postMessage, this.origin)
     }
