@@ -1,17 +1,17 @@
+/* eslint-disable no-unused-vars */
+
 import { AddonMessage } from './AddonMessage';
 import { AddonMessageType } from './AddonMessageType';
 import { NotificationType } from './NotificationType';
 
-export class NotificationMessage extends AddonMessage  {
-    
-    /**
+export class NotificationMessage extends AddonMessage {
+  /**
      *Creates an instance of InitMessage.
      * @memberof InitMessage
      */
-    constructor() {
-        super(AddonMessageType.REQUEST_NOTIFY);
-        
-    }
+  constructor () {
+    super(AddonMessageType.REQUEST_NOTIFY);
+  }
 
     /**
      * Text of the notification to be shown to Outreach user
@@ -28,7 +28,4 @@ export class NotificationMessage extends AddonMessage  {
      * @memberof NotificationMessage
      */
     public notificationType: NotificationType;
-
 }
-
-

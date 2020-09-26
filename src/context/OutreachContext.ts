@@ -1,8 +1,6 @@
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable no-unused-vars */
 import { UserContext } from './UserContext'
-// eslint-disable-next-line no-unused-vars
 import { OpportunityContext } from './OpportunityContext'
-// eslint-disable-next-line no-unused-vars
 import { AccountContext } from './AccountContext'
 
 export interface OutreachContext {

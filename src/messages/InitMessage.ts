@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import { OutreachContext } from '../context/OutreachContext';
 import { AccountContext } from '../context/AccountContext';
 import { UserContext } from '../context/UserContext';
