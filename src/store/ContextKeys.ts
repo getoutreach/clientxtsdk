@@ -18,7 +18,7 @@ export declare type AccountContextKeys =
     'acc.loc' |
     'acc.name' |
     'acc.tags' |
-    'acc.csf1'  | 'acc.csf2'  | 'acc.csf3'  | 'acc.csf4'  | 'acc.csf5'  | 'acc.csf6'  | 'acc.csf7' | 'acc.csf8' | 'acc.csf9' |
+    'acc.csf1' | 'acc.csf2' | 'acc.csf3' | 'acc.csf4' | 'acc.csf5' | 'acc.csf6' | 'acc.csf7' | 'acc.csf8' | 'acc.csf9' |
     'acc.csf10' | 'acc.csf11' | 'acc.csf12' | 'acc.csf13' | 'acc.csf14' | 'acc.csf15' | 'acc.csf16' | 'acc.csf17' | 'acc.csf18' | 'acc.csf19' | 'acc.csf20' |
     'acc.csf20' | 'acc.csf21' | 'acc.csf22' | 'acc.csf23' | 'acc.csf24' | 'acc.csf25' | 'acc.csf26' | 'acc.csf27' | 'acc.csf28' | 'acc.csf29' | 'acc.csf20' |
     'acc.csf30' | 'acc.csf31' | 'acc.csf32' | 'acc.csf33' | 'acc.csf34' | 'acc.csf35' | 'acc.csf36' | 'acc.csf37' | 'acc.csf38' | 'acc.csf39' | 'acc.csf20' |
@@ -40,7 +40,7 @@ export declare type OpportunityContextKeys =
     'opp.oppType' |
     'opp.probability' |
     'opp.tags' |
-    'opp.csf1'  | 'opp.csf2'  | 'opp.csf3'  | 'opp.csf4'  | 'opp.csf5'  | 'opp.csf6'  | 'opp.csf7' | 'opp.csf8' | 'opp.csf9' |
+    'opp.csf1' | 'opp.csf2' | 'opp.csf3' | 'opp.csf4' | 'opp.csf5' | 'opp.csf6' | 'opp.csf7' | 'opp.csf8' | 'opp.csf9' |
     'opp.csf10' | 'opp.csf11' | 'opp.csf12' | 'opp.csf13' | 'opp.csf14' | 'opp.csf15' | 'opp.csf16' | 'opp.csf17' | 'opp.csf18' | 'opp.csf19' | 'opp.csf20' |
     'opp.csf20' | 'opp.csf21' | 'opp.csf22' | 'opp.csf23' | 'opp.csf24' | 'opp.csf25' | 'opp.csf26' | 'opp.csf27' | 'opp.csf28' | 'opp.csf29' | 'opp.csf20' |
     'opp.csf30' | 'opp.csf31' | 'opp.csf32' | 'opp.csf33' | 'opp.csf34' | 'opp.csf35' | 'opp.csf36' | 'opp.csf37' | 'opp.csf38' | 'opp.csf39' | 'opp.csf20' |

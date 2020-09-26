@@ -1,4 +1,5 @@
-export declare type AllScopes = AuditScopes  | AccountsScopes | CallDispositions |
+/* eslint-disable no-unused-vars */
+export declare type AllScopes = AuditScopes | AccountsScopes | CallDispositions |
                                 CallPurposes | Calls | CustomDuties | ContentCategories |
                                 ContentCategoryMemberships | Duties | EmailAddresses |
                                 Events | Favorites | MailAliases | Mailboxes | Mailings |
@@ -12,7 +13,7 @@ export enum AuditScopes {
     All = 'audits.all',
     Read = 'audits.read'
 };
-  
+
 export enum AccountsScopes {
     All = 'accounts.all',
     Read = 'accounts.read',
