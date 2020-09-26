@@ -316,16 +316,14 @@ class AddonsSdk {
           hostOrigin += `:${loc.port}`;
       }
 
-      if (hostOrigin.endsWith("outreach.io")) {
+      if (hostOrigin.endsWith("outreach.io") || 
+          loc.hostname === 'localhost') {
         return hostOrigin;
       } else {
         console.error("Invalid host origin:" + hostOrigin);
         return null;
       }
-
-      
   }
-
 }
 
 declare global {
