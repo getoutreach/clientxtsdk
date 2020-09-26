@@ -37,15 +37,22 @@ export class Event {
   /**
    * An array of contextual parameters describing the event state. 
    *
-   * @type {unknown[]}
+   * @type {string[]}
    * @memberof Event
    */
-  context: unknown[] = [];
+  context: string[] = [];
 }
 
 class AddonsSdk {
-    private origin?: string;
+    
+  private origin!: string;
 
+    public locale: string = "en";
+    
+    public theme: 'light' | 'dark' = 'light';
+
+    public userIdentifier?: string;
+    
     public logging: LogLevel = window.outreach.log || LogLevel.Error;
 
     public onInit: (context: OutreachContext) => void;
@@ -60,6 +67,12 @@ class AddonsSdk {
      */
     constructor () {
 
+      this.origin = this.getHostOrigin();
+
+      if (!this.origin) {
+        return;
+      }
+
       // default handlers impplementation
       this.onInfo = this.defaultHandleOnInfo;
 
@@ -67,7 +80,7 @@ class AddonsSdk {
         this.onInfo({
           level: LogLevel.Trace,
           message: '[CXT]::onInit (default)',
-          context: [ context ]
+          context: [ JSON.stringify(context) ]
         })
       }
 
@@ -75,7 +88,7 @@ class AddonsSdk {
         this.onInfo({
           level: LogLevel.Trace,
           message: '[CXT]::onMessage (default)',
-          context: [ message ]
+          context: [ JSON.stringify(message) ]
         })
       }
 
@@ -97,7 +110,7 @@ class AddonsSdk {
         context: [ postMessage ]
       })
 
-      window.parent.postMessage(postMessage, '*')
+      window.parent.postMessage(postMessage, this.origin)
     }
 
     /**
@@ -150,14 +163,9 @@ class AddonsSdk {
 
     public sendMessage<T extends AddonMessage> (message: T, logged?: boolean) {
       if (!this.origin) {
-        this.onInfo({
-          message: 'You can not send messages before SDK is initialized',
-          level: LogLevel.Error, 
-          context: [ message ]
-        })
+        console.error('You can not send messages before SDK is initialized', message);
         return
-      }
-
+      }      
       const postMessage = JSON.stringify(message)
       
       if (!logged) {
@@ -177,7 +185,6 @@ class AddonsSdk {
         // do nothing - ignore the noise
         return
       }
-     
 
       if (this.origin && messageEvent.origin !== this.origin) {
         
@@ -204,7 +211,7 @@ class AddonsSdk {
         this.onInfo({
           level: LogLevel.Error,
           message: '[CXT]::handleReceivedMessage- invalid message data format',
-          context: [  messageEvent ]
+          context: [  JSON.stringify(messageEvent) ]
         })
 
         return
@@ -213,7 +220,7 @@ class AddonsSdk {
       this.onInfo({
         level: LogLevel.Trace,
         message: '[CXT]::handleReceivedMessage',
-        context: [ messageEvent ]
+        context: [ JSON.stringify(messageEvent) ]
       })
 
       switch (hostMessage.type) {
@@ -230,25 +237,28 @@ class AddonsSdk {
           this.onInfo({
             message: '[CXT]:onReceived - Client event received from host',
             level: LogLevel.Error,
-            context: [ hostMessage ]
+            context: [ JSON.stringify(hostMessage) ]
           })
           return
         default:
           this.onInfo({
             message: '[CXT]:onReceived - Unknown host message of type:',
             level: LogLevel.Warning,
-            context: [ hostMessage ]
+            context: [ JSON.stringify(hostMessage) ]
           })
       }
     }
 
     private preprocessInitMessage (context: InitMessage) {
-      this.origin = context.origin
+      
+      this.locale = context.locale;
+      this.theme = context.theme;
+      this.userIdentifier = context.userIdentifier;
 
       this.onInfo({
         message: '[CXT]::preprocessInitMessage',
         level: LogLevel.Trace,
-        context: [ context, this.origin ]
+        context: [ JSON.stringify(context), this.origin ]
       })
     }
 
@@ -287,6 +297,24 @@ class AddonsSdk {
           break;                          
       }
     }
+
+    private getHostOrigin = () => {
+      const loc = window.parent.location;
+      let hostOrigin = `${loc.protocol}//${loc.hostname}`;
+
+      if (loc.port && loc.port !== "80" && loc.port !== "433") {
+          hostOrigin += `:${loc.port}`;
+      }
+
+      if (hostOrigin.endsWith("outreach.io")) {
+        return hostOrigin;
+      } else {
+        console.error("Invalid host origin:" + hostOrigin);
+        return null;
+      }
+
+      
+  }
 
 }
 
