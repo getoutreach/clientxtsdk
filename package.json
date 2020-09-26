@@ -1,44 +1,45 @@
 {
-    "name": "@outreach/client-addon-sdk",
-    "license": "MIT",
-    "version": "0.0.20",
-    "private": false,
-    "contributors": [
-      "Martin Sevcik <martin.sevcik@outreach.io>",
-      "Nikola Malovic <nikola.malovicy@outreach.io>"
-    ],
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "scripts": {
-      "dev": "tsc --watch",
-      "build": "tsc",
-      "lint": "npx eslint .",
-      "deploy": "npm run lint && npm run build && npm publish"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/getoutreach/client-ext-sdk.git"
-    },
-    "bugs": {
-      "url": "https://github.com/getoutreach/client-ext-sdk/issues"
-    },
-    "homepage": "https://github.com/getoutreach/client-ext-sdk#readme",
-    "dependencies": {},
-    "devDependencies": {
-      "@typescript-eslint/eslint-plugin": "^3.8.0",
-      "@typescript-eslint/parser": "^3.8.0",
-      "eslint": "^7.6.0",
-      "eslint-config-prettier": "^6.11.0",
-      "eslint-config-standard": "^14.1.1",
-      "eslint-plugin-import": "^2.22.0",
-      "eslint-plugin-node": "^11.1.0",
-      "eslint-plugin-promise": "^4.2.1",
-      "eslint-plugin-standard": "^4.0.1",
-      "prettier": "^2.0.5",
-      "ts-loader": "^8.0.2",
-      "typescript": "^3.9.7",
-      "webpack": "^4.44.1",
-      "webpack-cli": "^3.3.12"
-    }
+  "name": "@outreach/client-addon-sdk",
+  "license": "MIT",
+  "version": "0.0.291",
+  "private": false,
+  "contributors": [
+    "Martin Sevcik <martin.sevcik@outreach.io>",
+    "Nikola Malovic <nikola.malovicy@outreach.io>"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "npx webpack --mode=development --watch=true",
+    "build": "npx webpack --mode=production",
+    "lint": "npx eslint .",
+    "test": "jest",
+    "deploy": "npm run lint && npm run build && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getoutreach/client-ext-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getoutreach/client-ext-sdk/issues"
+  },
+  "homepage": "https://github.com/getoutreach/client-ext-sdk#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.4.2",
+    "prettier": "^2.0.5",
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   }
-  
+}

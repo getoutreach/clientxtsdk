@@ -4,18 +4,17 @@ import { AddonMessage } from "./messages/AddonMessage";
 import { AddonMessageType } from "./messages/AddonMessageType";
 // eslint-disable-next-line no-unused-vars
 import { OutreachContext } from './context/OutreachContext'
+import { NotificationType } from "./messages/NotificationType";
+import { NotificationMessage } from "./messages/NotificationMessage";
+import { DecorationMessage } from "./messages/DecorationMessage";
 
 export enum LogLevel {
-    // eslint-disable-next-line no-unused-vars
-    Trace = 'trace',
-    // eslint-disable-next-line no-unused-vars
-    Debug = 'debug',
-    // eslint-disable-next-line no-unused-vars
-    Info = 'info',
-    // eslint-disable-next-line no-unused-vars
-    Warning = 'warning',
-    // eslint-disable-next-line no-unused-vars
-    Error = 'error'
+    None = 0,
+    Trace = 10,
+    Debug = 20,
+    Info = 30,
+    Warning = 40,
+    Error = 50
 }
 
 export class Event {
@@ -34,11 +33,26 @@ export class Event {
    * @memberof Event
    */
   level: LogLevel;
+
+  /**
+   * An array of contextual parameters describing the event state. 
+   *
+   * @type {string[]}
+   * @memberof Event
+   */
+  context: string[] = [];
 }
 
 class AddonsSdk {
-    private origin?: string;
+    
+    private origin: string | null;
 
+    public locale: string = "en";
+    
+    public theme: 'light' | 'dark' = 'light';
+
+    public userIdentifier?: string;
+    
     public logging: LogLevel = window.outreach.log || LogLevel.Error;
 
     public onInit: (context: OutreachContext) => void;
@@ -52,31 +66,32 @@ class AddonsSdk {
      * @memberof AddonsSdk
      */
     constructor () {
-      // define default handlers
+
+      this.origin = this.getHostOrigin();
+
+      if (!this.origin) {
+        return;
+      }
+
+      // default handlers impplementation
+      this.onInfo = this.defaultHandleOnInfo;
+
       this.onInit = (context: OutreachContext) => {
-        if (this.logging <= LogLevel.Trace) {
-          // tslint:disable-next-line: no-console
-          console.log('[CXT]::onInit-NOP', context)
-        }
+        this.onInfo({
+          level: LogLevel.Trace,
+          message: '[CXT]::onInit (default)',
+          context: [ JSON.stringify(context) ]
+        })
       }
 
       this.onMessage = (message: AddonMessage) => {
-        if (this.logging <= LogLevel.Trace) {
-          // tslint:disable-next-line: no-console
-          console.log('[CXT]::onMessage-NOP', message)
-        }
+        this.onInfo({
+          level: LogLevel.Trace,
+          message: '[CXT]::onMessage (default)',
+          context: [ JSON.stringify(message) ]
+        })
       }
 
-      this.onInfo = (event: Event) => {
-        // tslint:disable-next-line: no-console
-        console.error('[CXT]::onInfo-NOP', event)
-      }
-
-      // subscribe to host messages
-      if (this.logging <= LogLevel.Debug) {
-        // tslint:disable-next-line: no-console
-        console.log('[CXT]::ctor - observing messages: *', postMessage)
-      }
       window.addEventListener('message', this.handleReceivedMessage)
     }
 
@@ -88,12 +103,19 @@ class AddonsSdk {
      */
     public ready () {
       const postMessage = JSON.stringify(new AddonMessage(AddonMessageType.READY))
-      if (this.logging <= LogLevel.Debug) {
-        // tslint:disable-next-line: no-console
-        console.log('[CXT]::ready - origin: *', postMessage)
+
+      this.onInfo({
+        level: LogLevel.Debug,
+        message: '[CXT]::ready',
+        context: [ postMessage ]
+      })
+
+      if (!this.origin) {
+        console.error("Can not send ready message as the origin info is invalid", this.origin);
+        return;
       }
 
-      window.parent.postMessage(postMessage, '*')
+      window.parent.postMessage(postMessage, this.origin)
     }
 
     /**
@@ -105,63 +127,106 @@ class AddonsSdk {
       this.sendMessage(new AddonMessage(AddonMessageType.REQUEST_RELOAD))
     }
 
-    public sendMessage<T extends AddonMessage> (message: T) {
+    /**
+     * Sends request to Outreach hosting app to notify Outreach user 
+     * about a certain even happening in addon.
+     *
+     * @memberof AddonsSdk
+     */
+    public notify = (text: string, type: NotificationType) => {
+
+      this.onInfo({
+        level: LogLevel.Info,
+        message: '[CXT]::notify',
+        context: [text, type]
+      })
+
+      const message = new NotificationMessage();
+      message.notificationText = text;
+      message.notificationType = type;
+      this.sendMessage(message, true);
+    }
+
+    /**
+     * Sends request to Outreach hosting app to notify Outreach user 
+     * about a certain even happening in addon.
+     *
+     * @memberof AddonsSdk
+     */
+    public decorate = (text: string) => {
+      
+      this.onInfo({
+        level: LogLevel.Info,
+        message: '[CXT]::decorate',
+        context: [text]
+      })      
+
+      const message = new DecorationMessage();
+      message.decorationText = text;
+      this.sendMessage(message, true);
+    }
+
+    public sendMessage<T extends AddonMessage> (message: T, logged?: boolean) {
       if (!this.origin) {
-        this.onInfo({
-          message: 'You can not send messages before SDK is initialized',
-          level: LogLevel.Error
-        })
+        console.error('You can not send messages before SDK is initialized', message);
         return
-      }
-
+      }      
       const postMessage = JSON.stringify(message)
-
-      if (this.logging <= LogLevel.Debug) {
-        // tslint:disable-next-line: no-console
-        console.warn('[CXT][Index]::sendMessage', postMessage, this.origin)
+      
+      if (!logged) {
+        this.onInfo({
+          level: LogLevel.Debug,
+          message: '[CXT]::sendMessage',
+          context: [postMessage, this.origin]
+        })
       }
 
       window.parent.postMessage(postMessage, this.origin)
     }
 
     private handleReceivedMessage = (messageEvent: MessageEvent) => {
-      if (this.logging <= LogLevel.Trace) {
-        // tslint:disable-next-line: no-console
-        console.log('[CXT][Index]::handleReceivedMessage', messageEvent)
-      }
 
       if (!messageEvent || messageEvent.source === window || !messageEvent.data || !messageEvent.origin) {
-        if (this.logging <= LogLevel.Trace) {
-          // tslint:disable-next-line: no-console
-          console.error('[CXT]::handleReceivedMessage-invalid source, data or origin', messageEvent)
-        }
+        // do nothing - ignore the noise
         return
       }
 
       if (this.origin && messageEvent.origin !== this.origin) {
-        if (this.logging <= LogLevel.Trace) {
-          // tslint:disable-next-line: no-console
-          console.error('[CXT]::handleReceivedMessage-invalid message origin', messageEvent)
-        }
+        
+        this.onInfo({
+          level: LogLevel.Warning,
+          message: '[CXT]::handleReceivedMessage-invalid message origin ',
+          context: [ messageEvent.origin ]
+        })
         return
       }
 
       if (typeof messageEvent.data !== 'string') {
-        if (this.logging <= LogLevel.Trace) {
-          // tslint:disable-next-line: no-console
-          console.error('[CXT]::handleReceivedMessage - message event data is not a string', messageEvent.data)
-        }
+        this.onInfo({
+          level: LogLevel.Warning,
+          message: '[CXT]::handleReceivedMessage - message event data is not a string',
+          context: [  messageEvent.data ]
+        })
+
         return
       }
 
       const hostMessage: AddonMessage = JSON.parse(messageEvent.data)
       if (!hostMessage || !hostMessage.type) {
-        if (this.logging <= LogLevel.Trace) {
-          // tslint:disable-next-line: no-console
-          console.error('[CXT]::handleReceivedMessage- invalid message data format', messageEvent)
-        }
+        this.onInfo({
+          level: LogLevel.Error,
+          message: '[CXT]::handleReceivedMessage- invalid message data format',
+          context: [  JSON.stringify(messageEvent) ]
+        })
+
         return
       }
+
+      this.onInfo({
+        level: LogLevel.Trace,
+        message: '[CXT]::handleReceivedMessage',
+        context: [ JSON.stringify(messageEvent) ]
+      })
 
       switch (hostMessage.type) {
         case AddonMessageType.INIT: {
@@ -174,38 +239,98 @@ class AddonsSdk {
         case AddonMessageType.REQUEST_DECORATION_UPDATE:
         case AddonMessageType.REQUEST_NOTIFY:
         case AddonMessageType.REQUEST_RELOAD:
-          if (this.logging <= LogLevel.Debug) {
-            this.onInfo({
-              message: '[CXT]:onReceived - Client event received from host' + hostMessage.type,
-              level: LogLevel.Debug
-            })
-          }
+          this.onInfo({
+            message: '[CXT]:onReceived - Client event received from host',
+            level: LogLevel.Error,
+            context: [ JSON.stringify(hostMessage) ]
+          })
           return
         default:
-          if (this.logging <= LogLevel.Debug) {
-            this.onInfo({
-              message: '[CXT]:onReceived - Unknown host message of type:' + hostMessage.type,
-              level: LogLevel.Debug
-            })
-          }
+          this.onInfo({
+            message: '[CXT]:onReceived - Unknown host message of type:',
+            level: LogLevel.Warning,
+            context: [ JSON.stringify(hostMessage) ]
+          })
       }
     }
 
     private preprocessInitMessage (context: InitMessage) {
-      this.origin = context.origin
+      
+      this.locale = context.locale;
+      this.theme = context.theme;
+      this.userIdentifier = context.userIdentifier;
 
-      if (this.logging <= LogLevel.Trace) {
-        // tslint:disable-next-line: no-console
-        console.log('[CXT][Index]::preprocessInitMessage-> origin', this.origin)
+      if (!this.origin) {
+        console.error("Can not preprocess initMessage as the origin info is invalid", this.origin);
+        return;
+      }
+
+      this.onInfo({
+        message: '[CXT]::preprocessInitMessage',
+        level: LogLevel.Trace,
+        context: [ JSON.stringify(context), this.origin ]
+      })
+    }
+
+    private defaultHandleOnInfo = (event: Event) => {
+      switch (event.level) {
+        case LogLevel.None:
+          // ignore the event
+          break;
+        case LogLevel.Trace:
+          if (this.logging >= LogLevel.Trace) {
+            // tslint:disable-next-line: no-console
+            console.debug('[CXT]::onInfo-trace (default)', event, event.context)
+          }
+          break;
+        case LogLevel.Debug:
+          if (this.logging >= LogLevel.Debug) {
+            // tslint:disable-next-line: no-console
+            console.debug('[CXT]::onInfo-debug (default)', event, event.context)
+          }
+          break;
+        case LogLevel.Info:
+          if (this.logging >= LogLevel.Info) {
+            // tslint:disable-next-line: no-console
+            console.info('[CXT]::onInfo-info (default)', event, event.context)
+          }
+          break;                         
+        case LogLevel.Warning:
+          if (this.logging >= LogLevel.Info) {
+            // tslint:disable-next-line: no-console
+            console.warn('[CXT]::onInfo-warning (default)', event, event.context)
+          }
+          break;                          
+        case LogLevel.Error:
+          // tslint:disable-next-line: no-console
+          console.error('[CXT]::onInfo-error (default)', event, event.context)
+          break;                          
       }
     }
+
+    private getHostOrigin = () => {
+      const loc = window.parent.location;
+      let hostOrigin = `${loc.protocol}//${loc.hostname}`;
+
+      if (loc.port && loc.port !== "80" && loc.port !== "433") {
+          hostOrigin += `:${loc.port}`;
+      }
+
+      if (hostOrigin.endsWith("outreach.io") || 
+          loc.hostname === 'localhost') {
+        return hostOrigin;
+      } else {
+        console.error("Invalid host origin:" + hostOrigin);
+        return null;
+      }
+  }
 }
 
 declare global {
     interface Window {
         outreach : {
             log?: LogLevel;
-            addonSdk: AddonsSdk;
+            addonSdk?: AddonsSdk;
         }
     }
 }

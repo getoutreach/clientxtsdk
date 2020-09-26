@@ -49,11 +49,4 @@ export class InitMessage extends AddonMessage implements OutreachContext {
    * @memberof InitMessage
    */
   opportunity?: OpportunityContext | undefined;
-  /**
-   * Host origin value to be used when client sends messages to host.
-   *
-   * @type {string}
-   * @memberof InitMessage
-   */
-  public origin: string;
 }

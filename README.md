@@ -14,7 +14,7 @@ In case you have any questions/comments/concerns about the extensibility, please
 - [Manifest file](#manifest-file)
   - [Basic manifest properties](#basic-manifest-properties)
     - [identifier](#identifier)
-    - [type](#type)
+    - [store](#store)
     - [title](#title)
     - [description](#description)
     - [host](#host)
@@ -99,11 +99,10 @@ Here is the sample manifest file of the hello world addon
 {
     "version": "0.10"
     "identifier": "addon-outreach-hello",
-    "type": "public",
+    "store": "public",
     "title":  [
         "en": "Hello world",
         "fr": "Salut tout le monde"
-
     ],
     "description": [
         "en": "This is a sample addon created as a guide for Outreach addon creators ",
@@ -134,19 +133,19 @@ Here is the sample manifest file of the hello world addon
 
 Unique identifier of the addon as defined by the addon creator
 
-### type
+### store
 
-Type of addon:
+Defines the store in which addon will be served:
 
 - **Public**
   
   The addon is going to be available in the addon store to all of the Outreach users.
 
-- **Private** 
+- **Private**
   
  The addon is going to be available only internally for users of a company that created the addon.
 
-- **Personal** 
+- **Personal**
   
   The addon is going to be available only to a developer who uploaded the manifest.
 
@@ -165,7 +164,7 @@ A localized addon description is shown in the addon store to explain what the ad
 Outreach application supports different types of addons which can be loaded in different parts of the application.
 Type property defines what the type of addon is and where it should be loaded.
 
-_e.g **type: "tab-opportunity"** will result with addon being loaded as an additional tab on the Outreach opportunity page_ 
+_e.g **type: "tab-opportunity"** will result with addon being loaded as an additional tab on the Outreach opportunity page_
 
 Supported addon types (we will expand this list as the time goes):
 
@@ -190,8 +189,7 @@ This section contains information to be presented to a user of the addon in the 
 
 ### context
 
-In this section, the addon author defines a list of predefined context information that addon needs from Outreach to be sent during the 
-initialization process.
+In this section, the addon author defines a list of predefined context information that addon needs from Outreach to be sent during the initialization process.
 It is a string array of predefined Outreach properties describing attributes of the Outreach user loading the addon.
 
 _e.g. ["opportunity.id", "account.id"]_
