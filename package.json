@@ -1,7 +1,7 @@
 {
   "name": "@outreach/client-addon-sdk",
   "license": "MIT",
-  "version": "0.0.29",
+  "version": "0.0.291",
   "private": false,
   "contributors": [
     "Martin Sevcik <martin.sevcik@outreach.io>",
@@ -10,8 +10,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc",
+    "dev": "npx webpack --mode=development --watch=true",
+    "build": "npx webpack --mode=production",
     "lint": "npx eslint .",
     "test": "jest",
     "deploy": "npm run lint && npm run build && npm publish"
