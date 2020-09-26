@@ -49,5 +49,4 @@ export class InitMessage extends AddonMessage implements OutreachContext {
    * @memberof InitMessage
    */
   opportunity?: OpportunityContext | undefined;
-  
 }

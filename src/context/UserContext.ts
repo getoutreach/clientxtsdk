@@ -1,7 +1,7 @@
 export class UserContext {
     /**
      * Unique user identifier
-     *
+     
      * @type {string}
      * @memberof UserContext
      */
