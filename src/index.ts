@@ -164,7 +164,7 @@ class AddonsSdk {
         this.onInfo({
           level: LogLevel.Debug,
           message: '[CXT]::sendMessage',
-          context: [message, this.origin]
+          context: [postMessage, this.origin]
         })
       }
 
