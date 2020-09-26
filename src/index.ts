@@ -45,7 +45,7 @@ export class Event {
 
 class AddonsSdk {
     
-  private origin!: string;
+    private origin: string | null;
 
     public locale: string = "en";
     
@@ -109,6 +109,11 @@ class AddonsSdk {
         message: '[CXT]::ready',
         context: [ postMessage ]
       })
+
+      if (!this.origin) {
+        console.error("Can not send ready message as the origin info is invalid", this.origin);
+        return;
+      }
 
       window.parent.postMessage(postMessage, this.origin)
     }
@@ -254,6 +259,11 @@ class AddonsSdk {
       this.locale = context.locale;
       this.theme = context.theme;
       this.userIdentifier = context.userIdentifier;
+
+      if (!this.origin) {
+        console.error("Can not preprocess initMessage as the origin info is invalid", this.origin);
+        return;
+      }
 
       this.onInfo({
         message: '[CXT]::preprocessInitMessage',
