@@ -11,11 +11,8 @@ jobs:
             name: Installing package dependencies
             command: yarn install --frozen-lockfile
         - run:
-            name: Linting source
-            command: yarn lint
-        - run:
             name: Building SDK
-            command: yarn build
+            command: yarn package
         - run:
             name: Authenticate with registry
             command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
