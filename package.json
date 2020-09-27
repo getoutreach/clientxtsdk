@@ -1,7 +1,7 @@
 {
   "name": "@outreach/client-addon-sdk",
   "license": "MIT",
-  "version": "0.0.34",
+  "version": "0.0.37",
   "private": false,
   "contributors": [
     "Martin Sevcik <martin.sevcik@outreach.io>",
@@ -10,11 +10,14 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "dev": "npx webpack --mode=development --watch=true",
-    "build": "npx webpack --mode=production",
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "package": "npm run build && npm run lint && npm run dts-bundle && npm run copy-to-dist",    
+    "dts-bundle": "npx dts-bundle --configJson dts-bundle.json",
+    "copy-to-dist": "npx copyfiles \"./build/**/*.js*\" dist -a -u 1",
     "lint": "npx eslint .",
     "test": "jest",
-    "deploy": "npm run lint && npm run build && npm publish"
+    "deploy": "npm run package && npm publish"
   },
   "repository": {
     "type": "git",
@@ -24,10 +27,11 @@
     "url": "https://github.com/getoutreach/client-ext-sdk/issues"
   },
   "homepage": "https://github.com/getoutreach/client-ext-sdk#readme",
-  "dependencies": {},
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.2.0",
     "@typescript-eslint/parser": "^4.2.0",
+    "copyfiles": "^2.3.0",
+    "dts-bundle": "^0.7.3",
     "dts-bundle-webpack": "^1.0.2",
     "eslint": "^7.10.0",
     "eslint-config-prettier": "^6.11.0",
