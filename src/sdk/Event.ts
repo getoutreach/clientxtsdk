@@ -1,6 +1,5 @@
 import { LogLevel } from './LogLevel';
 
-
 export class Event {
   /**
    * Message describing the event.

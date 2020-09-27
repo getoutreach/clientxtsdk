@@ -1,13 +1,4 @@
 /* eslint-disable no-unused-vars */
-export declare type AllScopes = AuditScopes | AccountsScopes | CallDispositions |
-                                CallPurposes | Calls | CustomDuties | ContentCategories |
-                                ContentCategoryMemberships | Duties | EmailAddresses |
-                                Events | Favorites | MailAliases | Mailboxes | Mailings |
-                                Opportunities | OpportunityProspectRoles | OpportunityStages |
-                                Personas | PhoneNumbers | Profiles | Profiles | Prospects |
-                                Roles | Rulesets | SequenceStates | SequenceSteps | SequenceTemplates |
-                                SequencesTemplates | SnippetsTemplates | StagesTemplates | TaskPriorities |
-                                Tasks | Teams | Templates | Users | Webhooks;
 
 export enum AuditScopes {
     All = 'audits.all',
@@ -255,3 +246,13 @@ export enum Webhooks {
     Write = 'webhooks.write',
     Delete = 'webhooks.delete'
 }
+
+export declare type AllScopes = AuditScopes | AccountsScopes | CallDispositions |
+                                CallPurposes | Calls | CustomDuties | ContentCategories |
+                                ContentCategoryMemberships | Duties | EmailAddresses |
+                                Events | Favorites | MailAliases | Mailboxes | Mailings |
+                                Opportunities | OpportunityProspectRoles | OpportunityStages |
+                                Personas | PhoneNumbers | Profiles | Profiles | Prospects |
+                                Roles | Rulesets | SequenceStates | SequenceSteps | SequenceTemplates |
+                                SequencesTemplates | SnippetsTemplates | StagesTemplates | TaskPriorities |
+                                Tasks | Teams | Templates | Users | Webhooks

@@ -1,7 +1,3 @@
-export declare type AllContextKeys = UserContextKeys |
-                                     AccountContextKeys |
-                                     OpportunityContextKeys
-
 export declare type UserContextKeys =
     'usr.id' |
     'usr.email' |
@@ -50,3 +46,7 @@ export declare type OpportunityContextKeys =
     'opp.csf70' | 'opp.csf71' | 'opp.csf72' | 'opp.csf73' | 'opp.csf74' | 'opp.csf75' | 'opp.csf76' | 'opp.csf77' | 'opp.csf78' | 'opp.csf79' | 'opp.csf20' |
     'opp.csf80' | 'opp.csf81' | 'opp.csf82' | 'opp.csf83' | 'opp.csf84' | 'opp.csf85' | 'opp.csf86' | 'opp.csf87' | 'opp.csf88' | 'opp.csf89' | 'opp.csf20' |
     'opp.csf90' | 'opp.csf91' | 'opp.csf92' | 'opp.csf93' | 'opp.csf94' | 'opp.csf95' | 'opp.csf96' | 'opp.csf97' | 'opp.csf98' | 'opp.csf99' | 'opp.csf100'
+
+export declare type AllContextKeys = UserContextKeys |
+                                     AccountContextKeys |
+                                     OpportunityContextKeys

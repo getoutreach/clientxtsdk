@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 export enum LogLevel {
   None = 0,

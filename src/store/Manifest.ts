@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { AddonStore } from './AddonStore'
-import { AddonType } from './AddonType'
 import { AllContextKeys } from './ContextKeys';
 import { LocalizedString } from './LocalizedString';
-import { AllScopes } from './Scopes';
+import { ManifestApi } from './ManifestApi';
+import { ManifestAuthor } from './ManifestAuthor';
+import { ManifestHost } from './ManifestHost';
 
 /**
  * Definition of the manifest file containing all the information
@@ -22,20 +23,20 @@ export class Manifest {
      * this secrion can be ommited from configuration.
      *
      * @see https://github.com/getoutreach/clientxtsdk#api-optional
-     * @type {Api}
+     * @type {ManifestApi}
      * @memberof Manifest
      */
-    public api?: Api;
+    public api?: ManifestApi;
 
     /**
      * This section contains information to be presented to a user of the addon in the marketplace and on the
      * consent screen: addon creator name, website URL, privacy policy document URL, and terms of use document URL.
      *
      * @see https://github.com/getoutreach/clientxtsdk#author
-     * @type {Author}
+     * @type {ManifestAuthor}
      * @memberof Manifest
      */
-    public author: Author;
+    public author: ManifestAuthor;
 
     /**
      * In this section, the addon author defines a list of predefined context information that addon needs from Outreach
@@ -62,10 +63,10 @@ export class Manifest {
      * Definition of addon host
      *
      * @see https://github.com/getoutreach/clientxtsdk#host
-     * @type {Host}
+     * @type {ManifestHost}
      * @memberof Manifest
      */
-    public host: Host;
+    public host: ManifestHost;
 
     /**
      * Unique identifier of the addon
@@ -101,81 +102,4 @@ export class Manifest {
      * @memberof Manifest
      */
     public version: string;
-}
-
-export class Host {
-    /**
-     * Type property defines what the type of addon is and where it should be loaded.
-     * @see https://github.com/getoutreach/clientxtsdk#type-host
-     * @type {AddonType}
-     * @memberof Host
-     */
-    type: AddonType;
-
-    /**
-     * Address where the addon hosting web page is hosted.
-     *
-     * @see https://github.com/getoutreach/clientxtsdk#url
-     * @type {string}
-     * @memberof Host
-     */
-    url: string;
-
-    /**
-     * Base64 string represents the icon to be shown in the addon store
-     * and (if applicable) in the Outreach app.
-     *
-     * @see https://github.com/getoutreach/clientxtsdk#icon
-     * @type {string}
-     * @memberof Host
-     */
-    icon: string;
-}
-
-export class Api {
-    /**
-     * The list of scopes will be used for Outreach API authentication
-     * where current Outreach user will be asked to consent for granting
-     * permissions for defined scopes to addon creator.
-     *
-     * @see https://github.com/getoutreach/clientxtsdk#scopes
-     * @type {AllScopes[]}
-     * @memberof Api
-     */
-    scopes: AllScopes[];
-
-    /**
-     * Address of the endpoint, which will return support refresh token flow.
-     *
-     * @see https://github.com/getoutreach/clientxtsdk#token-endpoint
-     * @type {string}
-     * @memberof Api
-     */
-    token: string;
-}
-
-export class Author {
-    /**
-     *
-     *
-     * @type {string}
-     * @memberof Author
-     */
-    websiteUrl: string;
-
-    /**
-     *
-     *
-     * @type {string}
-     * @memberof Author
-     */
-    privacyUrl: string;
-
-    /**
-     *
-     *
-     * @type {string}
-     * @memberof Author
-     */
-    termsOfUseUrl: string;
 }
