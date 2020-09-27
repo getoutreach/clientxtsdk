@@ -1,3 +1,5 @@
+const DtsBundleWebpack = require('dts-bundle-webpack')
+
 const path = require('path')
 
 module.exports = {
@@ -22,5 +24,12 @@ module.exports = {
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist')
-  }
+  },
+  plugins: [
+    new DtsBundleWebpack({
+      name: '@outreach/client-addon-sdk',
+      main: 'build/index.d.ts',
+      out: '../dist/index.d.ts'
+    })
+  ]
 }
