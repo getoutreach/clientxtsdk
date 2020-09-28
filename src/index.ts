@@ -17,6 +17,7 @@ import { OpportunityContext } from './context/OpportunityContext';
 import { UserContext } from './context/UserContext';
 
 export * from './context/AccountContext';
+export * from './context/ContextParam';
 export * from './context/CustomContext';
 export * from './context/OpportunityContext';
 export * from './context/OutreachContext';
@@ -35,8 +36,8 @@ export * from './sdk/Locale';
 export * from './sdk/LogLevel';
 export * from './sdk/Theme';
 
-export * from './store/keys/ContextKeys';
 export * from './store/keys/AccountContextKeys';
+export * from './store/keys/AllContextKeys';
 export * from './store/keys/ClientContextKeys';
 export * from './store/keys/OpportunityContextKeys';
 export * from './store/keys/UserContextKeys';

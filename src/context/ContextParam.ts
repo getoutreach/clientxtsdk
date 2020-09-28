@@ -1,4 +1,4 @@
-import { AllContextKeys } from '../store/keys/ContextKeys';
+import { AllContextKeys } from '../store/keys/AllContextKeys';
 
 export class ContextParam {
     key: AllContextKeys;
