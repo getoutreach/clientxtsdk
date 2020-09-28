@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { LogLevel } from './LogLevel';
 
 export class Event {
