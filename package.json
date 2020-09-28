@@ -1,11 +1,10 @@
 {
   "name": "@outreach/client-addon-sdk",
   "license": "MIT",
-  "version": "0.0.48",
+  "version": "0.0.50",
   "private": false,
   "contributors": [
-    "Martin Sevcik <martin.sevcik@outreach.io>",
-    "Nikola Malovic <nikola.malovicy@outreach.io>"
+    "Outreach Client Extensibility Team <cxt-sdk@outreach.io>"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
