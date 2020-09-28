@@ -5,14 +5,14 @@ import { AccountContext } from './AccountContext'
 import { Theme } from '../sdk/Theme'
 import { Locale } from '../sdk/Locale'
 
-export interface OutreachContext {
+export class OutreachContext {
     /**
      * Language locale to be used in rendering addon.
      *
      * @type {string}
      * @memberof Context
      */
-    locale: Locale;
+    public locale: Locale;
 
     /**
      * A theme addon should be using in rendering.
@@ -20,7 +20,7 @@ export interface OutreachContext {
      * @type {Theme}
      * @memberof Context
      */
-    theme: Theme;
+    public theme: Theme;
 
     /**
      * Unique identifier of the Outreach user.
@@ -28,7 +28,7 @@ export interface OutreachContext {
      * @type {string}
      * @memberof Context
      */
-    userIdentifier?: string;
+    public userIdentifier?: string;
 
     /**
      * Outreach account context information  (if any)
@@ -36,7 +36,7 @@ export interface OutreachContext {
      * @type {AccountContext}
      * @memberof OutreachContext
      */
-    account?: AccountContext;
+    public account?: AccountContext;
 
     /**
      * Outreach user context information (if any)
@@ -44,7 +44,7 @@ export interface OutreachContext {
      * @type {UserContext}
      * @memberof OutreachContext
      */
-    user?: UserContext;
+    public user?: UserContext;
 
     /**
      * Outreach opportunity context information (if any)
@@ -52,5 +52,5 @@ export interface OutreachContext {
      * @type {OpportunityContext}
      * @memberof OutreachContext
      */
-    opportunity?: OpportunityContext;
+    public opportunity?: OpportunityContext;
 }

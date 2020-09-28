@@ -12,6 +12,9 @@ import { Event } from './sdk/Event';
 import { ReadyMessage } from './messages/ReadyMessage';
 import { Theme } from './sdk/Theme';
 import { Locale } from './sdk/Locale';
+import { AccountContext } from './context/AccountContext';
+import { OpportunityContext } from './context/OpportunityContext';
+import { UserContext } from './context/UserContext';
 
 export * from './context/AccountContext';
 export * from './context/CustomContext';
@@ -251,21 +254,51 @@ class AddonsSdk {
       }
     }
 
-    private preprocessInitMessage (context: InitMessage) {
-      this.locale = context.locale;
-      this.theme = context.theme;
-      this.userIdentifier = context.userIdentifier;
-
+    private preprocessInitMessage (initMessage: InitMessage) {
       if (!this.origin) {
         console.error('Can not preprocess initMessage as the origin info is invalid', this.origin);
         return;
       }
 
+      this.locale = initMessage.locale;
+      this.theme = initMessage.theme;
+      this.userIdentifier = initMessage.userIdentifier;
+
+      const outreachContext = new OutreachContext();
+      outreachContext.locale = this.locale;
+      outreachContext.theme = this.theme;
+      outreachContext.userIdentifier = initMessage.userIdentifier;
+
+      const accountContext = new AccountContext();
+      const opportunityContext = new OpportunityContext();
+      const userContext = new UserContext();
+
+      for (let i = 0; i < initMessage.context.length; i++) {
+        const param = initMessage.context[i];
+
+        let handled = accountContext.initFrom(param);
+        if (handled) {
+          outreachContext.account = outreachContext.account || accountContext;
+        }
+
+        handled = opportunityContext.initFrom(param);
+        if (handled) {
+          outreachContext.opportunity = outreachContext.opportunity || opportunityContext;
+        }
+
+        handled = userContext.initFrom(param);
+        if (handled) {
+          outreachContext.user = outreachContext.opportunity || userContext;
+        }
+      }
+
       this.onInfo({
         message: '[CXT]::preprocessInitMessage',
         level: LogLevel.Trace,
-        context: [JSON.stringify(context), this.origin]
+        context: [JSON.stringify(initMessage), JSON.stringify(outreachContext), this.origin]
       })
+
+      this.onInit(outreachContext);
     }
 
     private defaultHandleOnInfo = (event: Event) => {
