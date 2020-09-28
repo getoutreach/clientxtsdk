@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { AddonStore } from './AddonStore'
-import { AllContextKeys } from './ContextKeys';
+import { AllContextKeys } from './context/ContextKeys';
 import { LocalizedString } from './LocalizedString';
 import { ManifestApi } from './ManifestApi';
 import { ManifestAuthor } from './ManifestAuthor';
