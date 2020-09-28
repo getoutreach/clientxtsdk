@@ -10,6 +10,8 @@ import { DecorationMessage } from './messages/DecorationMessage';
 import { LogLevel } from './sdk/LogLevel';
 import { Event } from './sdk/Event';
 import { ReadyMessage } from './messages/ReadyMessage';
+import { Theme } from './sdk/Theme';
+import { Locale } from './sdk/Locale';
 
 export * from './context/AccountContext';
 export * from './context/CustomContext';
@@ -23,23 +25,32 @@ export * from './messages/DecorationMessage';
 export * from './messages/InitMessage';
 export * from './messages/NotificationMessage';
 export * from './messages/NotificationType';
+export * from './messages/ReadyMessage';
 
 export * from './sdk/Event';
+export * from './sdk/Locale';
 export * from './sdk/LogLevel';
+export * from './sdk/Theme';
 
+export * from './store/keys/ContextKeys';
+export * from './store/keys/AccountContextKeys';
+export * from './store/keys/OpportunityContextKeys';
+export * from './store/keys/UserContextKeys';
 export * from './store/AddonStore';
 export * from './store/AddonType';
-export * from './store/context/ContextKeys';
 export * from './store/LocalizedString';
 export * from './store/Manifest';
+export * from './store/ManifestApi';
+export * from './store/ManifestAuthor';
+export * from './store/ManifestHost';
 export * from './store/Scopes';
 
 class AddonsSdk {
     private origin: string | null;
 
-    public locale: string = 'en';
+    public locale: Locale = Locale.ENGLISH
 
-    public theme: 'light' | 'dark' = 'light';
+    public theme: Theme = Theme.LIGHT;
 
     public userIdentifier?: string;
 

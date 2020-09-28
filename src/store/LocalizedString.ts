@@ -1,3 +1,15 @@
-export declare type LocalizedString = {
-    [key: string]: string;
+import { Locale } from '../sdk/Locale';
+
+export class LocalizedString {
+  public en: string;
+
+  public getText = (locale: Locale) => {
+    switch (locale) {
+      case Locale.ENGLISH:
+        return this.en;
+      default:
+        // TODO: nimal, 28.9.2020 - Report this to telemetry
+        return this.en;
+    }
+  }
 }

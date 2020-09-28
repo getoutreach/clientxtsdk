@@ -6,6 +6,8 @@ import { UserContext } from '../context/UserContext';
 import { OpportunityContext } from '../context/OpportunityContext';
 import { AddonMessage } from './AddonMessage';
 import { AddonMessageType } from './AddonMessageType';
+import { Theme } from '../sdk/Theme';
+import { Locale } from '../sdk/Locale';
 export class InitMessage extends AddonMessage implements OutreachContext {
   /**
    *Creates an instance of InitMessage.
@@ -18,17 +20,17 @@ export class InitMessage extends AddonMessage implements OutreachContext {
   /**
    * Language locale to be used in rendering addon.
    *
-   * @type {'en'}
+   * @type {Locale}
    * @memberof InitMessage
    */
-  locale: string = 'en';
+  locale: Locale = Locale.ENGLISH;
   /**
    * A theme addon should be using in rendering.
    *
-   * @type {('light' | 'dark')}
+   * @type {Theme}
    * @memberof InitMessage
    */
-  theme: 'light' | 'dark' = 'light';
+  theme: Theme = Theme.LIGHT;
   /**
    * Unique identifier hash of the Outreach user.
    *
