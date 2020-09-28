@@ -1,13 +1,11 @@
 /* eslint-disable no-unused-vars */
-
 import { OutreachContext } from '../context/OutreachContext';
-import { AccountContext } from '../context/AccountContext';
-import { UserContext } from '../context/UserContext';
-import { OpportunityContext } from '../context/OpportunityContext';
 import { AddonMessage } from './AddonMessage';
 import { AddonMessageType } from './AddonMessageType';
 import { Theme } from '../sdk/Theme';
 import { Locale } from '../sdk/Locale';
+import { ContextParam } from '../context/ContextParam';
+
 export class InitMessage extends AddonMessage implements OutreachContext {
   /**
    *Creates an instance of InitMessage.
@@ -37,29 +35,13 @@ export class InitMessage extends AddonMessage implements OutreachContext {
    * @type {(string | undefined)}
    * @memberof InitMessage
    */
-  userIdentifier?: string | undefined;
+  userIdentifier: string | undefined;
+
   /**
-   * Account context information of the current Outreach user.
-   * Undefined if addon manifest is not defining account properties.
+   * Collection of the context parameters
    *
-   * @type {(AccountContext | undefined)}
+   * @type {ContextParam[]}
    * @memberof InitMessage
    */
-  account?: AccountContext | undefined;
-  /**
-   * User context information of the current Outreach user.
-   * Undefined if addon manifest is not defining user properties.
-   *
-   * @type {(UserContext | undefined)}
-   * @memberof InitMessage
-   */
-  user?: UserContext | undefined;
-  /**
-   * Opportunity context information of the current Outreach user.
-   * Undefined if addon manifest is not defining opportunity properties.
-   *
-   * @type {(OpportunityContext | undefined)}
-   * @memberof InitMessage
-   */
-  opportunity?: OpportunityContext | undefined;
+  context: ContextParam[] = [];
 }
