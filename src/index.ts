@@ -29,7 +29,7 @@ export * from './sdk/LogLevel';
 
 export * from './store/AddonStore';
 export * from './store/AddonType';
-export * from './store/context/ContextKeys';
+export * from './store/keys/ContextKeys';
 export * from './store/LocalizedString';
 export * from './store/Manifest';
 export * from './store/Scopes';

@@ -2,6 +2,8 @@
 import { UserContext } from './UserContext'
 import { OpportunityContext } from './OpportunityContext'
 import { AccountContext } from './AccountContext'
+import { Theme } from '../sdk/Theme'
+import { Locale } from '../sdk/Locale'
 
 export interface OutreachContext {
     /**
@@ -10,15 +12,15 @@ export interface OutreachContext {
      * @type {string}
      * @memberof Context
      */
-    locale: string;
+    locale: Locale;
 
     /**
      * A theme addon should be using in rendering.
      *
-     * @type {('light' | 'dark')}
+     * @type {Theme}
      * @memberof Context
      */
-    theme: 'light' | 'dark';
+    theme: Theme;
 
     /**
      * Unique identifier of the Outreach user.
