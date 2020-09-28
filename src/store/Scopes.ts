@@ -71,10 +71,10 @@ export enum Scopes {
     MAILINGS_WRITE = 'mailings.write',
     MAILINGS_DELETE = 'mailings.delete',
 
-    OPPORTUNITIES_ALL = 'mailboxes.all',
-    OPPORTUNITIES_READ = 'mailboxes.read',
-    OPPORTUNITIES_WRITE = 'mailboxes.write',
-    OPPORTUNITIES_DELETE = 'mailboxes.delete',
+    OPPORTUNITIES_ALL = 'opportunities.all',
+    OPPORTUNITIES_READ = 'opportunities.read',
+    OPPORTUNITIES_WRITE = 'opportunities.write',
+    OPPORTUNITIES_DELETE = 'opportunities.delete',
 
     OPPORTUNITY_PROSPECT_ROLES_ALL = 'opportunityProspectRoles.all',
     OPPORTUNITY_PROSPECT_ROLES_READ = 'opportunityProspectRoles.read',
