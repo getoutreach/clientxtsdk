@@ -25,15 +25,24 @@ export * from './messages/DecorationMessage';
 export * from './messages/InitMessage';
 export * from './messages/NotificationMessage';
 export * from './messages/NotificationType';
+export * from './messages/ReadyMessage';
 
 export * from './sdk/Event';
+export * from './sdk/Locale';
 export * from './sdk/LogLevel';
+export * from './sdk/Theme';
 
+export * from './store/keys/ContextKeys';
+export * from './store/keys/AccountContextKeys';
+export * from './store/keys/OpportunityContextKeys';
+export * from './store/keys/UserContextKeys';
 export * from './store/AddonStore';
 export * from './store/AddonType';
-export * from './store/keys/ContextKeys';
 export * from './store/LocalizedString';
 export * from './store/Manifest';
+export * from './store/ManifestApi';
+export * from './store/ManifestAuthor';
+export * from './store/ManifestHost';
 export * from './store/Scopes';
 
 class AddonsSdk {
