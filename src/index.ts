@@ -34,6 +34,7 @@ export * from './sdk/Theme';
 
 export * from './store/keys/ContextKeys';
 export * from './store/keys/AccountContextKeys';
+export * from './store/keys/ClientContextKeys';
 export * from './store/keys/OpportunityContextKeys';
 export * from './store/keys/UserContextKeys';
 export * from './store/AddonStore';
