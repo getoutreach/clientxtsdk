@@ -10,6 +10,8 @@ import { DecorationMessage } from './messages/DecorationMessage';
 import { LogLevel } from './sdk/LogLevel';
 import { Event } from './sdk/Event';
 import { ReadyMessage } from './messages/ReadyMessage';
+import { Theme } from './sdk/Theme';
+import { Locale } from './sdk/Locale';
 
 export * from './context/AccountContext';
 export * from './context/CustomContext';
@@ -37,9 +39,9 @@ export * from './store/Scopes';
 class AddonsSdk {
     private origin: string | null;
 
-    public locale: string = 'en';
+    public locale: Locale = Locale.ENGLISH
 
-    public theme: 'light' | 'dark' = 'light';
+    public theme: Theme = Theme.LIGHT;
 
     public userIdentifier?: string;
 

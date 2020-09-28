@@ -1,9 +1,15 @@
 import { Locale } from '../sdk/Locale';
 
 export class LocalizedString {
-    [key: string]: string;
+  public en: string;
 
-    public getText = (locale: Locale) => {
-      return this[locale];
+  public getText = (locale: Locale) => {
+    switch (locale) {
+      case Locale.ENGLISH:
+        return this.en;
+      default:
+        // TODO: nimal, 28.9.2020 - Report this to telemetry
+        return this.en;
     }
+  }
 }
