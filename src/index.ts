@@ -9,6 +9,7 @@ import { NotificationMessage } from './messages/NotificationMessage';
 import { DecorationMessage } from './messages/DecorationMessage';
 import { LogLevel } from './sdk/LogLevel';
 import { Event } from './sdk/Event';
+import { ReadyMessage } from './messages/ReadyMessage';
 
 export * from './context/AccountContext';
 export * from './context/CustomContext';
@@ -112,7 +113,7 @@ class AddonsSdk {
      * @memberof AddonsSdk
      */
     public initRequest = () => {
-      this.sendMessage(new AddonMessage(AddonMessageType.REQUEST_RELOAD))
+      this.sendMessage(new ReadyMessage())
     }
 
     /**

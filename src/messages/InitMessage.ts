@@ -5,7 +5,17 @@ import { AccountContext } from '../context/AccountContext';
 import { UserContext } from '../context/UserContext';
 import { OpportunityContext } from '../context/OpportunityContext';
 import { AddonMessage } from './AddonMessage';
+import { AddonMessageType } from './AddonMessageType';
 export class InitMessage extends AddonMessage implements OutreachContext {
+  
+  /**
+   *Creates an instance of InitMessage.
+   * @memberof InitMessage
+   */
+  constructor() {
+    super(AddonMessageType.INIT);
+  }
+  
   /**
    * Language locale to be used in rendering addon.
    *
