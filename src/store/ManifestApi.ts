@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { AllScopes } from './Scopes';
+import { Scopes } from './Scopes';
 
 export class ManifestApi {
     /**
@@ -8,10 +8,10 @@ export class ManifestApi {
      * permissions for defined scopes to addon creator.
      *
      * @see https://github.com/getoutreach/clientxtsdk#scopes
-     * @type {AllScopes[]}
+     * @type {Scopes[]}
      * @memberof Api
      */
-    scopes: AllScopes[];
+    scopes: Scopes[];
 
     /**
      * Address of the endpoint, which will return support refresh token flow.
