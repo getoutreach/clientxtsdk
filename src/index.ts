@@ -12,8 +12,10 @@ import { Event } from './sdk/Event';
 import { ReadyMessage } from './messages/ReadyMessage';
 import { Theme } from './sdk/Theme';
 import { Locale } from './sdk/Locale';
+
 import { AccountContext } from './context/AccountContext';
 import { OpportunityContext } from './context/OpportunityContext';
+import { ProspectContext } from './context/ProspectContext';
 import { UserContext } from './context/UserContext';
 
 export * from './context/AccountContext';
@@ -273,6 +275,7 @@ class AddonsSdk {
       const accountContext = new AccountContext();
       const opportunityContext = new OpportunityContext();
       const userContext = new UserContext();
+      const prospectContext = new ProspectContext();
 
       for (let i = 0; i < initMessage.context.length; i++) {
         const param = initMessage.context[i];
@@ -287,9 +290,14 @@ class AddonsSdk {
           outreachContext.opportunity = outreachContext.opportunity || opportunityContext;
         }
 
+        handled = prospectContext.initFrom(param);
+        if (handled) {
+          outreachContext.prospect = outreachContext.prospect || prospectContext;
+        }
+
         handled = userContext.initFrom(param);
         if (handled) {
-          outreachContext.user = outreachContext.opportunity || userContext;
+          outreachContext.user = outreachContext.user || userContext;
         }
       }
 

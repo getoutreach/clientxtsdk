@@ -38,7 +38,7 @@ export enum AccountContextKeys {
      */
     TAGS = 'acc.tags',
 
-    CUSTOM_FIELD_1 = 'acc.csf5',
+    CUSTOM_FIELD_1 = 'acc.csf1',
     CUSTOM_FIELD_2 = 'acc.csf2',
     CUSTOM_FIELD_3 = 'acc.csf3',
     CUSTOM_FIELD_4 = 'acc.csf4',
