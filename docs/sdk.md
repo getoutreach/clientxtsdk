@@ -1,4 +1,22 @@
+<!-- omit in toc -->
 # Add-on SDK
+
+Table of content
+
+- [Summary](#summary)
+- [Addon initialization](#addon-initialization)
+  - [Init event handler](#init-event-handler)
+  - [Info event handler (optional)](#info-event-handler-optional)
+  - [Ready function](#ready-function)
+- [Additional addon functions](#additional-addon-functions)
+  - [Notify function](#notify-function)
+  - [Decorate function](#decorate-function)
+- [Add-on authentication](#add-on-authentication)
+  - [Auth temp cookie creation](#auth-temp-cookie-creation)
+  - [Caching access token](#caching-access-token)
+  - [Obtaining an access token](#obtaining-an-access-token)
+
+## Summary
 
 The outreach host is using iframes to load addons due to security and performance reasons. Once an addon is loaded, the Outreach host communicates with it using POST messages. 
 

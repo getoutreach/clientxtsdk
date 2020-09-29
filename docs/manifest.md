@@ -1,6 +1,29 @@
+<!-- omit in toc -->
 # Manifest file
 
 Manifest is a simple JSON file that the addon developer uploads to Outreach and which contains all of the data needed for Outreach to host addon in an iframe.
+
+Table of content:
+
+- [Sample manifest](#sample-manifest)
+- [Basic manifest properties](#basic-manifest-properties)
+  - [identifier](#identifier)
+  - [store](#store)
+  - [title](#title)
+  - [description](#description)
+  - [host](#host)
+    - [type (host)](#type-host)
+    - [url](#url)
+    - [icon](#icon)
+  - [author](#author)
+- [Integration manifest properties](#integration-manifest-properties)
+  - [context](#context)
+- [api (optional)](#api-optional)
+  - [token endpoint](#token-endpoint)
+  - [scopes](#scopes)
+- [Uploading the manifest](#uploading-the-manifest)
+
+## Sample manifest
 
 Here is the sample manifest file of the hello world addon
 
@@ -85,7 +108,6 @@ Supported addon types (we will expand this list as the time goes):
 
 Address where the addon hosting web page is hosted.
 
-
 #### icon
 
 base64 string represents the icon to be shown in the addon store and (if possible) in Outreach client.
@@ -101,15 +123,13 @@ This section contains information to be presented to a user of the addon in the 
 In this section, the addon author defines a list of predefined context information that addon needs from Outreach to be sent during the initialization process.
 It is a string array of predefined Outreach properties describing attributes of the Outreach user loading the addon.
 
-_e.g. ["opportunity.id", "account.id"]_
+e.g. ["opportunity.id", "account.id"]
+
+Complete list of all of the supported context properties can be found on [context property page](context.md).
 
 Outreach User will be asked to consent with sharing this information with the addon on the addon's first use.  If the future version of the manifest addon creator will add additional contextual fields, the Outreach user will consent again.
 
-Here is the list of currently supported context information (we will add more):
-
-- **account**: id, name, customId, custom1...custom100
-- **user**: id, name, custom1 ... custom5
-- **opportunity**: id, custom1...custom100,
+[ADD-CONTEXT-CONSENT-SCREENSHOT-HERE]
 
 ## api (optional)
 
@@ -123,17 +143,12 @@ Address of the endpoint, which will return support [refresh token flow](#refresh
 
 ### scopes
 
-(If the addon creator needs no API access, this section can be omitted.)
-
 In the scopes section, the addon creator defines a list of Outreach API scopes which are needed for performing API calls addon needs to perform.
 
-The list of scopes will be used for [Outreach API authentication](https://api.outreach.io/api/v2/docs#authentication "Outreach API authentication") where current Outreach user will be asked to consent for granting permissions for defined scopes to addon creator.
+Complete list of all of the API scopes can be found on [API Scopes page](scopes.md).
 
-This list of scopes defined in the manifest will be reviewed during the addon approval process needed for an addon to be accepted in the addon store.
-
-"Authorization scopes let you specify what type and level of access your application requires. Your OAuth application's scopes describe the possible set of values that may be requested. Still, the specific scopes requested during the authentication process are what will be applied to the resulting access token and used to restrict and permit application access.
-
-Scopes are period-separated strings containing two parts: the first part is a pluralized resource name (e.g., prospects); the second part is a token — read, write, delete, or all — that describes the level of access permitted. For example, the scopes prospects.read and prospects.all would both grant access to read prospects, while only the latter would permit write and delete access. Scopes are not additive; the prospects.write scope does not grant read access."
+On the first [SDK authentication](sdk.md#authentication) Outreach user is then asked to consent with granting requested scopes to the addon
+![alt text](api-consent.png "API consent screen")
 
 ## Uploading the manifest
 

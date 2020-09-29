@@ -1,4 +1,21 @@
+<!-- omit in toc -->
 # Addon host
+
+Table of content
+
+- [Query parameters](#query-parameters)
+  - [404 (NOT FOUND)](#404-not-found)
+  - [302 (FOUND)](#302-found)
+  - [200 (OK)](#200-ok)
+- [Authentication](#authentication)
+  - [Manifest scopes](#manifest-scopes)
+  - [Setup Outreach OAuth application](#setup-outreach-oauth-application)
+  - [Initial authentication flow](#initial-authentication-flow)
+    - [User consent](#user-consent)
+    - [Authorization code handling](#authorization-code-handling)
+    - [Caching the tokens](#caching-the-tokens)
+    - [Passing back access token to addon](#passing-back-access-token-to-addon)
+  - [Refresh token flow](#refresh-token-flow)
 
 In order for a web page of addon creator to be able to integrate with the Outreach app, that page has to support certain integration enabling features.
 

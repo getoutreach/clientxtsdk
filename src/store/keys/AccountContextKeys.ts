@@ -29,7 +29,7 @@ export enum AccountContextKeys {
     LOCALITY = 'acc.loc',
 
     /**
-     * The company’s primary geographic region (e.g. "Eastern USA").
+     * The name of the company (e.g. "Acme Corporation").
      */
     NAME = 'acc.name',
 

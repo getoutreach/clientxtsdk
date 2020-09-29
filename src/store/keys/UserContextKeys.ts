@@ -8,11 +8,6 @@
  */
 export enum UserContextKeys {
     /**
-     * Hash of user id
-     */
-    ID = 'usr.hid',
-
-    /**
      * The email address of the user.
      */
     EMAIL = 'usr.email',
@@ -21,6 +16,11 @@ export enum UserContextKeys {
      * The first name of the user.
      */
     FIRST_NAME = 'usr.fname',
+
+    /**
+     * Hash of user id
+     */
+    ID = 'usr.hid',
 
     /**
      * The last name of the user.

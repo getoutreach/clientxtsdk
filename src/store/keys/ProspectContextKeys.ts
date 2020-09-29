@@ -8,11 +8,6 @@
  */
 export enum ProspectContextKeys {
     /**
-     * Hash of prospect id
-     */
-    ID = 'pro.hid',
-
-    /**
      * The date and time the prospect is available to contact again.
      */
     AVAILABLE_AT = 'pro.avail',
@@ -27,6 +22,10 @@ export enum ProspectContextKeys {
      * The locality of prospect’s company.
      */
     COMPANY_LOCALITY = 'pro.loc',
+    /**
+     * Hash of prospect id
+     */
+    ID = 'pro.hid',
 
     /**
      * A list of tag values associated with the account (e.g. ["Interested", "2017 Expo"]).

@@ -22,7 +22,7 @@ export enum OpportunityContextKeys {
     /**
      * The date the opportunity was created in the external system.
      */
-    EXTERNAL_CREATED_AT = 'opp.extCreatedAt',
+    EXTERNAL_CREATED_AT = 'opp.ecrat',
 
     /**
      * Hash of opportunity id
@@ -37,12 +37,12 @@ export enum OpportunityContextKeys {
     /**
      * The next step to take for the opportunity.
      */
-    NEXT_STEP = 'opp.nextStep',
+    NEXT_STEP = 'opp.nstp',
 
     /**
      * The chances of the opportunity succeeding, represented as a percentage.
      */
-    PROBABILITY = 'opp.probability',
+    PROBABILITY = 'opp.prob',
 
     /**
      * Tags associated with the opportunity.
