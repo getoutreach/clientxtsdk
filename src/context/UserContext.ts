@@ -1,4 +1,5 @@
 import { UserContextKeys } from '../store/keys/UserContextKeys';
+// eslint-disable-next-line no-unused-vars
 import { ContextParam } from './ContextParam';
 
 export class UserContext {

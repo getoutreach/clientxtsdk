@@ -4,6 +4,7 @@ import { OpportunityContext } from './OpportunityContext'
 import { AccountContext } from './AccountContext'
 import { Theme } from '../sdk/Theme'
 import { Locale } from '../sdk/Locale'
+import { ProspectContext } from './ProspectContext'
 
 export class OutreachContext {
     /**
@@ -47,10 +48,18 @@ export class OutreachContext {
     public user?: UserContext;
 
     /**
-     * Outreach opportunity context information (if any)
+     * Current Outreach opportunity context information (if any)
      *
      * @type {OpportunityContext}
      * @memberof OutreachContext
      */
     public opportunity?: OpportunityContext;
+
+    /**
+     * Current Outreach prospect context information (if any)
+     *
+     * @type {ProspectContext}
+     * @memberof OutreachContext
+     */
+    public prospect?: ProspectContext;
 }

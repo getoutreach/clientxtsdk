@@ -109,4 +109,26 @@ export class CustomContext {
     public customField99?: string;
 
     public customField100?: string;
+    public customField101?: string;
+    public customField102?: string;
+    public customField103?: string;
+    public customField104?: string;
+    public customField105?: string;
+    public customField106?: string;
+    public customField107?: string;
+    public customField108?: string;
+    public customField109?: string;
+
+    public customField110?: string;
+    public customField111?: string;
+    public customField112?: string;
+    public customField113?: string;
+    public customField114?: string;
+    public customField115?: string;
+    public customField116?: string;
+    public customField117?: string;
+    public customField118?: string;
+    public customField119?: string;
+
+    public customField120?: string;
 }
