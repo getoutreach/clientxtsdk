@@ -9,7 +9,7 @@ In order to do that, developer needs to download a tool called [ngrok](https://n
 
 Once ngrok is installed and unpacked to a folder it is being run by simple
 
-```json
+```bash
 ./ngrok http 3000
 ```
 
@@ -24,7 +24,7 @@ This means that a secure tunnel from a publicly available endpoint will be forwa
 
 One of the easiest way to work locally on your addon is to simply create a separate dev manifest which will have a few settings pointing to created ngrok public address
 
-```json 
+```bash 
 {
     ...
     host: {
@@ -42,7 +42,7 @@ If you want to develop [addon host authentication support](host.md) you need to 
 
 The first step is the same, create a new dev manifest but this time it would have to have the api section with token value pointing to a ngrok public url.
 
-```json 
+```bash 
 {
     ...
     host: {
