@@ -2,7 +2,7 @@
 
 This document contains all the information a developer needs to create an Outreach addon.
 
-In case you have any questions/comments/concerns about the extensibility, please email us at cxt-sdk@outreach.io.
+*In case you have any questions/comments/concerns about the extensibility, please email us at cxt-sdk@outreach.io.***
 
 ## How it works
 
@@ -19,7 +19,7 @@ The process of creating addon usually requires the next steps:
 - The developer creates an addon page to be used by Outreach users,
 - The developer creates a [manifest file](/docs/manifest.md)  describing the addon (including the addon page URL)
 - The manifest file gets [uploaded to the Outreach](/docs/manifest.md#uploading-the-manifest), and the addon is visible only to a developer for dev/testing
-- The developer [integrates the addon](#addon-integration) with the Outreach client extensibility framework
+- The developer [integrates the addon](/docs/host.md) with the Outreach client extensibility framework
 - Once the addon is implemented, the developer makes the addon visible in the store to other Outreach users.
 
 ## How much coding is needed
