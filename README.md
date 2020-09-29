@@ -1,3 +1,4 @@
+<!-- omit in toc -->
 # Outreach client extensibility SDK
 
 This document contains all the information a developer needs to create an Outreach addon.
@@ -6,11 +7,10 @@ This document contains all the information a developer needs to create an Outrea
 
 Table of content
 
-- [Outreach client extensibility SDK](#outreach-client-extensibility-sdk)
-  - [How it works](#how-it-works)
-  - [How does the development process look](#how-does-the-development-process-look)
-  - [How much coding is needed](#how-much-coding-is-needed)
-  - [How to learn more about building an addon](#how-to-learn-more-about-building-an-addon)
+- [How it works](#how-it-works)
+- [How does the development process look](#how-does-the-development-process-look)
+- [How much coding is needed](#how-much-coding-is-needed)
+- [How to learn more about building an addon](#how-to-learn-more-about-building-an-addon)
 
 ## How it works
 
