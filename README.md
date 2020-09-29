@@ -3,12 +3,12 @@
 
 This document contains all the information a developer needs to create an Outreach addon.
 
-*In case you have any questions/comments/concerns about the extensibility, please email us at cxt-sdk@outreach.io.***
+In case you have any questions/comments/concerns about the extensibility, please email us at **cxt-sdk@outreach.io.**
 
 Table of content
 
 - [How it works](#how-it-works)
-- [How does the development process look](#how-does-the-development-process-look)
+- [Development process summary](#development-process-summary)
 - [How much coding is needed](#how-much-coding-is-needed)
 - [How to learn more about building an addon](#how-to-learn-more-about-building-an-addon)
 
@@ -20,7 +20,7 @@ When Outreach user goes to a specific part of the Outreach application (e.g., op
 - Add an iframe with the source pointing to an addon hosting page
 - Send the current user contextual information to the addon to initialize itself into a proper state.
 
-## How does the development process look
+## Development process summary
 
 The process of creating addon usually requires the next steps:
 
@@ -53,5 +53,7 @@ In any type of integration, you would need to create and uplad a manifest file, 
 In case your integration will need to integrate SDK, you can learn about it on [Outreach SDK](/docs/sdk.md) page.
 
 In case your integration will require client access to Outreach API, you will have to learn more about [Addon host](/docs/host.md) requirements.
+
+In case you would want to learn how you can work on Outreach addon from your own computer without having any servers and any deployments, read about it in  [Local development experience](/docs/devxp.md)
 
 *In case you have any questions/comments/concerns about the extensibility, please email us at **cxt-sdk@outreach.io.***
