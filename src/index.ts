@@ -42,6 +42,7 @@ export * from './store/keys/AccountContextKeys';
 export * from './store/keys/AllContextKeys';
 export * from './store/keys/ClientContextKeys';
 export * from './store/keys/OpportunityContextKeys';
+export * from './store/keys/ProspectContextKeys';
 export * from './store/keys/UserContextKeys';
 export * from './store/AddonStore';
 export * from './store/AddonType';
