@@ -9,9 +9,9 @@
 export enum AccountContextKeys {
 
     /**
-     * Hash of account id
+     * Account id
      */
-    ID = 'acc.hid',
+    ID = 'acc.id',
 
     /**
      * A custom ID for the account, often referencing an ID in an external system.

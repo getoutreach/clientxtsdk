@@ -25,9 +25,9 @@ export enum OpportunityContextKeys {
     EXTERNAL_CREATED_AT = 'opp.ecrat',
 
     /**
-     * Hash of opportunity id
+     * Opportunity id
      */
-    ID = 'opp.hid',
+    ID = 'opp.id',
 
     /**
      * The name of the opportunity.

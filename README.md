@@ -1,9 +1,11 @@
 <!-- omit in toc -->
 # Outreach client extensibility SDK
 
-This document contains all the information a developer needs to create an Outreach addon.
+This document contains all the information a developer needs to create an Outreach addon. 
 
-In case you have any questions/comments/concerns about the extensibility, please email us at **cxt-sdk@outreach.io.**
+In case you have any questions/comments/concerns about the client extensibility, please email us at **cxt-sdk@outreach.io.**
+
+_NOTE: This document is an early preview of the client extensibility framework whose primary purpose is to speed up the collaboration and scenario exploration with potential addon creators. It will be changing at a rapid pace until the official release of the platform._
 
 Table of content
 

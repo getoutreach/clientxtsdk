@@ -22,7 +22,7 @@ Our end goal is to provide contextual access to any of the properties available 
 
 - **acc.cstmId** A custom ID for the account, often referencing an ID in an external system.
 - **acc.desc** A custom description of the account.
-- **acc.hid** Hash of account id
+- **acc.id** Account id
 - **acc.loc** The company’s primary geographic region (e.g. "Eastern USA").
 - **acc.name** The name of the company (e.g. "Acme Corporation").
 - **acc.tags** A list of tag values associated with the account (e.g. ["Enterprise", "Tier 1"]).
@@ -37,7 +37,7 @@ Our end goal is to provide contextual access to any of the properties available 
 - **opp.amnt** The amount the opportunity is worth.
 - **opp.desc** A description of the opportunity.
 - **opp.ecrat** The date the opportunity was created in the external system.
-- **opp.hid** Hash of opportunity id
+- **opp.id** Opportunity id
 - **opp.name** The name of the opportunity.
 - **opp.nstp** The next step to take for the opportunity.
 - **opp.prob** The chances of the opportunity succeeding represented as a percentage.
@@ -54,7 +54,7 @@ Our end goal is to provide contextual access to any of the properties available 
 - **pro.avail** The date and time the prospect is available to contact again.
 - **pro.comp** The name of the prospect company. If associated with an account, this is the name of the account. (e.g. Acme International).
 - **pro.loc** The locality of the prospect's company.
-- **pro.hid** Hash of prospect id
+- **pro.id** Prospect id
 - **pro.tags** A list of tag values associated with the account (e.g. ["Interested", "2017 Expo"]).
 - **pro.tzone** The prospect's current timezone, preferably in the IANA format (e.g. "America/LosAngeles").
 - **pro.title** The title of the prospect.
@@ -68,7 +68,7 @@ Our end goal is to provide contextual access to any of the properties available 
 
 - **usr.email** The email address of the user.
 - **usr.fname** The first name of the user.
-- **usr.hid** Hash of user id.
+- **usr.id** user id.
 - **ust.lname** The last name of the user.
 - **usr.tit** The user's job title (e.g. "Staff Accountant").
 - **usr.uname** A reader-friendly unique identifier of the user.

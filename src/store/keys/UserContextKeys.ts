@@ -18,9 +18,9 @@ export enum UserContextKeys {
     FIRST_NAME = 'usr.fname',
 
     /**
-     * Hash of user id
+     * User id
      */
-    ID = 'usr.hid',
+    ID = 'usr.id',
 
     /**
      * The last name of the user.

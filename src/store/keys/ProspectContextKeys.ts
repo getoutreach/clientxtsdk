@@ -23,9 +23,9 @@ export enum ProspectContextKeys {
      */
     COMPANY_LOCALITY = 'pro.loc',
     /**
-     * Hash of prospect id
+     * Prospect id
      */
-    ID = 'pro.hid',
+    ID = 'pro.id',
 
     /**
      * A list of tag values associated with the account (e.g. ["Interested", "2017 Expo"]).
