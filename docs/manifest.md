@@ -12,7 +12,7 @@ Table of content:
   - [title](#title)
   - [description](#description)
   - [host](#host)
-    - [type (host)](#type-host)
+    - [type](#type)
     - [url](#url)
     - [icon](#icon)
   - [author](#author)
@@ -91,14 +91,14 @@ A localized addon description is shown in the addon store to explain what the ad
 
 ### host
 
-#### type (host)
+#### type
 
 Outreach application supports different types of addons which can be loaded in different parts of the application.
 Type property defines what the type of addon is and where it should be loaded.
 
 _e.g **type: "tab-opportunity"** will result with addon being loaded as an additional tab on the Outreach opportunity page_
 
-Supported addon types (we will expand this list as the time goes):
+[SDK supported addon types](https://github.com/getoutreach/clientxtsdk/blob/develop/src/store/AddonType.ts) (we will expand this list as the time goes):
 
 - tab-account
 - tab-opportunity

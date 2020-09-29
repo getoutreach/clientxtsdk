@@ -11,7 +11,7 @@ From [Outreach API](https://api.outreach.io/api/v2/docs#authorization) documenta
 
 
 
-All of the [SDK scopes]((https://github.com/getoutreach/clientxtsdk/blob/develop/src/store/scopes.ts)) are resource grouped in:
+All of the [SDK scopes](https://github.com/getoutreach/clientxtsdk/blob/develop/src/store/scopes.ts) are resource grouped in:
 
 - **audits** (audits all|read)
 - **accounts** (accounts all|read|write|delete)
