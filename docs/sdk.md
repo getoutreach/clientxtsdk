@@ -62,7 +62,7 @@ addonSdk.onInfo = (info: AddonInfo) => {
 }
 ```
 
-In case there is a need for observing other types of events, addonSdk defines a logLevel property which can be set to one of the enum values
+In case there is a need for observing other types of events, addonSdk defines a logLevel property that can be set to one of the enum values.
 None| Debug  | Info | Warn | Error.
 
 ```javascript
@@ -129,8 +129,8 @@ Every time when addon creator wants to call Outreach API, it needs a valid acces
 
 If there is a **token in local storage** and the token didn't expire, the function just returns that token immediately.
 
-If no valid access token in local cache, addon sdk will try to **refresh access token** by calling the [refresh token endpoint](#refresh-token-flow), cache it, and return it.
+If no valid access token in the local cache, addon sdk will try to **refresh access token** by calling the [refresh token endpoint](#refresh-token-flow), cache it, and return it.
 
-If the token refresh call will will fail to **obtain a new access token**, addon sdk will ask the Outreach host to start the authentication process, so the user will see the Outreach API OAuth consent screen, and the flow will go as described in [initial auth flow](#initial-authentication-flow) section. At the end of this initial auth flow, the addon will load again, but this time it will have a locally cached access token, and getToken() will this time resolve with a valid access token.
+If the token refresh call will fail to **obtain a new access token**, addon sdk will ask the Outreach host to start the authentication process, so the user will see the Outreach API OAuth consent screen, and the flow will go as described in [initial auth flow](#initial-authentication-flow) section. At the end of this initial auth flow, the addon will load again, but this time it will have a locally cached access token, and getToken() will this time resolve with a valid access token.
 
-_if **skipCache** parameter is passed with true value, locally cached value will be ignored and new access token will be retrieved from server through refreshing or outreach user consrent flows._
+_if **skipCache** parameter is passed with true value, the locally cached value will be ignored, and a new access token will be retrieved from the server through refreshing or outreach user consent flows._

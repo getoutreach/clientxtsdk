@@ -43,17 +43,17 @@ Suppose your addon needs to **be aware of the current Outreach user's context** 
 In case your addon needs to communicate with the Outreach app, it needs to integrate the [Outreach SDK](/docs/sdk.md).
 An example of this integration would be an addon that wants to inform the user about an error in addon by requesting the Outreach app to show error notification.
 
-In case your addon needs **access to Outreach API**,  it will require, in addition to [Outreach SDK](/docs/sdk.md) integration also an update of [the addon host](/docs/host.md) to support the Outreach API authentication.
+In case your addon needs **access to Outreach API**,  it will require, in addition to [Outreach SDK](/docs/sdk.md) integration, also an update of [the addon host](/docs/host.md) to support the Outreach API authentication.
 While this is the only non-trivial amount of coding, it should be doable in a few hours based on this document's instructions.
 
 ## How to learn more about building an addon
 
-In any type of integration, you would need to create and uplad a manifest file, so you can start by learning more about [manifest file](/docs/manifest.md) page.
+In any type of integration, you would need to create and upload a manifest file to learn more about [manifest file](/docs/manifest.md) page.
 
-In case your integration will need to integrate SDK, you can learn about it on [Outreach SDK](/docs/sdk.md) page.
+In case your integration needs to integrate SDK, you can learn about it on [Outreach SDK](/docs/sdk.md) page.
 
-In case your integration will require client access to Outreach API, you will have to learn more about [Addon host](/docs/host.md) requirements.
+In case your integration requires client access to Outreach API, you will have to learn more about [Addon host](/docs/host.md) requirements.
 
-In case you would want to learn how you can work on Outreach addon from your own computer without having any servers and any deployments, read about it in  [Local development experience](/docs/devxp.md)
+In case you would want to learn how you can work on Outreach addon from your computer without having any servers and any deployments, read about it in  [Local development experience](/docs/devxp.md)
 
-*In case you have any questions/comments/concerns about the extensibility, please email us at **cxt-sdk@outreach.io.***
+*If you have any questions/comments/concerns about the extensibility, please email us at **cxt-sdk@outreach.io.***
