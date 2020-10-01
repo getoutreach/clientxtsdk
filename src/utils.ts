@@ -1,13 +1,13 @@
 // eslint-disable-next-line no-unused-vars
 import { ContextParam } from './context/ContextParam';
 
-class Utils {
+export class utils {
     /**
      * Tokenize url by replacing all token placeholders with matching context params.
      *
-     * @memberof Utils
+     * @memberof utils
      */
-    public tokenizeUrl = (url: string, params: ContextParam[])
+    public static tokenizeUrl = (url: string, params: ContextParam[])
     : {
         url: string,
         params: ContextParam[]
@@ -37,9 +37,10 @@ class Utils {
     /**
      * Paramaterize url by appending context params to the url parameters.
      *
-     * @memberof Utils
+     * @static
+     * @memberof utils
      */
-    public parametarizeUrl = (url: string, params: ContextParam[])
+    public static parametarizeUrl = (url: string, params: ContextParam[])
     : string => {
       const hostUrl = new URL(url);
 
@@ -47,10 +48,10 @@ class Utils {
       params.forEach(param => hostParams.append(param.key, param.value));
       const hostParamsString = hostParams.toString();
 
-      return `${this.getUrlDomain(hostUrl)}${hostUrl.pathname}?${hostParamsString}`;
+      return `${utils.getUrlDomain(hostUrl)}${hostUrl.pathname}?${hostParamsString}`;
     }
 
-    public getUrlDomain = (url: URL): string => {
+    public static getUrlDomain = (url: URL): string => {
       let originHost = `${url.protocol}//${url.hostname}`;
 
       if (url.port && url.port !== '443') {
@@ -60,5 +61,3 @@ class Utils {
       return originHost;
     };
 }
-
-export default new Utils();

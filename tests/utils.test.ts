@@ -2,7 +2,7 @@ import { ContextParam } from '../src/context/ContextParam';
 import { UserContextKeys } from '../src/store/keys/UserContextKeys';
 import { OpportunityContextKeys } from '../src/store/keys/OpportunityContextKeys';
 
-import utils from '../src/utils';
+import { utils } from '../src/utils';
 
 const usrIdParam = { key: UserContextKeys.ID, value: 'uid-123' };
 const oppIdParam = { key: OpportunityContextKeys.ID, value: '112233' };
