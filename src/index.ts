@@ -52,6 +52,7 @@ export * from './store/ManifestApi';
 export * from './store/ManifestAuthor';
 export * from './store/ManifestHost';
 export * from './store/Scopes';
+export * as utils from './utils';
 
 class AddonsSdk {
     private origin: string | null;
