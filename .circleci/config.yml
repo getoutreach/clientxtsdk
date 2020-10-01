@@ -11,7 +11,16 @@ jobs:
             name: Installing package dependencies
             command: yarn install --frozen-lockfile
         - run:
-            name: Building SDK
+            name: Lint SDK
+            command: yarn lint          
+        - run:
+            name: Build SDK
+            command: yarn build
+        - run:
+            name: Test SDK
+            command: yarn test
+        - run:
+            name: Package SDK
             command: yarn package
         - run:
             name: Authenticate with registry
