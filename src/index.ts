@@ -356,6 +356,7 @@ class AddonsSdk {
       }
 
       if (hostOrigin.endsWith('outreach.io') ||
+          hostOrigin.endsWith('outreach-staging.com') ||
           loc.hostname === 'localhost') {
         return hostOrigin;
       } else {
