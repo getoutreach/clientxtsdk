@@ -62,7 +62,7 @@ describe('tokenizer tests', () => {
 describe('parmeterization tests', () => {
     test('all the params are added as url params', () => {
         const url = 'https://someurl.com/test';
-        const result = utils.parametarizeUrl(url, queryParams);
+        const result = utils.parameterizeUrl(url, queryParams);
         expect(result).toBe('https://someurl.com/test?usr.id=uid-123&opp.id=112233');
     })
 });

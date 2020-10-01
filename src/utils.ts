@@ -40,7 +40,7 @@ export class utils {
      * @static
      * @memberof utils
      */
-    public static parametarizeUrl = (url: string, params: ContextParam[])
+    public static parameterizeUrl = (url: string, params: ContextParam[])
     : string => {
       const hostUrl = new URL(url);
 
