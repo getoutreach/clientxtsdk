@@ -76,13 +76,6 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   constructor () {
-    console.log('[CXT][AddonSdk]::ctor()');
-    this.origin = this.getHostOrigin();
-
-    if (!this.origin) {
-      return;
-    }
-
     // default handlers impplementation
     this.onInfo = this.defaultHandleOnInfo;
 
@@ -112,8 +105,6 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public ready () {
-    console.log('[CXT][AddonSdk]::ready', this.origin);
-
     const postMessage = JSON.stringify(
       new AddonMessage(AddonMessageType.READY)
     );
@@ -126,13 +117,11 @@ class AddonsSdk {
 
     if (!this.origin) {
       console.error(
-        'Can not send ready message as the origin info is invalid',
+        'Can not send ready message without the origin info is missing',
         this.origin
       );
       return;
     }
-
-    console.log('[CXT][AddonSdk]::ready', postMessage, this.origin);
 
     window.parent.postMessage(postMessage, this.origin);
   }
@@ -257,15 +246,12 @@ class AddonsSdk {
     }
   };
 
-  private preprocessInitMessage (initMessage: InitMessage) {
-    if (!this.origin) {
-      console.error(
-        'Can not preprocess initMessage as the origin info is invalid',
-        this.origin
-      );
-      return;
+  private preprocessInitMessage = (initMessage: InitMessage) => {
+    if (!this.validOrigin(initMessage.origin)) {
+      throw new Error('Init message is having invalid origin value:' + initMessage.origin);
     }
 
+    this.origin = initMessage.origin;
     this.locale = initMessage.locale;
     this.theme = initMessage.theme;
     this.userIdentifier = initMessage.userIdentifier;
@@ -354,28 +340,6 @@ class AddonsSdk {
     }
   };
 
-  private getHostOrigin = () => {
-    const loc = window.parent.location;
-    let hostOrigin = `${loc.protocol}//${loc.hostname}`;
-
-    if (loc.port && loc.port !== '80' && loc.port !== '433') {
-      hostOrigin += `:${loc.port}`;
-    }
-
-    if (
-      hostOrigin.endsWith('outreach.io') ||
-      hostOrigin.endsWith('outreach-staging.com') ||
-      hostOrigin.endsWith('outreach-dev.com') ||
-      loc.hostname === 'localhost'
-    ) {
-      console.log('[CXT][AddonSdk]::getHostOrigin()->OK', hostOrigin)
-      return hostOrigin;
-    } else {
-      console.error('[CXT][AddonSdk]::getHostOrigin()->Invalid host origin:', hostOrigin, window.parent);
-      return null;
-    }
-  };
-
   private isCtxMessageEvent = (messageEvent: MessageEvent): boolean => {
     if (!messageEvent) {
       return false;
@@ -389,7 +353,7 @@ class AddonsSdk {
       this.onInfo({
         level: LogLevel.Trace,
         message:
-          '[CXT]::isCtxMessageEvent-invalid message source or missing source/data',
+          '[CXT][AddonSdk]::isCtxMessageEvent-invalid message source or missing source/data',
         context: [messageEvent.data, messageEvent.origin, messageEvent.source]
       });
       return false;
@@ -398,7 +362,7 @@ class AddonsSdk {
     if (!this.origin || messageEvent.origin !== this.origin) {
       this.onInfo({
         level: LogLevel.Debug,
-        message: '[CXT]::isCtxMessageEvent-invalid message origin ',
+        message: '[CXT][AddonSdk]::isCtxMessageEvent-invalid message origin ',
         context: [messageEvent.origin]
       });
       return false;
@@ -408,7 +372,7 @@ class AddonsSdk {
       this.onInfo({
         level: LogLevel.Debug,
         message:
-          '[CXT]::isCtxMessageEvent - message event data is not a string',
+          '[CXT][AddonSdk]::isCtxMessageEvent - message event data is not a string',
         context: [JSON.stringify(messageEvent.data)]
       });
 
@@ -416,6 +380,16 @@ class AddonsSdk {
     }
 
     return true;
+  };
+
+  private validOrigin = (origin: string): boolean => {
+    if (!origin) {
+      return false;
+    }
+    return origin.endsWith('outreach.io') ||
+      origin.endsWith('outreach-staging.com') ||
+      origin.endsWith('outreach-dev.com') ||
+      origin.endsWith('localhost');
   };
 }
 

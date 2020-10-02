@@ -44,4 +44,12 @@ export class InitMessage extends AddonMessage implements OutreachContext {
    * @memberof InitMessage
    */
   context: ContextParam[] = [];
+
+  /**
+   * Parent origin to be used when posting messages to parent
+   *
+   * @type {string}
+   * @memberof InitMessage
+   */
+  origin: string;
 }
