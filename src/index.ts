@@ -198,7 +198,7 @@ class AddonsSdk {
       this.onInfo({
         level: LogLevel.Trace,
         message: '[CXT][AddonSdk]::handleReceivedMessage- ignoring event message',
-        context: [JSON.stringify(messageEvent)]
+        context: [messageEvent.origin, JSON.stringify(messageEvent.data)]
       });
       return;
     }
@@ -310,25 +310,25 @@ class AddonsSdk {
         // ignore the event
         break;
       case LogLevel.Trace:
-        if (this.logging >= LogLevel.Trace) {
+        if (this.logging <= LogLevel.Trace) {
           // tslint:disable-next-line: no-console
-          console.debug('[CXT][AddonSdk]::onInfo-trace (default)', event, event.context);
+          console.log('[CXT][AddonSdk]::onInfo-trace (default)', event, event.context);
         }
         break;
       case LogLevel.Debug:
-        if (this.logging >= LogLevel.Debug) {
+        if (this.logging <= LogLevel.Debug) {
           // tslint:disable-next-line: no-console
-          console.debug('[CXT][AddonSdk]::onInfo-debug (default)', event, event.context);
+          console.log('[CXT][AddonSdk]::onInfo-debug (default)', event, event.context);
         }
         break;
       case LogLevel.Info:
-        if (this.logging >= LogLevel.Info) {
+        if (this.logging <= LogLevel.Info) {
           // tslint:disable-next-line: no-console
           console.info('[CXT][AddonSdk]::onInfo-info (default)', event, event.context);
         }
         break;
       case LogLevel.Warning:
-        if (this.logging >= LogLevel.Info) {
+        if (this.logging <= LogLevel.Warning) {
           // tslint:disable-next-line: no-console
           console.warn('[CXT][AddonSdk]::onInfo-warning (default)', event, event.context);
         }
@@ -350,27 +350,16 @@ class AddonsSdk {
       !messageEvent.data ||
       !messageEvent.origin
     ) {
-      this.onInfo({
-        level: LogLevel.Trace,
-        message:
-          '[CXT][AddonSdk]::isCtxMessageEvent-invalid message source or missing source/data',
-        context: [messageEvent.data, messageEvent.origin, messageEvent.source]
-      });
       return false;
     }
 
     if (!this.origin || messageEvent.origin !== this.origin) {
-      this.onInfo({
-        level: LogLevel.Debug,
-        message: '[CXT][AddonSdk]::isCtxMessageEvent-invalid message origin ',
-        context: [messageEvent.origin]
-      });
       return false;
     }
 
     if (typeof messageEvent.data !== 'string') {
       this.onInfo({
-        level: LogLevel.Debug,
+        level: LogLevel.Error,
         message:
           '[CXT][AddonSdk]::isCtxMessageEvent - message event data is not a string',
         context: [JSON.stringify(messageEvent.data)]
