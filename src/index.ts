@@ -200,7 +200,12 @@ class AddonsSdk {
   }
 
   private handleReceivedMessage = (messageEvent: MessageEvent) => {
-    if (this.isCtxMessageEvent(messageEvent)) {
+    if (!this.isCtxMessageEvent(messageEvent)) {
+      this.onInfo({
+        level: LogLevel.Trace,
+        message: '[CXT]::handleReceivedMessage- ignoring event message',
+        context: [JSON.stringify(messageEvent)]
+      });
       return;
     }
 
@@ -378,7 +383,7 @@ class AddonsSdk {
       this.onInfo({
         level: LogLevel.Trace,
         message:
-          '[CXT]::handleReceivedMessage-invalid message source or missing source/data',
+          '[CXT]::isCtxMessageEvent-invalid message source or missing source/data',
         context: [messageEvent.data, messageEvent.origin, messageEvent.source]
       });
       return false;
@@ -387,7 +392,7 @@ class AddonsSdk {
     if (!this.origin || messageEvent.origin !== this.origin) {
       this.onInfo({
         level: LogLevel.Debug,
-        message: '[CXT]::handleReceivedMessage-invalid message origin ',
+        message: '[CXT]::isCtxMessageEvent-invalid message origin ',
         context: [messageEvent.origin]
       });
       return false;
@@ -397,8 +402,8 @@ class AddonsSdk {
       this.onInfo({
         level: LogLevel.Debug,
         message:
-          '[CXT]::handleReceivedMessage - message event data is not a string',
-        context: [messageEvent.data]
+          '[CXT]::isCtxMessageEvent - message event data is not a string',
+        context: [JSON.stringify(messageEvent.data)]
       });
 
       return false;
