@@ -186,23 +186,14 @@ class AddonsSdk {
   }
 
   private handleReceivedMessage = (messageEvent: MessageEvent) => {
-    if (!this.isCtxMessageEvent(messageEvent)) {
+    const addonMessage = this.getAddonMessage(messageEvent);
+    if (!addonMessage) {
       this.onInfo({
         level: LogLevel.Trace,
-        message: '[CXT][AddonSdk]::handleReceivedMessage- ignoring event message',
+        message:
+          '[CXT][AddonSdk]::handleReceivedMessage- ignoring event message',
         context: [messageEvent.origin, JSON.stringify(messageEvent.data)]
       });
-      return;
-    }
-
-    const hostMessage: AddonMessage = JSON.parse(messageEvent.data);
-    if (!hostMessage || !hostMessage.type) {
-      this.onInfo({
-        level: LogLevel.Error,
-        message: '[CXT][AddonSdk]::handleReceivedMessage- invalid message data format',
-        context: [JSON.stringify(messageEvent)]
-      });
-
       return;
     }
 
@@ -212,9 +203,9 @@ class AddonsSdk {
       context: [JSON.stringify(messageEvent)]
     });
 
-    switch (hostMessage.type) {
+    switch (addonMessage.type) {
       case AddonMessageType.INIT: {
-        const context = hostMessage as InitMessage;
+        const context = addonMessage as InitMessage;
         this.preprocessInitMessage(context);
         this.onInit(context);
         return;
@@ -224,26 +215,22 @@ class AddonsSdk {
       case AddonMessageType.REQUEST_NOTIFY:
       case AddonMessageType.REQUEST_RELOAD:
         this.onInfo({
-          message: '[CXT][AddonSdk]:onReceived - Client event received from host',
+          message:
+            '[CXT][AddonSdk]:onReceived - Client event received from host',
           level: LogLevel.Error,
-          context: [JSON.stringify(hostMessage)]
+          context: [JSON.stringify(addonMessage)]
         });
         return;
       default:
         this.onInfo({
           message: '[CXT][AddonSdk]:onReceived - Unknown host message of type:',
           level: LogLevel.Warning,
-          context: [JSON.stringify(hostMessage)]
+          context: [JSON.stringify(addonMessage)]
         });
     }
   };
 
   private preprocessInitMessage = (initMessage: InitMessage) => {
-    if (!this.validOrigin(initMessage.origin)) {
-      throw new Error('Init message is having invalid origin value:' + initMessage.origin);
-    }
-
-    this.origin = initMessage.origin;
     this.locale = initMessage.locale;
     this.theme = initMessage.theme;
     this.userIdentifier = initMessage.userIdentifier;
@@ -289,12 +276,12 @@ class AddonsSdk {
       context: [
         JSON.stringify(initMessage),
         JSON.stringify(outreachContext),
-        this.origin
+        this.origin || 'N/A'
       ]
     });
 
     this.onInit(outreachContext);
-  }
+  };
 
   private defaultHandleOnInfo = (event: Event) => {
     switch (event.level) {
@@ -304,73 +291,138 @@ class AddonsSdk {
       case LogLevel.Trace:
         if (this.logging <= LogLevel.Trace) {
           // tslint:disable-next-line: no-console
-          console.log('[CXT][AddonSdk]::onInfo-trace (default)', event, event.context);
+          console.log(
+            '[CXT][AddonSdk]::onInfo-trace (default)',
+            event,
+            event.context
+          );
         }
         break;
       case LogLevel.Debug:
         if (this.logging <= LogLevel.Debug) {
           // tslint:disable-next-line: no-console
-          console.log('[CXT][AddonSdk]::onInfo-debug (default)', event, event.context);
+          console.log(
+            '[CXT][AddonSdk]::onInfo-debug (default)',
+            event,
+            event.context
+          );
         }
         break;
       case LogLevel.Info:
         if (this.logging <= LogLevel.Info) {
           // tslint:disable-next-line: no-console
-          console.info('[CXT][AddonSdk]::onInfo-info (default)', event, event.context);
+          console.info(
+            '[CXT][AddonSdk]::onInfo-info (default)',
+            event,
+            event.context
+          );
         }
         break;
       case LogLevel.Warning:
         if (this.logging <= LogLevel.Warning) {
           // tslint:disable-next-line: no-console
-          console.warn('[CXT][AddonSdk]::onInfo-warning (default)', event, event.context);
+          console.warn(
+            '[CXT][AddonSdk]::onInfo-warning (default)',
+            event,
+            event.context
+          );
         }
         break;
       case LogLevel.Error:
         // tslint:disable-next-line: no-console
-        console.error('[CXT][AddonSdk]::onInfo-error (default)', event, event.context);
+        console.error(
+          '[CXT][AddonSdk]::onInfo-error (default)',
+          event,
+          event.context
+        );
         break;
     }
   };
 
-  private isCtxMessageEvent = (messageEvent: MessageEvent): boolean => {
+  private getAddonMessage = (
+    messageEvent: MessageEvent
+  ): AddonMessage | null => {
     if (!messageEvent) {
-      return false;
+      return null;
     }
 
-    if (
-      messageEvent.source !== window ||
-      !messageEvent.data ||
-      !messageEvent.origin
-    ) {
-      return false;
-    }
-
-    if (!this.origin || messageEvent.origin !== this.origin) {
-      return false;
-    }
-
-    if (typeof messageEvent.data !== 'string') {
+    if (!messageEvent.data || typeof messageEvent.data !== 'string') {
       this.onInfo({
-        level: LogLevel.Error,
+        level: LogLevel.Debug,
         message:
-          '[CXT][AddonSdk]::isCtxMessageEvent - message event data is not a string',
+          '[CXT][AddonSdk]::getAddonMessage - message event data is not a string',
         context: [JSON.stringify(messageEvent.data)]
       });
-
-      return false;
+      return null;
     }
 
-    return true;
+    const hostMessage: AddonMessage = JSON.parse(messageEvent.data);
+    if (!hostMessage || !hostMessage.type) {
+      this.onInfo({
+        level: LogLevel.Debug,
+        message:
+          '[CXT][AddonSdk]::getAddonMessage- invalid message data format',
+        context: [JSON.stringify(messageEvent)]
+      });
+
+      return null;
+    }
+
+    if (this.origin) {
+      if (messageEvent.origin !== this.origin) {
+        this.onInfo({
+          level: LogLevel.Error,
+          message: '[CXT][AddonSdk]::getAddonMessage- invalid origin',
+          context: [messageEvent.origin, this.origin]
+        });
+        return null;
+      }
+    } else {
+      if (!this.initializeOrigin(hostMessage, messageEvent)) {
+        return null;
+      }
+    }
+
+    return hostMessage;
+  };
+
+  private initializeOrigin = (
+    hostMessage: AddonMessage,
+    messageEvent: MessageEvent
+  ) => {
+    if (hostMessage.type !== AddonMessageType.INIT) {
+      return null;
+    }
+
+    if (!this.validOrigin(messageEvent.origin)) {
+      this.onInfo({
+        level: LogLevel.Error,
+        message: '[CXT][AddonSdk]::getAddonMessage- invalid origin received',
+        context: [messageEvent.origin]
+      });
+      return null;
+    }
+
+    this.onInfo({
+      level: LogLevel.Info,
+      message: '[CXT][AddonSdk]::getAddonMessage- setting origin',
+      context: [messageEvent.origin]
+    });
+
+    this.origin = messageEvent.origin;
+    return this.origin;
   };
 
   private validOrigin = (origin: string): boolean => {
     if (!origin) {
       return false;
     }
-    return origin.endsWith('outreach.io') ||
+    return (
+      origin.endsWith('outreach.io') ||
       origin.endsWith('outreach-staging.com') ||
       origin.endsWith('outreach-dev.com') ||
-      origin.endsWith('localhost');
+      origin.endsWith('localhost')
+    );
   };
 }
 
