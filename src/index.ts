@@ -191,29 +191,11 @@ class AddonsSdk {
       window.parent.postMessage(postMessage, this.origin)
     }
 
+
+
     private handleReceivedMessage = (messageEvent: MessageEvent) => {
-      if (!messageEvent || messageEvent.source === window || !messageEvent.data || !messageEvent.origin) {
-        // do nothing - ignore the noise
-        return
-      }
-
-      if (this.origin && messageEvent.origin !== this.origin) {
-        this.onInfo({
-          level: LogLevel.Warning,
-          message: '[CXT]::handleReceivedMessage-invalid message origin ',
-          context: [messageEvent.origin]
-        })
-        return
-      }
-
-      if (typeof messageEvent.data !== 'string') {
-        this.onInfo({
-          level: LogLevel.Warning,
-          message: '[CXT]::handleReceivedMessage - message event data is not a string',
-          context: [messageEvent.data]
-        })
-
-        return
+      if (this.isCtxMessageEvent(messageEvent)) {
+        return;
       }
 
       const hostMessage: AddonMessage = JSON.parse(messageEvent.data)
@@ -358,6 +340,7 @@ class AddonsSdk {
 
       if (hostOrigin.endsWith('outreach.io') ||
           hostOrigin.endsWith('outreach-staging.com') ||
+          hostOrigin.endsWith('outreach-dev.com') ||
           loc.hostname === 'localhost') {
         return hostOrigin;
       } else {
@@ -365,6 +348,42 @@ class AddonsSdk {
         return null;
       }
     }
+
+    private isCtxMessageEvent = (messageEvent: MessageEvent): boolean => {
+      if (!messageEvent) {
+        return false;
+      }
+
+      if (messageEvent.source !== window || !messageEvent.data || !messageEvent.origin) {
+        this.onInfo({
+          level: LogLevel.Trace,
+          message: '[CXT]::handleReceivedMessage-invalid message source or missing source/data',
+          context: [messageEvent.data, messageEvent.origin, messageEvent.source]
+        })
+        return false;
+      }
+
+      if (!this.origin || messageEvent.origin !== this.origin) {
+        this.onInfo({
+          level: LogLevel.Debug,
+          message: '[CXT]::handleReceivedMessage-invalid message origin ',
+          context: [messageEvent.origin]
+        })
+        return false;
+      }
+
+      if (typeof messageEvent.data !== 'string') {
+        this.onInfo({
+          level: LogLevel.Debug,
+          message: '[CXT]::handleReceivedMessage - message event data is not a string',
+          context: [messageEvent.data]
+        })
+
+        return false;
+      }
+
+      return true;
+    };
 }
 
 declare global {
