@@ -81,7 +81,7 @@ class AddonsSdk {
 
     this.onInit = (context: OutreachContext) => {
       this.onInfo({
-        level: LogLevel.Trace,
+        level: LogLevel.Info,
         message: '[CXT][AddonSdk]::onInit (default)',
         context: [JSON.stringify(context)]
       });
@@ -89,7 +89,7 @@ class AddonsSdk {
 
     this.onMessage = (message: AddonMessage) => {
       this.onInfo({
-        level: LogLevel.Trace,
+        level: LogLevel.Info,
         message: '[CXT][AddonSdk]::onMessage (default)',
         context: [JSON.stringify(message)]
       });
@@ -110,7 +110,7 @@ class AddonsSdk {
     );
 
     this.onInfo({
-      level: LogLevel.Debug,
+      level: LogLevel.Info,
       message: '[CXT][AddonSdk]::ready',
       context: [postMessage]
     });
@@ -184,7 +184,7 @@ class AddonsSdk {
 
     if (!logged) {
       this.onInfo({
-        level: LogLevel.Debug,
+        level: LogLevel.Info,
         message: '[CXT][AddonSdk]::sendMessage',
         context: [postMessage, this.origin]
       });
@@ -215,7 +215,7 @@ class AddonsSdk {
     }
 
     this.onInfo({
-      level: LogLevel.Trace,
+      level: LogLevel.Info,
       message: '[CXT][AddonSdk]::handleReceivedMessage',
       context: [JSON.stringify(messageEvent)]
     });
@@ -293,7 +293,7 @@ class AddonsSdk {
 
     this.onInfo({
       message: '[CXT][AddonSdk]::preprocessInitMessage',
-      level: LogLevel.Trace,
+      level: LogLevel.Debug,
       context: [
         JSON.stringify(initMessage),
         JSON.stringify(outreachContext),
