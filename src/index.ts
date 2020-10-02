@@ -112,6 +112,8 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public ready () {
+    console.log('[CXT][AddonSdk]::ready', this.origin);
+
     const postMessage = JSON.stringify(
       new AddonMessage(AddonMessageType.READY)
     );
