@@ -115,15 +115,7 @@ class AddonsSdk {
       context: [postMessage]
     });
 
-    if (!this.origin) {
-      console.error(
-        'Can not send ready message without the origin info is missing',
-        this.origin
-      );
-      return;
-    }
-
-    window.parent.postMessage(postMessage, this.origin);
+    window.parent.postMessage(postMessage, '*');
   }
 
   /**
