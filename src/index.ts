@@ -356,13 +356,24 @@ class AddonsSdk {
       return null;
     }
 
-    const hostMessage: AddonMessage = JSON.parse(messageEvent.data);
-    if (!hostMessage || !hostMessage.type) {
+    let hostMessage: AddonMessage;
+    try {
+      hostMessage = JSON.parse(messageEvent.data);
+      if (!hostMessage || !hostMessage.type) {
+        this.onInfo({
+          level: LogLevel.Debug,
+          message:
+            '[CXT][AddonSdk]::getAddonMessage- invalid message data format',
+          context: [messageEvent.data]
+        });
+
+        return null;
+      }
+    } catch (e) {
       this.onInfo({
         level: LogLevel.Debug,
-        message:
-          '[CXT][AddonSdk]::getAddonMessage- invalid message data format',
-        context: [JSON.stringify(messageEvent)]
+        message: '[CXT][AddonSdk]::getAddonMessage- not a json data',
+        context: [messageEvent.data, JSON.stringify(e)]
       });
 
       return null;
