@@ -163,5 +163,27 @@ export enum OpportunityContextKeys {
     CUSTOM_FIELD_98 = 'opp.csf98',
     CUSTOM_FIELD_99 = 'opp.csf99',
 
-    CUSTOM_FIELD_100 = 'opp.csf100'
+    CUSTOM_FIELD_100 = 'opp.csf100',
+    CUSTOM_FIELD_101 = 'opp.csf101',
+    CUSTOM_FIELD_102 = 'opp.csf102',
+    CUSTOM_FIELD_103 = 'opp.csf103',
+    CUSTOM_FIELD_104 = 'opp.csf104',
+    CUSTOM_FIELD_105 = 'opp.csf105',
+    CUSTOM_FIELD_106 = 'opp.csf106',
+    CUSTOM_FIELD_107 = 'opp.csf107',
+    CUSTOM_FIELD_108 = 'opp.csf108',
+    CUSTOM_FIELD_109 = 'opp.csf109',
+
+    CUSTOM_FIELD_110 = 'opp.csf110',
+    CUSTOM_FIELD_111 = 'opp.csf111',
+    CUSTOM_FIELD_112 = 'opp.csf112',
+    CUSTOM_FIELD_113 = 'opp.csf113',
+    CUSTOM_FIELD_114 = 'opp.csf114',
+    CUSTOM_FIELD_115 = 'opp.csf115',
+    CUSTOM_FIELD_116 = 'opp.csf116',
+    CUSTOM_FIELD_117 = 'opp.csf117',
+    CUSTOM_FIELD_118 = 'opp.csf118',
+    CUSTOM_FIELD_119 = 'opp.csf119',
+
+    CUSTOM_FIELD_120 = 'opp.csf120'
 }

@@ -147,5 +147,27 @@ export enum AccountContextKeys {
     CUSTOM_FIELD_98 = 'acc.csf98',
     CUSTOM_FIELD_99 = 'acc.csf99',
 
-    CUSTOM_FIELD_100 = 'acc.csf100'
+    CUSTOM_FIELD_100 = 'acc.csf100',
+    CUSTOM_FIELD_101 = 'acc.csf101',
+    CUSTOM_FIELD_102 = 'acc.csf102',
+    CUSTOM_FIELD_103 = 'acc.csf103',
+    CUSTOM_FIELD_104 = 'acc.csf104',
+    CUSTOM_FIELD_105 = 'acc.csf105',
+    CUSTOM_FIELD_106 = 'acc.csf106',
+    CUSTOM_FIELD_107 = 'acc.csf107',
+    CUSTOM_FIELD_108 = 'acc.csf108',
+    CUSTOM_FIELD_109 = 'acc.csf109',
+
+    CUSTOM_FIELD_110 = 'acc.csf110',
+    CUSTOM_FIELD_111 = 'acc.csf111',
+    CUSTOM_FIELD_112 = 'acc.csf112',
+    CUSTOM_FIELD_113 = 'acc.csf113',
+    CUSTOM_FIELD_114 = 'acc.csf114',
+    CUSTOM_FIELD_115 = 'acc.csf115',
+    CUSTOM_FIELD_116 = 'acc.csf116',
+    CUSTOM_FIELD_117 = 'acc.csf117',
+    CUSTOM_FIELD_118 = 'acc.csf118',
+    CUSTOM_FIELD_119 = 'acc.csf119',
+
+    CUSTOM_FIELD_120 = 'acc.csf120'
 }
