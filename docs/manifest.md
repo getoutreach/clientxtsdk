@@ -108,6 +108,51 @@ _e.g **type: "tab-opportunity"** will result with addon being loaded as an addit
 
 Address where the addon hosting web page is hosted.
 
+This URL can be a direct URL without any value placeholders, in which case Outreach host will add all of the contextual parameters as query parameters.
+
+e.g.
+
+```javascript
+manifest.host.url = "http://somesite.com/something"
+manifest.context = ["opp.id", "usr.id"]
+```
+
+In the case of outreach user with id 456 looking at opportunity 123, this will result during the runtime.
+
+```bash
+ http://somesite.com/something?opp.id=123&usr.id=456
+```
+
+In addition to this default behavior, the addon creator can customize how the addon URL is constructed by applying simple templatization.
+
+e.g.
+
+```javascript
+manifest.host.url = "http://somesite.com/something/{usr.id}"
+```
+
+will become during the runtime
+
+```bash
+http://somesite.com/something/456?opp.id=123
+```
+
+_NB: as opp.id was not tokenized it was appended as query parameter following the default naming convention_
+
+The addon creator can templatize the name of the query parameters.
+
+e.g.
+
+```javascript
+manifest.host.url = "http://somesite.com/something/{usr.id}?oid={opp.id}"
+```
+
+will become during the runtime
+
+``` bash
+http://somesite.com/something/456?oid=123
+```
+
 #### icon
 
 base64 string represents the icon to be shown in the addon store and (if possible) in Outreach client.
