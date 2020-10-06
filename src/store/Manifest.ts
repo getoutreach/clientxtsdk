@@ -1,4 +1,3 @@
-import { Locale } from '../sdk/Locale';
 /* eslint-disable no-unused-vars */
 import { AddonStore } from './AddonStore'
 import { AllContextKeys } from './keys/AllContextKeys';
@@ -112,21 +111,29 @@ export class Manifest {
      */
     public isValid: boolean;
 
-    constructor (props: Manifest) {
-      this.api = new ManifestApi(props.api?.scopes, props.api?.token);
+    constructor (props?: Manifest) {
+      if (!props) {
+        return;
+      }
+
       this.author = { ...new ManifestAuthor(), ...props.author };
-      this.context = props.context || [];
+      this.context = props.context;
       this.description = { ...new LocalizedString(), ...props.description };
       this.host = { ...new ManifestHost(), ...props.host };
       this.identifier = props.identifier?.toString();
       this.title = { ...new LocalizedString(), ...props.title };
       this.store = props.store;
-      this.version = props.version?.toString() || '';
+      this.version = props.version;
+
+      if (props.api) {
+        this.api = new ManifestApi(props.api.scopes, props.api.token);
+      }
+
       this.isValid = this.validate();
     }
 
-    private validate (): boolean {
-      if (this.api && (!this.api.scopes || !this.api.token || this.api.token === '')) {
+    public validate (): boolean {
+      if (this.api && (!this.api.scopes || !this.api.token)) {
         return false;
       }
 
@@ -138,7 +145,7 @@ export class Manifest {
         return false;
       }
 
-      if (this.description && this.description.getText(Locale.ENGLISH) === '') {
+      if (this.description && this.description.en === '') {
         return false;
       }
 
@@ -150,7 +157,7 @@ export class Manifest {
         return false;
       }
 
-      if (this.title && this.title.getText(Locale.ENGLISH) === '') {
+      if (this.title && this.title.en === '') {
         return false;
       }
 
