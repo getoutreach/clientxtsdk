@@ -23,4 +23,10 @@ export class ManifestAuthor {
      * @memberof Author
      */
     termsOfUseUrl: string;
+
+    constructor () {
+      this.websiteUrl = '';
+      this.privacyUrl = '';
+      this.termsOfUseUrl = '';
+    }
 }

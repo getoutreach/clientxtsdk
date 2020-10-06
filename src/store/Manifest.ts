@@ -1,3 +1,4 @@
+import { Locale } from '../sdk/Locale';
 /* eslint-disable no-unused-vars */
 import { AddonStore } from './AddonStore'
 import { AllContextKeys } from './keys/AllContextKeys';
@@ -75,7 +76,7 @@ export class Manifest {
      * @type {string}
      * @memberof Manifest
      */
-    public identifier: string;
+    public identifier: string = '';
 
     /**
      * The localized addon title is shown in the addon store and Outreach app as a tab tile.
@@ -102,4 +103,65 @@ export class Manifest {
      * @memberof Manifest
      */
     public version: string;
+
+    /**
+     * Object validation
+     *
+     * @type {boolean}
+     * @memberof Manifest
+     */
+    public isValid: boolean;
+
+    constructor (props: Manifest) {
+      this.api = new ManifestApi(props.api?.scopes, props.api?.token);
+      this.author = { ...new ManifestAuthor(), ...props.author };
+      this.context = props.context || [];
+      this.description = { ...new LocalizedString(), ...props.description };
+      this.host = { ...new ManifestHost(), ...props.host };
+      this.identifier = props.identifier?.toString();
+      this.title = { ...new LocalizedString(), ...props.title };
+      this.store = props.store;
+      this.version = props.version?.toString() || '';
+      this.isValid = this.validate();
+    }
+
+    private validate (): boolean {
+      if (this.api && (!this.api.scopes || !this.api.token || this.api.token === '')) {
+        return false;
+      }
+
+      if (this.author.websiteUrl === '' || this.author.privacyUrl === '' || this.author.termsOfUseUrl === '') {
+        return false;
+      }
+
+      if (!Array.isArray(this.context)) {
+        return false;
+      }
+
+      if (this.description && this.description.getText(Locale.ENGLISH) === '') {
+        return false;
+      }
+
+      if (this.host.icon === '' || this.host.url === '' || !this.host.type) {
+        return false;
+      }
+
+      if (this.identifier === '') {
+        return false;
+      }
+
+      if (this.title && this.title.getText(Locale.ENGLISH) === '') {
+        return false;
+      }
+
+      if (!this.store) {
+        return false;
+      }
+
+      if (this.version === '') {
+        return false;
+      }
+
+      return true;
+    }
 }

@@ -3,6 +3,10 @@ import { Locale } from '../sdk/Locale';
 export class LocalizedString {
   public en: string;
 
+  constructor () {
+    this.en = '';
+  }
+
   public getText = (locale: Locale) => {
     switch (locale) {
       case Locale.ENGLISH:
