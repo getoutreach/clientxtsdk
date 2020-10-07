@@ -59,6 +59,8 @@ class AddonsSdk {
 
   public locale: Locale = Locale.ENGLISH;
 
+  public activeListener: boolean = false;
+
   public theme: Theme = Theme.LIGHT;
 
   public userIdentifier?: string;
@@ -94,8 +96,6 @@ class AddonsSdk {
         context: [JSON.stringify(message)]
       });
     };
-
-    window.addEventListener('message', this.handleReceivedMessage);
   }
 
   /**
@@ -105,6 +105,11 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public ready () {
+    if (!this.activeListener) {
+      this.activeListener = true;
+      window.addEventListener('message', this.handleReceivedMessage);
+    }
+
     const postMessage = JSON.stringify(
       new AddonMessage(AddonMessageType.READY)
     );
