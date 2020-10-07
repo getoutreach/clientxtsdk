@@ -1,10 +1,16 @@
 /* eslint-disable no-unused-vars */
 import { AddonStore } from './AddonStore'
+import { AddonType } from './AddonType';
 import { AllContextKeys } from './keys/AllContextKeys';
+import { ClientContextKeys } from './keys/ClientContextKeys';
+import { OpportunityContextKeys } from './keys/OpportunityContextKeys';
+import { ProspectContextKeys } from './keys/ProspectContextKeys';
+import { UserContextKeys } from './keys/UserContextKeys';
 import { LocalizedString } from './LocalizedString';
 import { ManifestApi } from './ManifestApi';
 import { ManifestAuthor } from './ManifestAuthor';
 import { ManifestHost } from './ManifestHost';
+import { Scopes } from './Scopes';
 
 /**
  * Definition of the manifest file containing all the information
@@ -133,8 +139,21 @@ export class Manifest {
     }
 
     public validate (): boolean {
-      if (this.api && (!this.api.scopes || !this.api.token)) {
+      if (this.api && (!this.api.scopes || !Array.isArray(this.api.scopes) || !this.api.token)) {
         return false;
+      }
+
+      if (this.api && this.api.scopes && Array.isArray(this.api.scopes)) {
+        let scopeValidation = true;
+        this.api.scopes.forEach(scope => {
+          if (!Object.values(Scopes).includes(scope as Scopes)) {
+            scopeValidation = false;
+          }
+        });
+
+        if (!scopeValidation) {
+          return false;
+        }
       }
 
       if (
@@ -150,15 +169,38 @@ export class Manifest {
         return false;
       }
 
-      if (!Array.isArray(this.context)) {
+      if (!this.context || !Array.isArray(this.context)) {
         return false;
+      } else {
+        let contextValidation = true;
+        this.context.forEach(context => {
+          if (
+            !Object.values(UserContextKeys).includes(context as UserContextKeys) &&
+            !Object.values(ClientContextKeys).includes(context as ClientContextKeys) &&
+            !Object.values(OpportunityContextKeys).includes(context as OpportunityContextKeys) &&
+            !Object.values(ProspectContextKeys).includes(context as ProspectContextKeys)
+          ) {
+            contextValidation = false;
+          }
+        });
+
+        if (!contextValidation) {
+          return false;
+        }
       }
 
       if (this.description && this.description.en === '') {
         return false;
       }
 
-      if (!this.host || this.host.icon === '' || this.host.url === '' || !this.urlValidation([this.host.url]) || !this.host.type) {
+      if (
+        !this.host ||
+        this.host.icon === '' ||
+        this.host.url === '' ||
+        !this.urlValidation([this.host.url]) ||
+        !this.host.type ||
+        !Object.values(AddonType).includes(this.host.type as AddonType)
+      ) {
         return false;
       }
 
@@ -170,7 +212,7 @@ export class Manifest {
         return false;
       }
 
-      if (!this.store) {
+      if (!this.store || !Object.values(AddonStore).includes(this.store as AddonStore)) {
         return false;
       }
 

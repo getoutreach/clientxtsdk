@@ -6,6 +6,13 @@ import { Manifest } from '../src/store/Manifest';
 import { Scopes } from '../src/store/Scopes';
 
 describe('manifest tests', () => {
+  describe('valid', () => {
+    test('only valid manifest should be acceptable', () => {
+      const manifest: Manifest = Object.assign(new Manifest(), validManifest);
+      expect(manifest.validate()).toBe(true);
+    });
+  });
+
   describe('author', () => {
     test('privacyUrl should be url', () => {
       const manifest: Manifest = Object.assign(new Manifest(), validManifest);
@@ -26,17 +33,16 @@ describe('manifest tests', () => {
     });
   });
 
-  describe('context', () => {
-    test('only valid context keys should be acceptable', () => {
-      const manifest: Manifest = Object.assign(new Manifest(), validManifest);
+  describe('api', () => {
+    test('only valid scope should be acceptable', () => {
+      const manifest: Manifest = Object.assign(new Manifest(), invalidScopeTypeManifest);
       expect(manifest.validate()).toBe(false);
     });
   });
 
   describe('host', () => {
-
     test('host has to be defined', () => {
-      const manifest: Manifest = Object.assign(new Manifest(), invalidContextManifest);
+      const manifest: Manifest = Object.assign(new Manifest(), validManifest);
       delete manifest.host;
       expect(manifest.validate()).toBe(false);
     });
@@ -60,10 +66,16 @@ describe('manifest tests', () => {
     });
   });
 
-  describe('store', () => {
-    const manifest: Manifest = Object.assign(new Manifest(), invalidStoreTypeManifest);
+  describe('context', () => {
+    test('only valid contexts should be acceptable', () => {
+      const manifest: Manifest = Object.assign(new Manifest(), invalidContextManifest);
+      expect(manifest.validate()).toBe(false);
+    });
+  });
 
+  describe('store', () => {
     test('only valid store type hould be acceptable', () => {
+      const manifest: Manifest = Object.assign(new Manifest(), invalidStoreTypeManifest);
       expect(manifest.validate()).toBe(false);
     });
   });
@@ -177,3 +189,30 @@ const invalidStoreTypeManifest = {
     token: 'https://someurl.com/token'
   }
 };
+
+const invalidScopeTypeManifest = {
+  author: {
+    privacyUrl: 'https://someurl.com/privacy',
+    termsOfUseUrl: 'https://someurl.com/tos',
+    websiteUrl: 'https://someurl.com/'
+  },
+  context: [UserContextKeys.ID, OpportunityContextKeys.ID],
+  description: {
+    en: 'Some description (en)'
+  },
+  title: {
+    en: 'Some title (en)'
+  },
+  host: {
+    icon: 'http://someurl.com/favicon.png',
+    type: AddonType.OpportunityTab,
+    url: 'http://someurl.com/host'
+  },
+  identifier: 'addon-identifier',
+  store: AddonStore.Personal,
+  version: '0.10',
+  api: {
+    scopes: ['BANANA',Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
+    token: 'https://someurl.com/token'
+  }
+} as Manifest;
