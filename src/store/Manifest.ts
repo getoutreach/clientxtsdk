@@ -1,10 +1,16 @@
 /* eslint-disable no-unused-vars */
 import { AddonStore } from './AddonStore'
+import { AddonType } from './AddonType';
 import { AllContextKeys } from './keys/AllContextKeys';
+import { ClientContextKeys } from './keys/ClientContextKeys';
+import { OpportunityContextKeys } from './keys/OpportunityContextKeys';
+import { ProspectContextKeys } from './keys/ProspectContextKeys';
+import { UserContextKeys } from './keys/UserContextKeys';
 import { LocalizedString } from './LocalizedString';
 import { ManifestApi } from './ManifestApi';
 import { ManifestAuthor } from './ManifestAuthor';
 import { ManifestHost } from './ManifestHost';
+import { Scopes } from './Scopes';
 
 /**
  * Definition of the manifest file containing all the information
@@ -75,7 +81,7 @@ export class Manifest {
      * @type {string}
      * @memberof Manifest
      */
-    public identifier: string;
+    public identifier: string = '';
 
     /**
      * The localized addon title is shown in the addon store and Outreach app as a tab tile.
@@ -102,4 +108,136 @@ export class Manifest {
      * @memberof Manifest
      */
     public version: string;
+
+    /**
+     * Object validation
+     *
+     * @type {boolean}
+     * @memberof Manifest
+     */
+    public isValid: boolean;
+
+    constructor (props?: Manifest) {
+      if (!props) {
+        return;
+      }
+
+      this.author = { ...new ManifestAuthor(), ...props.author };
+      this.context = props.context;
+      this.description = { ...new LocalizedString(), ...props.description };
+      this.host = { ...new ManifestHost(), ...props.host };
+      this.identifier = props.identifier?.toString();
+      this.title = { ...new LocalizedString(), ...props.title };
+      this.store = props.store;
+      this.version = props.version?.toString();
+
+      if (props.api) {
+        this.api = new ManifestApi(props.api.scopes, props.api.token);
+      }
+
+      this.isValid = this.validate();
+    }
+
+    public validate (): boolean {
+      if (this.api && (!this.api.scopes || !Array.isArray(this.api.scopes) || !this.api.token)) {
+        return false;
+      }
+
+      if (this.api && this.api.scopes && Array.isArray(this.api.scopes)) {
+        let scopeValidation = true;
+        this.api.scopes.forEach(scope => {
+          if (!Object.values(Scopes).includes(scope as Scopes)) {
+            scopeValidation = false;
+          }
+        });
+
+        if (!scopeValidation) {
+          return false;
+        }
+      }
+
+      if (
+        !this.author ||
+        !this.author.websiteUrl ||
+        !this.author.privacyUrl ||
+        !this.author.termsOfUseUrl ||
+        this.author.websiteUrl === '' ||
+        this.author.privacyUrl === '' ||
+        this.author.termsOfUseUrl === '' ||
+        !this.urlValidation([this.author.websiteUrl, this.author.privacyUrl, this.author.termsOfUseUrl])
+      ) {
+        return false;
+      }
+
+      if (!this.context || !Array.isArray(this.context)) {
+        return false;
+      } else {
+        let contextValidation = true;
+        this.context.forEach(context => {
+          if (
+            !Object.values(UserContextKeys).includes(context as UserContextKeys) &&
+            !Object.values(ClientContextKeys).includes(context as ClientContextKeys) &&
+            !Object.values(OpportunityContextKeys).includes(context as OpportunityContextKeys) &&
+            !Object.values(ProspectContextKeys).includes(context as ProspectContextKeys)
+          ) {
+            contextValidation = false;
+          }
+        });
+
+        if (!contextValidation) {
+          return false;
+        }
+      }
+
+      if (this.description && this.description.en === '') {
+        return false;
+      }
+
+      if (
+        !this.host ||
+        this.host.icon === '' ||
+        this.host.url === '' ||
+        !this.urlValidation([this.host.url]) ||
+        !this.host.type ||
+        !Object.values(AddonType).includes(this.host.type as AddonType)
+      ) {
+        return false;
+      }
+
+      if (this.identifier === '') {
+        return false;
+      }
+
+      if (this.title && this.title.en === '') {
+        return false;
+      }
+
+      if (!this.store || !Object.values(AddonStore).includes(this.store as AddonStore)) {
+        return false;
+      }
+
+      if (this.version === '') {
+        return false;
+      }
+
+      return true;
+    }
+
+    private urlValidation (urls: string[]): boolean {
+      let validation = true;
+
+      urls.forEach((url: string) => {
+        try {
+          const validatedUrl = new URL(url);
+
+          if (validatedUrl.toString() !== url) {
+            validation = false;
+          }
+        } catch (e) {
+          validation = false;
+        }
+      });
+
+      return validation;
+    }
 }
