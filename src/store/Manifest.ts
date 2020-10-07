@@ -123,7 +123,7 @@ export class Manifest {
       this.identifier = props.identifier?.toString();
       this.title = { ...new LocalizedString(), ...props.title };
       this.store = props.store;
-      this.version = props.version;
+      this.version = props.version?.toString();
 
       if (props.api) {
         this.api = new ManifestApi(props.api.scopes, props.api.token);
@@ -137,7 +137,16 @@ export class Manifest {
         return false;
       }
 
-      if (this.author.websiteUrl === '' || this.author.privacyUrl === '' || this.author.termsOfUseUrl === '') {
+      if (
+        !this.author ||
+        !this.author.websiteUrl ||
+        !this.author.privacyUrl ||
+        !this.author.termsOfUseUrl ||
+        this.author.websiteUrl === '' ||
+        this.author.privacyUrl === '' ||
+        this.author.termsOfUseUrl === '' ||
+        !this.urlValidation([this.author.websiteUrl, this.author.privacyUrl, this.author.termsOfUseUrl])
+      ) {
         return false;
       }
 
@@ -149,7 +158,7 @@ export class Manifest {
         return false;
       }
 
-      if (this.host.icon === '' || this.host.url === '' || !this.host.type) {
+      if (!this.host || this.host.icon === '' || this.host.url === '' || !this.urlValidation([this.host.url]) || !this.host.type) {
         return false;
       }
 
@@ -170,5 +179,23 @@ export class Manifest {
       }
 
       return true;
+    }
+
+    private urlValidation (urls: string[]): boolean {
+      let validation = true;
+
+      urls.forEach((url: string) => {
+        try {
+          const validatedUrl = new URL(url);
+
+          if (validatedUrl.toString() !== url) {
+            validation = false;
+          }
+        } catch (e) {
+          validation = false;
+        }
+      });
+
+      return validation;
     }
 }

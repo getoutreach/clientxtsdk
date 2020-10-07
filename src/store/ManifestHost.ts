@@ -17,7 +17,7 @@ export class ManifestHost {
      * @type {string}
      * @memberof Host
      */
-    url: string = '';
+    url: string;
 
     /**
      * Base64 string represents the icon to be shown in the addon store
@@ -27,5 +27,10 @@ export class ManifestHost {
      * @type {string}
      * @memberof Host
      */
-    icon: string = '';
+    icon: string;
+
+    constructor () {
+      this.url = '';
+      this.icon = '';
+    }
 }
