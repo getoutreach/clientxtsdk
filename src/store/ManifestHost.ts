@@ -28,9 +28,4 @@ export class ManifestHost {
      * @memberof Host
      */
     icon: string;
-
-    constructor () {
-      this.url = '';
-      this.icon = '';
-    }
 }
