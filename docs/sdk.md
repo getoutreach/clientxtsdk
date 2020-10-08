@@ -107,7 +107,7 @@ In order to support addons needing Outreach API access, addon SDK implements a f
 
 ### Auth temp cookie creation
 
-Every time when addon starts, it will read the uid query parameter and store it in a cookie called "ctx-temp", so the addon host can later read it when it is [caching the retrieved tokens](#caching-the-tokens).
+Every time when addon starts, it will take the user identifier value and store it in a cookie called "ctx-sdk-token", so the addon host can later read it when it is [caching the retrieved tokens](#caching-the-tokens).
 
 *This is happening automatically without the need for any coding from the addon creator.*
 

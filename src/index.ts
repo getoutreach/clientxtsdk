@@ -10,13 +10,15 @@ import { DecorationMessage } from './messages/DecorationMessage';
 import { LogLevel } from './sdk/LogLevel';
 import { Event } from './sdk/Event';
 import { ReadyMessage } from './messages/ReadyMessage';
-import { Theme } from './sdk/Theme';
-import { Locale } from './sdk/Locale';
 
 import { AccountContext } from './context/AccountContext';
 import { OpportunityContext } from './context/OpportunityContext';
 import { ProspectContext } from './context/ProspectContext';
 import { UserContext } from './context/UserContext';
+
+import runtime from './sdk/RuntimeContext';
+import tokenService from './services/tokenService';
+import { AuthenticationMessage } from './messages/AuthenticationMessage';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -57,13 +59,7 @@ export * from './utils';
 class AddonsSdk {
   private origin: string | null;
 
-  public locale: Locale = Locale.ENGLISH;
-
   public activeListener: boolean = false;
-
-  public theme: Theme = Theme.LIGHT;
-
-  public userIdentifier?: string;
 
   public logging: LogLevel = window.outreach.log || LogLevel.Error;
 
@@ -169,6 +165,28 @@ class AddonsSdk {
     this.sendMessage(message, true);
   };
 
+  public getToken = async (skipCache?: boolean): Promise<string | null> => {
+    const token = await tokenService.getTokenAsync(skipCache);
+    if (token) {
+      return token;
+    }
+
+    // start the OAuth consent flow
+
+    // user identifier goes to cookie to enable addon oauth server
+    // linking the outreach user with the addon external identity.
+    document.cookie = `ctx-sdk-user=${
+      runtime.userIdentifier
+    };Secure;HttpOnly;SameSite=None;max-age:${30 * 24 * 60 * 60}`;
+
+    // request from host to start the authentication process
+    // this will reload the iframe with a authentication page shown
+    // isntead of the current page
+    this.sendMessage(new AuthenticationMessage());
+
+    return null;
+  };
+
   public sendMessage<T extends AddonMessage> (message: T, logged?: boolean) {
     if (!this.origin) {
       console.error(
@@ -236,14 +254,15 @@ class AddonsSdk {
   };
 
   private preprocessInitMessage = (initMessage: InitMessage) => {
-    this.locale = initMessage.locale;
-    this.theme = initMessage.theme;
-    this.userIdentifier = initMessage.userIdentifier;
+    runtime.locale = initMessage.locale;
+    runtime.theme = initMessage.theme;
+    runtime.userIdentifier = initMessage.userIdentifier;
+    runtime.api = initMessage.api;
 
     const outreachContext = new OutreachContext();
-    outreachContext.locale = this.locale;
-    outreachContext.theme = this.theme;
-    outreachContext.userIdentifier = initMessage.userIdentifier;
+    outreachContext.locale = runtime.locale;
+    outreachContext.theme = runtime.theme;
+    outreachContext.userIdentifier = runtime.userIdentifier;
 
     const accountContext = new AccountContext();
     const opportunityContext = new OpportunityContext();
