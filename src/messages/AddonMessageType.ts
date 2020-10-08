@@ -18,7 +18,7 @@ export enum AddonMessageType {
   /**
    * Message sent from client to host requesting host to notify user about a message client has.
    * (e.g. requesting from host to show a toast informing user that addon had an error)
-  */
+   */
   // eslint-disable-next-line no-unused-vars
   REQUEST_NOTIFY = 'cxt:sdk:notify',
   /**
@@ -26,5 +26,10 @@ export enum AddonMessageType {
    * (e.g. Tab title to "Messages(2)"")
    */
   // eslint-disable-next-line no-unused-vars
-  REQUEST_DECORATION_UPDATE = 'cxt:sdk:decorate'
+  REQUEST_DECORATION_UPDATE = 'cxt:sdk:decorate',
+  /**
+   * Message sent from client to host requesting an oAuth flow to be triggered
+   */
+  // eslint-disable-next-line no-unused-vars
+  REQUEST_OAUTH_AUTHENTICATE = 'cxt:sdk:authenticate',
 }
