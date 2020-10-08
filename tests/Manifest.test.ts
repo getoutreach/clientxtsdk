@@ -53,6 +53,12 @@ describe('manifest tests', () => {
       expect(manifest.validate()).toBe(false);
     });
 
+    test('host.url - tokenized url should be acceptable', () => {
+      const manifest: Manifest = Object.assign(new Manifest(), validManifest);
+      manifest.host.url = "https://somesite.com/{opp.id}?uid={usr.id}";
+      expect(manifest.validate()).toBe(true);
+    });
+
     test('host.icon - only url should be acceptable', () => {
       const manifest: Manifest = Object.assign(new Manifest(), validManifest);
       manifest.host.icon = 'bananas';
