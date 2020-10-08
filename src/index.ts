@@ -8,7 +8,6 @@ import { NotificationType } from './messages/NotificationType';
 import { NotificationMessage } from './messages/NotificationMessage';
 import { DecorationMessage } from './messages/DecorationMessage';
 import { LogLevel } from './sdk/LogLevel';
-import { Event } from './sdk/Event';
 import { ReadyMessage } from './messages/ReadyMessage';
 
 import { AccountContext } from './context/AccountContext';
@@ -19,6 +18,7 @@ import { UserContext } from './context/UserContext';
 import runtime from './sdk/RuntimeContext';
 import tokenService from './services/tokenService';
 import { AuthenticationMessage } from './messages/AuthenticationMessage';
+import logger, { ILogger } from './sdk/Logger';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -36,6 +36,7 @@ export * from './messages/NotificationType';
 export * from './messages/ReadyMessage';
 
 export * from './sdk/Event';
+export { ILogger } from './sdk/Logger';
 export * from './sdk/Locale';
 export * from './sdk/LogLevel';
 export * from './sdk/Theme';
@@ -61,24 +62,19 @@ class AddonsSdk {
 
   public activeListener: boolean = false;
 
-  public logging: LogLevel = window.outreach.log || LogLevel.Error;
-
   public onInit: (context: OutreachContext) => void;
 
   public onMessage: (message: AddonMessage) => void;
 
-  public onInfo: (event: Event) => void;
+  public logger: ILogger = logger
 
   /**
    * Creates an instance of AddonsSdk.
    * @memberof AddonsSdk
    */
   constructor () {
-    // default handlers impplementation
-    this.onInfo = this.defaultHandleOnInfo;
-
     this.onInit = (context: OutreachContext) => {
-      this.onInfo({
+      this.logger.log({
         level: LogLevel.Info,
         message: '[CXT][AddonSdk]::onInit (default)',
         context: [JSON.stringify(context)]
@@ -86,7 +82,7 @@ class AddonsSdk {
     };
 
     this.onMessage = (message: AddonMessage) => {
-      this.onInfo({
+      this.logger.log({
         level: LogLevel.Info,
         message: '[CXT][AddonSdk]::onMessage (default)',
         context: [JSON.stringify(message)]
@@ -110,7 +106,7 @@ class AddonsSdk {
       new AddonMessage(AddonMessageType.READY)
     );
 
-    this.onInfo({
+    this.logger.log({
       level: LogLevel.Info,
       message: '[CXT][AddonSdk]::ready',
       context: [postMessage]
@@ -135,7 +131,7 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public notify = (text: string, type: NotificationType) => {
-    this.onInfo({
+    this.logger.log({
       level: LogLevel.Info,
       message: '[CXT][AddonSdk]::notify',
       context: [text, type]
@@ -154,7 +150,7 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public decorate = (text: string) => {
-    this.onInfo({
+    this.logger.log({
       level: LogLevel.Info,
       message: '[CXT][AddonSdk]::decorate',
       context: [text]
@@ -198,7 +194,7 @@ class AddonsSdk {
     const postMessage = JSON.stringify(message);
 
     if (!logged) {
-      this.onInfo({
+      this.logger.log({
         level: LogLevel.Info,
         message: '[CXT][AddonSdk]::sendMessage',
         context: [postMessage, this.origin]
@@ -211,7 +207,7 @@ class AddonsSdk {
   private handleReceivedMessage = (messageEvent: MessageEvent) => {
     const addonMessage = this.getAddonMessage(messageEvent);
     if (!addonMessage) {
-      this.onInfo({
+      this.logger.log({
         level: LogLevel.Trace,
         message:
           '[CXT][AddonSdk]::handleReceivedMessage- ignoring event message',
@@ -220,7 +216,7 @@ class AddonsSdk {
       return;
     }
 
-    this.onInfo({
+    this.logger.log({
       level: LogLevel.Info,
       message: '[CXT][AddonSdk]::handleReceivedMessage',
       context: [JSON.stringify(messageEvent)]
@@ -237,7 +233,7 @@ class AddonsSdk {
       case AddonMessageType.REQUEST_DECORATION_UPDATE:
       case AddonMessageType.REQUEST_NOTIFY:
       case AddonMessageType.REQUEST_RELOAD:
-        this.onInfo({
+        this.logger.log({
           message:
             '[CXT][AddonSdk]:onReceived - Client event received from host',
           level: LogLevel.Error,
@@ -245,7 +241,7 @@ class AddonsSdk {
         });
         return;
       default:
-        this.onInfo({
+        this.logger.log({
           message: '[CXT][AddonSdk]:onReceived - Unknown host message of type:',
           level: LogLevel.Warning,
           context: [JSON.stringify(addonMessage)]
@@ -294,7 +290,7 @@ class AddonsSdk {
       }
     }
 
-    this.onInfo({
+    this.logger.log({
       message: '[CXT][AddonSdk]::preprocessInitMessage',
       level: LogLevel.Debug,
       context: [
@@ -307,62 +303,6 @@ class AddonsSdk {
     this.onInit(outreachContext);
   };
 
-  private defaultHandleOnInfo = (event: Event) => {
-    switch (event.level) {
-      case LogLevel.None:
-        // ignore the event
-        break;
-      case LogLevel.Trace:
-        if (this.logging <= LogLevel.Trace) {
-          // tslint:disable-next-line: no-console
-          console.log(
-            '[CXT][AddonSdk]::onInfo-trace (default)',
-            event,
-            event.context
-          );
-        }
-        break;
-      case LogLevel.Debug:
-        if (this.logging <= LogLevel.Debug) {
-          // tslint:disable-next-line: no-console
-          console.log(
-            '[CXT][AddonSdk]::onInfo-debug (default)',
-            event,
-            event.context
-          );
-        }
-        break;
-      case LogLevel.Info:
-        if (this.logging <= LogLevel.Info) {
-          // tslint:disable-next-line: no-console
-          console.info(
-            '[CXT][AddonSdk]::onInfo-info (default)',
-            event,
-            event.context
-          );
-        }
-        break;
-      case LogLevel.Warning:
-        if (this.logging <= LogLevel.Warning) {
-          // tslint:disable-next-line: no-console
-          console.warn(
-            '[CXT][AddonSdk]::onInfo-warning (default)',
-            event,
-            event.context
-          );
-        }
-        break;
-      case LogLevel.Error:
-        // tslint:disable-next-line: no-console
-        console.error(
-          '[CXT][AddonSdk]::onInfo-error (default)',
-          event,
-          event.context
-        );
-        break;
-    }
-  };
-
   private getAddonMessage = (
     messageEvent: MessageEvent
   ): AddonMessage | null => {
@@ -371,7 +311,7 @@ class AddonsSdk {
     }
 
     if (!messageEvent.data || typeof messageEvent.data !== 'string') {
-      this.onInfo({
+      this.logger.log({
         level: LogLevel.Debug,
         message:
           '[CXT][AddonSdk]::getAddonMessage - message event data is not a string',
@@ -384,7 +324,7 @@ class AddonsSdk {
     try {
       hostMessage = JSON.parse(messageEvent.data);
       if (!hostMessage || !hostMessage.type) {
-        this.onInfo({
+        this.logger.log({
           level: LogLevel.Debug,
           message:
             '[CXT][AddonSdk]::getAddonMessage- invalid message data format',
@@ -394,7 +334,7 @@ class AddonsSdk {
         return null;
       }
     } catch (e) {
-      this.onInfo({
+      this.logger.log({
         level: LogLevel.Debug,
         message: '[CXT][AddonSdk]::getAddonMessage- not a json data',
         context: [messageEvent.data, JSON.stringify(e)]
@@ -405,7 +345,7 @@ class AddonsSdk {
 
     if (this.origin) {
       if (messageEvent.origin !== this.origin) {
-        this.onInfo({
+        this.logger.log({
           level: LogLevel.Error,
           message: '[CXT][AddonSdk]::getAddonMessage- invalid origin',
           context: [messageEvent.origin, this.origin]
@@ -430,7 +370,7 @@ class AddonsSdk {
     }
 
     if (!this.validOrigin(messageEvent.origin)) {
-      this.onInfo({
+      this.logger.log({
         level: LogLevel.Error,
         message: '[CXT][AddonSdk]::getAddonMessage- invalid origin received',
         context: [messageEvent.origin]
@@ -438,7 +378,7 @@ class AddonsSdk {
       return null;
     }
 
-    this.onInfo({
+    this.logger.log({
       level: LogLevel.Info,
       message: '[CXT][AddonSdk]::getAddonMessage- setting origin',
       context: [messageEvent.origin]

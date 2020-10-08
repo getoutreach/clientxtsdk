@@ -1,18 +1,11 @@
-import { ContextParam } from '../context/ContextParam';
-import { utils } from '../utils';
+import validator from '../sdk/Validator';
 /* eslint-disable no-unused-vars */
 import { AddonStore } from './AddonStore';
-import { AddonType } from './AddonType';
 import { AllContextKeys } from './keys/AllContextKeys';
-import { ClientContextKeys } from './keys/ClientContextKeys';
-import { OpportunityContextKeys } from './keys/OpportunityContextKeys';
-import { ProspectContextKeys } from './keys/ProspectContextKeys';
-import { UserContextKeys } from './keys/UserContextKeys';
 import { LocalizedString } from './LocalizedString';
 import { ManifestApi } from './ManifestApi';
 import { ManifestAuthor } from './ManifestAuthor';
 import { ManifestHost } from './ManifestHost';
-import { Scopes } from './Scopes';
 
 /**
  * Definition of the manifest file containing all the information
@@ -111,14 +104,6 @@ export class Manifest {
    */
   public version: string;
 
-  /**
-   * Object validation
-   *
-   * @type {boolean}
-   * @memberof Manifest
-   */
-  public isValid: boolean;
-
   constructor (props?: Manifest) {
     if (!props) {
       return;
@@ -136,149 +121,14 @@ export class Manifest {
     if (props.api) {
       this.api = new ManifestApi(props.api.scopes, props.api.token);
     }
-
-    this.isValid = this.validate();
   }
 
-  public validate (): boolean {
-    if (
-      this.api &&
-      (!this.api.scopes || !Array.isArray(this.api.scopes) || !this.api.token)
-    ) {
-      return false;
-    }
-
-    if (this.api && this.api.scopes && Array.isArray(this.api.scopes)) {
-      let scopeValidation = true;
-      this.api.scopes.forEach((scope) => {
-        if (!Object.values(Scopes).includes(scope as Scopes)) {
-          scopeValidation = false;
-        }
-      });
-
-      if (!scopeValidation) {
-        return false;
-      }
-    }
-
-    if (
-      !this.author ||
-      !this.author.websiteUrl ||
-      !this.author.privacyUrl ||
-      !this.author.termsOfUseUrl ||
-      this.author.websiteUrl === '' ||
-      this.author.privacyUrl === '' ||
-      this.author.termsOfUseUrl === '' ||
-      !this.urlValidation([
-        this.author.websiteUrl,
-        this.author.privacyUrl,
-        this.author.termsOfUseUrl
-      ])
-    ) {
-      return false;
-    }
-
-    if (!this.context || !Array.isArray(this.context)) {
-      return false;
-    } else {
-      let contextValidation = true;
-      this.context.forEach((context) => {
-        if (
-          !Object.values(UserContextKeys).includes(
-            context as UserContextKeys
-          ) &&
-          !Object.values(ClientContextKeys).includes(
-            context as ClientContextKeys
-          ) &&
-          !Object.values(OpportunityContextKeys).includes(
-            context as OpportunityContextKeys
-          ) &&
-          !Object.values(ProspectContextKeys).includes(
-            context as ProspectContextKeys
-          )
-        ) {
-          contextValidation = false;
-        }
-      });
-
-      if (!contextValidation) {
-        return false;
-      }
-    }
-
-    if (this.description && this.description.en === '') {
-      return false;
-    }
-
-    if (
-      !this.host ||
-      this.host.icon === '' ||
-      this.host.url === '' ||
-      !this.hostUrlValidation(this.host.url) ||
-      !this.host.type ||
-      !Object.values(AddonType).includes(this.host.type as AddonType)
-    ) {
-      return false;
-    }
-
-    if (this.identifier === '') {
-      return false;
-    }
-
-    if (this.title && this.title.en === '') {
-      return false;
-    }
-
-    if (
-      !this.store ||
-      !Object.values(AddonStore).includes(this.store as AddonStore)
-    ) {
-      return false;
-    }
-
-    if (this.version === '') {
-      return false;
-    }
-
-    return true;
-  }
-
-  private hostUrlValidation (hostUrl: string): boolean {
-    let validation = true;
-
-    const contextParams: ContextParam[] = [];
-    this.context.forEach((key) => contextParams.push({ key, value: 'marker' }));
-
-    try {
-      const { url } = utils.tokenizeUrl(hostUrl, contextParams);
-      console.log('[Manifest]::hostUrlValidation', hostUrl, url);
-      const validatedUrl = new URL(url);
-
-      if (validatedUrl.toString() !== url) {
-        validation = false;
-      }
-    } catch (e) {
-      validation = false;
-    }
-
-    return validation;
-  }
-
-  private urlValidation (urls: string[]): boolean {
-    let validation = true;
-
-    urls.forEach((url: string) => {
-      try {
-        const validatedUrl = new URL(url);
-
-        if (validatedUrl.toString() !== url) {
-          validation = false;
-        }
-      } catch (e) {
-        validation = false;
-      }
-    });
-
-    return validation;
+  /**
+   * Validates given manifest if it contains all of the required fields with correct values.
+   *
+   * @memberof Manifest
+   */
+  public validate = () : string[] => {
+    return validator.validate(this);
   }
 }
