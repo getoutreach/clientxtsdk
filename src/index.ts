@@ -262,7 +262,7 @@ class AddonsSdk {
     const outreachContext = new OutreachContext();
     outreachContext.locale = runtime.locale;
     outreachContext.theme = runtime.theme;
-    outreachContext.userIdentifier = initMessage.userIdentifier;
+    outreachContext.userIdentifier = runtime.userIdentifier;
 
     const accountContext = new AccountContext();
     const opportunityContext = new OpportunityContext();
