@@ -3,6 +3,23 @@ import { Scopes } from './Scopes';
 
 export class ManifestApi {
     /**
+     * Outreach OAuth application id
+     * (Defined in Outreach application)
+     *
+     * @type {string}
+     * @memberof ManifestApi
+     */
+    aplicationId: string;
+
+    /**
+     * Outrach OAuth redirect ui
+     *
+     * @type {string}
+     * @memberof ManifestApi
+     */
+    redirectUri: string;
+
+    /**
      * The list of scopes will be used for Outreach API authentication
      * where current Outreach user will be asked to consent for granting
      * permissions for defined scopes to addon creator.

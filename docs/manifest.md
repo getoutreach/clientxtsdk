@@ -19,8 +19,9 @@ Table of content:
 - [Integration manifest properties](#integration-manifest-properties)
   - [context](#context)
 - [api (optional)](#api-optional)
-  - [token endpoint](#token-endpoint)
+  - [applicationId and redirectUri](#applicationid-and-redirecturi)
   - [scopes](#scopes)
+  - [token endpoint](#token-endpoint)
 - [Uploading the manifest](#uploading-the-manifest)
 
 ## Sample manifest
@@ -180,11 +181,8 @@ Outreach User will be asked to consent with sharing this information with the ad
 
 This section is optional - if addon doesn't need access to outreach API, this section can be omitted.
 
-### token endpoint
-
-Address of the endpoint, which will return support [refresh token flow](#refresh-token-flow). 
-
-*In case addon doesn't need to access Outreach API, this section can be omitted.*
+### applicationId and redirectUri
+![alt text](api-consent.png "API consent screen")
 
 ### scopes
 
@@ -194,6 +192,12 @@ Complete list of all of the API scopes can be found on [API Scopes page](scopes.
 
 On the first [SDK authentication](sdk.md#authentication) Outreach user is then asked to consent with granting requested scopes to the addon
 ![alt text](api-consent.png "API consent screen")
+
+### token endpoint
+
+Address of the endpoint, which will return support [refresh token flow](#refresh-token-flow). 
+
+*In case addon doesn't need to access Outreach API, this section can be omitted.*
 
 ## Uploading the manifest
 
