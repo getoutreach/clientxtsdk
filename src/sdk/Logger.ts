@@ -17,7 +17,7 @@ export interface ILogger {
   log: (event: Event) => void;
 }
 
-class Logger implements ILogger {
+export class Logger implements ILogger {
   public level: LogLevel = window.outreach.log || LogLevel.Error;
 
   public log = (event: Event) => {
@@ -76,5 +76,3 @@ class Logger implements ILogger {
     }
   };
 }
-
-export default new Logger();

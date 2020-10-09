@@ -18,7 +18,7 @@ import { UserContext } from './context/UserContext';
 import runtime from './sdk/RuntimeContext';
 import tokenService from './services/tokenService';
 import { AuthenticationMessage } from './messages/AuthenticationMessage';
-import logger, { ILogger } from './sdk/Logger';
+import { Logger, ILogger } from './sdk/Logger';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -66,7 +66,7 @@ class AddonsSdk {
 
   public onMessage: (message: AddonMessage) => void;
 
-  public logger: ILogger = logger
+  public logger: ILogger = new Logger();
 
   /**
    * Creates an instance of AddonsSdk.
