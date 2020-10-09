@@ -9,7 +9,7 @@ export class ManifestApi {
      * @type {string}
      * @memberof ManifestApi
      */
-    aplicationId: string;
+    applicationId: string;
 
     /**
      * Outrach OAuth redirect ui

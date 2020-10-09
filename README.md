@@ -16,7 +16,7 @@ Table of content
 
 ## How it works
 
-When Outreach user goes to a specific part of the Outreach application (e.g., opportunity page), the application will check if that user has installed addons for that part of the app and:
+When Outreach user goes to a specific part of the Outreach application (e.g., opportunity page), the application will check if that user has installed addons for that part of the app and if yes:
 
 - Add a tab with the title of the addon
 - Add an iframe with the source pointing to an addon hosting page
@@ -40,19 +40,19 @@ Every addon needs to have, at a minimum, a publicly accessible web page that imp
 
 If your addon is **stateless** (e.g., currency exchange calculator addon)  or your addon has **independent initialization** (e.g., initialize itself based on its cookie), there is no need for any additional work to be done.
 
-Suppose your addon needs to **be aware of the current Outreach user's context** during its initial loading. In that case, it can do that by merely parsing the query parameter values containing context information.
+Suppose your addon needs to **be aware of the current Outreach user's context** but only once, during its initial loading. In that case, it can achieve that by merely parsing the query parameter values containing context information.
 
-In case your addon needs to communicate with the Outreach app, it needs to integrate the [Outreach SDK](/docs/sdk.md).
+In case your addon **needs to communicate with the Outreach app**, it needs to integrate the [Outreach SDK](/docs/sdk.md).
 An example of this integration would be an addon that wants to inform the user about an error in addon by requesting the Outreach app to show error notification.
 
 In case your addon needs **access to Outreach API**,  it will require, in addition to [Outreach SDK](/docs/sdk.md) integration, also an update of [the addon host](/docs/host.md) to support the Outreach API authentication.
-While this is the only non-trivial amount of coding, it should be doable in a few hours based on this document's instructions.
+While this is the only non-trivial amount of coding, it should be doable in a short time based on this document's instructions and our support.
 
 ## How to learn more about building an addon
 
 In any type of integration, you would need to create and upload a manifest file to learn more about [manifest file](/docs/manifest.md) page.
 
-In case your integration needs to integrate SDK, you can learn about it on [Outreach SDK](/docs/sdk.md) page.
+In case your integration needs to integrate client SDK, you can learn about it on [Outreach SDK](/docs/sdk.md) page.
 
 In case your integration requires client access to Outreach API, you will have to learn more about [Addon host](/docs/host.md) requirements.
 

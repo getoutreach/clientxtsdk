@@ -30,6 +30,14 @@ export class ProspectContext extends CustomContext {
     companyLocality: string;
 
     /**
+     * A list of email addresses associated with the prospect.
+     *
+     * @type {string[]}
+     * @memberof ProspectContext
+     */
+    emails: string[]
+
+    /**
      * Unique prospect identifier.
      *
      * @type {string}

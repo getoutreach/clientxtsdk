@@ -53,6 +53,7 @@ Our end goal is to provide contextual access to any of the properties available 
 
 - **pro.avail** The date and time the prospect is available to contact again.
 - **pro.comp** The name of the prospect company. If associated with an account, this is the name of the account. (e.g. Acme International).
+- **pro.emails** A list of email addresses associated with the prospect.
 - **pro.loc** The locality of the prospect's company.
 - **pro.id** Prospect id
 - **pro.tags** A list of tag values associated with the account (e.g. ["Interested", "2017 Expo"]).

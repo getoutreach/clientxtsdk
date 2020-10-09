@@ -15,7 +15,7 @@ Once ngrok is installed and unpacked to a folder, it is being run by:
 
 The result of this command will be the next screen containing ngrok publicly available endpoints.
 
-![alt text](cxt-ngrok.png "Ngrok public address")
+![alt text](assets/cxt-ngrok.png "Ngrok public address")
 
 
 A secure tunnel from a publicly available endpoint will be established with the laptop localhost on port 3000, so all the traffic to the public endpoint will be forwarded to the localhost. That enables developing addon work on your computer without deploying anything, which increases developer efficiency and happiness.
@@ -58,10 +58,10 @@ The first step is the same, create a new dev manifest, but this time it would ha
 
 Once this manifest is uploaded to Outreach, go to Outreach app settings and click "Manage OAuth Applications."
 
-![alt text](or-oauth-settings.png "Outreach OAuth app")
+![alt text](assets/or-oauth-settings.png "Outreach OAuth app")
 
 Add to the list of valid redirect URI addresses, ngrok public address.
 
-![alt text](oauth-app-ngrok.png "OAuth ngrok redirect uri")
+![alt text](assets/oauth-app-ngrok.png "OAuth ngrok redirect uri")
 
 Click **Save**, and the redirect flow will then be allowed to go to ngrok public address, which will be forwarded to your localhost, and you can then work on the addon host server locally.

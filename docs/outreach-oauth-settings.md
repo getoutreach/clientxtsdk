@@ -1,11 +1,13 @@
 # Outreach application OAuth settings
 
-In order to manage your Outreach applications you need to go to Outreach app settings, select Org settings and click "Manage OAuth Applications."
+To manage your Outreach applications, you need to go to Outreach app settings, select Org settings, and click "Manage OAuth Applications."
 
-![alt text](or-oauth-settings.png "Outreach OAuth app")
+![alt text](assets/or-oauth-settings.png "Manage OAuth applications")
 
-Add to the list of valid redirect URI addresses, ngrok public address.
+You can create there a new dedicated OAuth application which you will use for Outreach addon - you need to define the name of the app and one or more valid redirect URLs. 
 
-![alt text](oauth-app-ngrok.png "OAuth ngrok redirect uri")
+![alt text](assets/oauth-app-ngrok.png "New OAuth application ")
 
-Click **Save**, and the redirect flow will then be allowed to go to ngrok public address, which will be forwarded to your localhost, and you can then work on the addon host server locally.
+At any time later, you can view/edit OAuth app settings.
+
+![alt text](assets/app-settings.png "OAuth application settings")
