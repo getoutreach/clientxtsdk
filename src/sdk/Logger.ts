@@ -2,11 +2,23 @@ import { Event } from './Event';
 import { LogLevel } from './LogLevel';
 
 export interface ILogger {
+  /**
+   * Minimal log level for event to be logged
+   *
+   * @type {LogLevel}
+   * @memberof ILogger
+   */
+  level: LogLevel;
+  /**
+   * Logs an event for debugging purposes.
+   *
+   * @memberof ILogger
+   */
   log: (event: Event) => void;
 }
 
 class Logger implements ILogger {
-  public logging: LogLevel = window.outreach.log || LogLevel.Error;
+  public level: LogLevel = window.outreach.log || LogLevel.Error;
 
   public log = (event: Event) => {
     switch (event.level) {
@@ -14,7 +26,7 @@ class Logger implements ILogger {
         // ignore the event
         break;
       case LogLevel.Trace:
-        if (this.logging <= LogLevel.Trace) {
+        if (this.level <= LogLevel.Trace) {
           // tslint:disable-next-line: no-console
           console.log(
             '[CXT][AddonSdk]::onInfo-trace (default)',
@@ -24,7 +36,7 @@ class Logger implements ILogger {
         }
         break;
       case LogLevel.Debug:
-        if (this.logging <= LogLevel.Debug) {
+        if (this.level <= LogLevel.Debug) {
           // tslint:disable-next-line: no-console
           console.log(
             '[CXT][AddonSdk]::onInfo-debug (default)',
@@ -34,7 +46,7 @@ class Logger implements ILogger {
         }
         break;
       case LogLevel.Info:
-        if (this.logging <= LogLevel.Info) {
+        if (this.level <= LogLevel.Info) {
           // tslint:disable-next-line: no-console
           console.info(
             '[CXT][AddonSdk]::onInfo-info (default)',
@@ -44,7 +56,7 @@ class Logger implements ILogger {
         }
         break;
       case LogLevel.Warning:
-        if (this.logging <= LogLevel.Warning) {
+        if (this.level <= LogLevel.Warning) {
           // tslint:disable-next-line: no-console
           console.warn(
             '[CXT][AddonSdk]::onInfo-warning (default)',
