@@ -119,7 +119,7 @@ export class Manifest {
     this.version = props.version?.toString();
 
     if (props.api) {
-      this.api = new ManifestApi(props.api.scopes, props.api.token);
+      this.api = { ...new ManifestApi(), ...props.api };
     }
   }
 

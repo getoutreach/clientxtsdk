@@ -38,9 +38,4 @@ export class ManifestApi {
      * @memberof Api
      */
     token: string;
-
-    constructor (scope: Scopes[] = [], token: string = '') {
-      this.scopes = scope;
-      this.token = token;
-    }
 }
