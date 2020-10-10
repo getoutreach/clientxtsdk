@@ -103,13 +103,4 @@ export class Manifest {
    * @memberof Manifest
    */
   public version: string;
-
-  /**
-   * Validates given manifest if it contains all of the required fields with correct values.
-   *
-   * @memberof Manifest
-   */
-  public validate = () : string[] => {
-    return validator.validate(this);
-  }
 }
