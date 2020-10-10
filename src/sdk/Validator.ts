@@ -139,7 +139,7 @@ class Validator {
       !manifest.store ||
       !Object.values(AddonStore).includes(manifest.store as AddonStore)
     ) {
-      issues.push('Store value is invalid. Value:' + manifest.host.type);
+      issues.push('Store value is invalid. Value:' + manifest.store);
     }
 
     if (!manifest.version) {

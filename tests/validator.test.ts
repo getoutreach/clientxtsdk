@@ -7,6 +7,7 @@ import validator from '../src/sdk/Validator';
 import { Scopes } from '../src/store/Scopes';
 
 describe('manifest tests', () => {
+ 
   describe('valid', () => {
     test('only valid manifest should be acceptable', () => {
       const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
@@ -123,7 +124,7 @@ describe('manifest tests', () => {
       const manifest = JSON.parse(JSON.stringify(invalidStoreTypeManifest));
       var issues = validator.validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Store value is invalid. Value:tab-opportunity");
+      expect(issues[0]).toBe("Store value is invalid. Value:BANANAS");
       
     });
   });
