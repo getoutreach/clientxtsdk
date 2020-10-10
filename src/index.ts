@@ -174,7 +174,7 @@ class AddonsSdk {
     // linking the outreach user with the addon external identity.
     document.cookie = `ctx-sdk-user=${
       runtime.userIdentifier
-    };Secure;HttpOnly;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
+    };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
 
     // request from host to start the authentication process
     // this will reload the iframe with a authentication page shown
