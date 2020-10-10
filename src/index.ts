@@ -318,9 +318,13 @@ class AddonsSdk {
       return null;
     }
 
+    if (!this.validOrigin(messageEvent.origin)) {
+      return null;
+    }
+
     if (!messageEvent.data || typeof messageEvent.data !== 'string') {
       this.logger.log({
-        level: LogLevel.Debug,
+        level: LogLevel.Trace,
         message:
           '[CXT][AddonSdk]::getAddonMessage - message event data is not a string',
         context: [JSON.stringify(messageEvent.data)]
