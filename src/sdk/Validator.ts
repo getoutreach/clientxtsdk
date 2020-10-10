@@ -15,7 +15,7 @@ import { utils } from '../utils';
  * @param {Manifest} manifest
  * @returns {string[]} list of validation issues (if any)
  */
-export const validate = (manifest: Manifest): string[] => {
+export const  validate = (manifest: Manifest): string[] => {
   const issues: string[] = [];
   if (manifest.api) {
     if (!manifest.api.scopes) {
