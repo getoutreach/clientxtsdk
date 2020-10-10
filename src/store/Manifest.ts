@@ -104,25 +104,6 @@ export class Manifest {
    */
   public version: string;
 
-  constructor (props?: Manifest) {
-    if (!props) {
-      return;
-    }
-
-    this.author = { ...new ManifestAuthor(), ...props.author };
-    this.context = props.context;
-    this.description = { ...new LocalizedString(), ...props.description };
-    this.host = { ...new ManifestHost(), ...props.host };
-    this.identifier = props.identifier?.toString();
-    this.title = { ...new LocalizedString(), ...props.title };
-    this.store = props.store;
-    this.version = props.version?.toString();
-
-    if (props.api) {
-      this.api = { ...new ManifestApi(), ...props.api };
-    }
-  }
-
   /**
    * Validates given manifest if it contains all of the required fields with correct values.
    *
