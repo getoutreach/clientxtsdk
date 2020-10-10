@@ -1,61 +1,52 @@
 <!-- omit in toc -->
 # Outreach client extensibility SDK
 
-This document contains all the information a developer needs to create an Outreach addon. 
+This document contains all the information a developer needs to create an Outreach add-on. 
 
 In case you have any questions/comments/concerns about the client extensibility, please email us at **cxt-sdk@outreach.io.**
 
-_NOTE: This document is an early preview of the client extensibility framework whose primary purpose is to speed up the collaboration and scenario exploration with potential addon creators. It will be changing at a rapid pace until the official release of the platform._
+_NOTE: This document is an early preview of the client extensibility framework whose primary purpose is to speed up the collaboration and scenario exploration with potential add-on creators. It will be changing at a rapid pace until the official release of the platform._
 
 Table of content
 
-- [How it works](#how-it-works)
-- [Development process summary](#development-process-summary)
-- [How much coding is needed](#how-much-coding-is-needed)
-- [How to learn more about building an addon](#how-to-learn-more-about-building-an-addon)
+- [How it works?](#how-it-works)
+- [Required steps to build an add-on](#required-steps-to-build-an-add-on)
 
-## How it works
+## How it works?
 
-When Outreach user goes to a specific part of the Outreach application (e.g., opportunity page), the application will check if that user has installed addons for that part of the app and:
+When Outreach user goes to a specific part of the Outreach application (e.g., opportunity page), the application will check if that user has installed add-ons for that part of the app and if yes:
 
-- Add a tab with the title of the addon
-- Add an iframe with the source pointing to an addon hosting page
-- Send the current user contextual information to the addon to initialize itself into a proper state.
+- Add a tab with the title of the add-on
+- Add an iframe with the source pointing to an add-on hosting page
+- Send the current user contextual information to the add-on to initialize itself into a proper state.
 
-## Development process summary
 
-The process of creating addon usually requires the next steps:
+## Required steps to build an add-on
 
-- The developer creates an addon page to be used by Outreach users,
-- The developer creates a [manifest file](/docs/manifest.md)  describing the addon (including the addon page URL)
-- The manifest file gets [uploaded to the Outreach](/docs/manifest.md#uploading-the-manifest), and the addon is visible only to a developer for dev/testing
-- The developer [integrates the addon](/docs/host.md) with the Outreach client extensibility framework
-- Once the addon is implemented, the developer makes the addon visible in the store to other Outreach users.
+The client extensibility framework supports a few integration methods, which have different coding requirements and provide a different integration level with Outreach. Each one of the methods requires one or more steps to be implemented based on the add-on requirements.
 
-## How much coding is needed
+1. Every add-on needs to have an add-on page for Outreach users and host it on some publicly available internet address.
 
-The client extensibility framework supports a few integration methods, which have different coding requirements and provide a different integration level with Outreach.
+    During the development phase, add-on creators can skip this requirement and use only a [Locally hosted add-on page](/docs/devxp.md) without the need to have a publicly available page.
 
-Every addon needs to have, at a minimum, a publicly accessible web page that implements addon functionality for Outreach users. For Outreach to be aware of the addon hosting page, the addon creator needs to  [create a JSON manifest](/docs/manifest.md).
+2. Every add-on also needs to **create and upload a manifest file**. 
+That manifest file contains things like the URL where the add-on web page is located, contextual information which add-on needs from Outreach, details about Outreach API access, etc. 
 
-If your addon is **stateless** (e.g., currency exchange calculator addon)  or your addon has **independent initialization** (e.g., initialize itself based on its cookie), there is no need for any additional work to be done.
+    If your add-on is **stateless** (e.g., currency exchange calculator add-on)  or your add-on has **independent initialization** (e.g., initialize itself based on its cookie), there is no need for any additional work to be done.
 
-Suppose your addon needs to **be aware of the current Outreach user's context** during its initial loading. In that case, it can do that by merely parsing the query parameter values containing context information.
+    Go to [manifest file](/docs/manifest.md) page to learn more.
 
-In case your addon needs to communicate with the Outreach app, it needs to integrate the [Outreach SDK](/docs/sdk.md).
-An example of this integration would be an addon that wants to inform the user about an error in addon by requesting the Outreach app to show error notification.
+3. All of the stateful add-ons would need contextual information from Outreach to initialize itself in the proper state. For that, they need to **parse from the URL** a set of contextual information (e.g., opportunity id, prospect email, etc.) sent by Outreach.
 
-In case your addon needs **access to Outreach API**,  it will require, in addition to [Outreach SDK](/docs/sdk.md) integration, also an update of [the addon host](/docs/host.md) to support the Outreach API authentication.
-While this is the only non-trivial amount of coding, it should be doable in a few hours based on this document's instructions.
+    Go to [host query parameters parsing](/docs/host.md#query-parameters-parsing) section to learn more.
 
-## How to learn more about building an addon
+4. Most of the add-ons would want to have **deeper integration with Outreach application** (e.g., to notify Outreach user about some add-on event), and for that, the add-on will need to integrate Outreach client sdk.
+  
+    Go to [Outreach client SDK](/docs/sdk.md) page to learn more.
 
-In any type of integration, you would need to create and upload a manifest file to learn more about [manifest file](/docs/manifest.md) page.
+5. Some of the add-ons will need to have **client access to Outreach API**, and for that, they will need to add support on the add-on server required for obtaining and refreshing access tokens. This will include implementing additional endpoints, server to server calls to Outreach API, token caching, etc.
 
-In case your integration needs to integrate SDK, you can learn about it on [Outreach SDK](/docs/sdk.md) page.
+    Go to [host authentication support]() page to learn more about API access requirements.
 
-In case your integration requires client access to Outreach API, you will have to learn more about [Addon host](/docs/host.md) requirements.
-
-In case you would want to learn how you can work on Outreach addon from your computer without having any servers and any deployments, read about it in  [Local development experience](/docs/devxp.md)
 
 *If you have any questions/comments/concerns about the extensibility, please email us at **cxt-sdk@outreach.io.***

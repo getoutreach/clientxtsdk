@@ -34,6 +34,14 @@ class Validator {
       if (!this.urlValidation(manifest.api.token)) {
         issues.push('Api token endpoint is invalid url. Value: ' + manifest.api.token);
       }
+
+      if (!manifest.api.applicationId) {
+        issues.push('Manifest Api section needs to have applicationId value.');
+      }
+
+      if (!this.urlValidation(manifest.api.redirectUri)) {
+        issues.push('Manifest Api section needs to have a valid redirect url. Value: ' + manifest.api.redirectUri);
+      }
     }
 
     if (!manifest.author) {

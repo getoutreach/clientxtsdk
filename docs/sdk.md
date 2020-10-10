@@ -12,6 +12,7 @@ Table of content
   - [Notify function](#notify-function)
   - [Decorate function](#decorate-function)
 - [Add-on authentication](#add-on-authentication)
+  - [Auth user cookie](#auth-user-cookie)
   - [Auth temp cookie creation](#auth-temp-cookie-creation)
   - [Caching access token](#caching-access-token)
   - [Obtaining an access token](#obtaining-an-access-token)
@@ -104,6 +105,9 @@ addonSdk.decorate({text:’Messages (2)’);
 ## Add-on authentication
 
 In order to support addons needing Outreach API access, addon SDK implements a few supporting features.
+
+
+### Auth user cookie
 
 ### Auth temp cookie creation
 

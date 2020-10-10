@@ -19,8 +19,10 @@ Table of content:
 - [Integration manifest properties](#integration-manifest-properties)
   - [context](#context)
 - [api (optional)](#api-optional)
-  - [token endpoint](#token-endpoint)
+  - [applicationId](#applicationid)
+  - [redirectUri](#redirecturi)
   - [scopes](#scopes)
+  - [token endpoint](#token-endpoint)
 - [Uploading the manifest](#uploading-the-manifest)
 
 ## Sample manifest
@@ -43,19 +45,25 @@ Here is the sample manifest file of the hello world addon
     ],
     "host": {
         "type": "tab-opportunity",
-        "url": "https://addon-host.com/hello-world",
+        "url": "https://addon-host.com/something",
         "icon": "https://addon-host.com/icon.png"
     },
-    "api": {
-      "token": "https://addon-host.com/token",
-      "scopes": "prospects.read, opportunity.read" ,
-    }
-    "context":  [ "user.id", "opportunity.id", "prospect.customField12" ],
     "author": {
         "websiteUrl": "https://addon-host.com",
         "privacyUrl": "https://addon-host.com/privacy",
         "termsOfUseUrl": "https://addon-host.com/tos",
     }
+    "context":  [ 
+      "usr.id", "opp.id", "prospect.emails" ],
+    "api": {
+      "token": "https://addon-host.com/token",
+      "scopes": "prospects.read, opportunity.read",
+      "applicationId": "AbCd123456qW",
+      "redirectUri": "https://addon-host.com/hello-world",
+
+    }
+    
+
 }
 ```
 
@@ -137,7 +145,7 @@ will become during the runtime
 http://somesite.com/something/456?opp.id=123
 ```
 
-_NB: as opp.id was not tokenized it was appended as query parameter following the default naming convention_
+_NB: as opp.id was not tokenized, it was appended as query parameter following the default naming convention_
 
 The addon creator can templatize the name of the query parameters.
 
@@ -168,11 +176,11 @@ This section contains information to be presented to a user of the addon in the 
 In this section, the addon author defines a list of predefined context information that addon needs from Outreach to be sent during the initialization process.
 It is a string array of predefined Outreach properties describing attributes of the Outreach user loading the addon.
 
-e.g. ["opportunity.id", "account.id"]
+e.g. ["opp.id", "acc.id"]
 
-Complete list of all of the supported context properties can be found on [context property page](context.md).
+A complete list of all of the supported context properties can be found on the [context property page](context.md).
 
-Outreach User will be asked to consent with sharing this information with the addon on the addon's first use.  If the future version of the manifest addon creator will add additional contextual fields, the Outreach user will consent again.
+Outreach User will be asked to consent to share this information on the addon's first use.  If the manifest addon creator's future version adds additional contextual fields, the Outreach user will consent again.
 
 [ADD-CONTEXT-CONSENT-SCREENSHOT-HERE]
 
@@ -180,20 +188,25 @@ Outreach User will be asked to consent with sharing this information with the ad
 
 This section is optional - if addon doesn't need access to outreach API, this section can be omitted.
 
-### token endpoint
+### applicationId 
+This is the value of the [Outreach OAuth application](outreach-OAuth-settings.md), which is to be used for [API authentication flow](https://api.outreach.io/api/v2/docs#authentication)as client_id value.
 
-Address of the endpoint, which will return support [refresh token flow](#refresh-token-flow). 
-
-*In case addon doesn't need to access Outreach API, this section can be omitted.*
+### redirectUri
+This URL is defined in [Outreach OAuth settings](outreach-oauth-settings.md) to which the authorization form will redirect once the user consent with granting access to Outreach API in his name. This URL can be the same as the [host url](#url) or a separate URL, but in both cases, it has to support [host requirements](host.md).
 
 ### scopes
 
-In the scopes section, the addon creator defines a list of Outreach API scopes which are needed for performing API calls addon needs to perform.
+In the scopes section, the addon creator defines Outreach API scopes that are needed for performing API calls addon needs to perform.
 
-Complete list of all of the API scopes can be found on [API Scopes page](scopes.md).
+A complete list of all of the API scopes can be found on [API Scopes page](scopes.md).
 
-On the first [SDK authentication](sdk.md#authentication) Outreach user is then asked to consent with granting requested scopes to the addon
-![alt text](api-consent.png "API consent screen")
+On the first [SDK authentication](sdk.md#authentication) Outreach user is asked to consent with granting requested scopes to the addon
+![alt text](assets/api-consent.png "API consent screen")
+
+### token endpoint
+
+Address of the endpoint, which will support [refresh token flow](#refresh-token-flow). We recommend it to be a dedicated endpoint as it will need to support POST request and return a JSON data response, but it can be the same as the [redirectUri](#redirecturi) or [host.url](#url)  as long the refresh token flow requirements are fulfilled.
+
 
 ## Uploading the manifest
 
@@ -202,4 +215,4 @@ Once the manifest file is created, it has to be uploaded to Outreach so it can b
 At the moment, there are two ways you can upload the manifest:
 emailing it support email cxt-sdk@outreach.io or by using the Outreach API to POST manifest file.
 
-_In the near future, we will have a section in the Outreach application where you would be able to upload it using the application UI._
+_ Soon, we will have a section in the Outreach application where you would be able to upload it using the application UI._
