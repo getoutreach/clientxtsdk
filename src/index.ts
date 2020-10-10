@@ -169,12 +169,19 @@ class AddonsSdk {
     }
 
     // start the OAuth consent flow
+    const cookie = `ctx-sdk-user=${
+      runtime.userIdentifier
+    };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
+
+    this.logger.log({
+      level: LogLevel.Debug,
+      message: '[CXT][AddonSdk]::getToken',
+      context: [document.cookie, cookie]
+    });
 
     // user identifier goes to cookie to enable addon oauth server
     // linking the outreach user with the addon external identity.
-    document.cookie = `ctx-sdk-user=${
-      runtime.userIdentifier
-    };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
+    document.cookie = cookie;
 
     // request from host to start the authentication process
     // this will reload the iframe with a authentication page shown
