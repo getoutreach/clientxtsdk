@@ -1,4 +1,3 @@
-import validator from '../sdk/Validator';
 /* eslint-disable no-unused-vars */
 import { AddonStore } from './AddonStore';
 import { AllContextKeys } from './keys/AllContextKeys';
