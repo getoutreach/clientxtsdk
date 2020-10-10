@@ -40,6 +40,7 @@ export { ILogger } from './sdk/Logger';
 export * from './sdk/Locale';
 export * from './sdk/LogLevel';
 export * from './sdk/Theme';
+export * from './sdk/Validator';
 
 export * from './store/keys/AccountContextKeys';
 export * from './store/keys/AllContextKeys';
