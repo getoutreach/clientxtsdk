@@ -20,6 +20,7 @@ import tokenService from './services/tokenService';
 import { AuthenticationMessage } from './messages/AuthenticationMessage';
 import { Logger, ILogger } from './sdk/Logger';
 import { Constants } from './sdk/Constants';
+import { EventType } from './sdk/EventType';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -38,6 +39,7 @@ export * from './messages/ReadyMessage';
 
 export * from './sdk/Constants';
 export * from './sdk/Event';
+export * from './sdk/EventType';
 export { ILogger } from './sdk/Logger';
 export * from './sdk/Locale';
 export * from './sdk/LogLevel';
@@ -78,16 +80,20 @@ class AddonsSdk {
   constructor () {
     this.onInit = (context: OutreachContext) => {
       this.logger.log({
+        type: EventType.MESSAGE,
+        messageType: AddonMessageType.INIT,
         level: LogLevel.Info,
-        message: '[CXT][AddonSdk]::onInit (default)',
+        message: '[CXT] Addon received init context from host',
         context: [JSON.stringify(context)]
       });
     };
 
     this.onMessage = (message: AddonMessage) => {
       this.logger.log({
+        type: EventType.MESSAGE,
+        messageType: message.type,
         level: LogLevel.Info,
-        message: '[CXT][AddonSdk]::onMessage (default)',
+        message: '[CXT] Addon received message from host',
         context: [JSON.stringify(message)]
       });
     };
@@ -110,8 +116,10 @@ class AddonsSdk {
     );
 
     this.logger.log({
+      type: EventType.MESSAGE,
+      messageType: AddonMessageType.READY,
       level: LogLevel.Info,
-      message: '[CXT][AddonSdk]::ready',
+      message: '[CXT] Addon is sending ready message to host',
       context: [postMessage]
     });
 
@@ -134,16 +142,18 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public notify = (text: string, type: NotificationType) => {
-    this.logger.log({
-      level: LogLevel.Info,
-      message: '[CXT][AddonSdk]::notify',
-      context: [text, type]
-    });
-
     const message = new NotificationMessage();
     message.notificationText = text;
     message.notificationType = type;
     this.sendMessage(message, true);
+
+    this.logger.log({
+      type: EventType.MESSAGE,
+      messageType: message.type,
+      level: LogLevel.Info,
+      message: '[CXT] Addon is sending notification request message to host',
+      context: [text, type]
+    });
   };
 
   /**
@@ -153,15 +163,17 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public decorate = (text: string) => {
-    this.logger.log({
-      level: LogLevel.Info,
-      message: '[CXT][AddonSdk]::decorate',
-      context: [text]
-    });
-
     const message = new DecorationMessage();
     message.decorationText = text;
     this.sendMessage(message, true);
+
+    this.logger.log({
+      type: EventType.MESSAGE,
+      messageType: message.type,
+      level: LogLevel.Info,
+      message: '[CXT]Addon is sending decoration request message to host',
+      context: [text]
+    });
   };
 
   public getToken = async (skipCache?: boolean): Promise<string | null> => {
@@ -174,12 +186,6 @@ class AddonsSdk {
     const cookie = `${Constants.AUTH_USER_STATE_COOKIE_NAME}=${
       runtime.userIdentifier
     };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
-
-    this.logger.log({
-      level: LogLevel.Debug,
-      message: '[CXT][AddonSdk]::getToken',
-      context: [document.cookie, cookie]
-    });
 
     // user identifier goes to cookie to enable addon oauth server
     // linking the outreach user with the addon external identity.
@@ -205,8 +211,10 @@ class AddonsSdk {
 
     if (!logged) {
       this.logger.log({
+        type: EventType.MESSAGE,
+        messageType: message.type,
         level: LogLevel.Info,
-        message: '[CXT][AddonSdk]::sendMessage',
+        message: `[CXT] Addon is sending ${message.type} message to host`,
         context: [postMessage, this.origin]
       });
     }
@@ -218,17 +226,20 @@ class AddonsSdk {
     const addonMessage = this.getAddonMessage(messageEvent);
     if (!addonMessage) {
       this.logger.log({
+        type: EventType.INTERNAL,
         level: LogLevel.Trace,
         message:
-          '[CXT][AddonSdk]::handleReceivedMessage- ignoring event message',
+          '[CXT][AddonSdk]::handleReceivedMessage - ignoring event message as it is not addon message',
         context: [messageEvent.origin, JSON.stringify(messageEvent.data)]
       });
       return;
     }
 
     this.logger.log({
+      type: EventType.MESSAGE,
+      messageType: addonMessage.type,
       level: LogLevel.Info,
-      message: '[CXT][AddonSdk]::handleReceivedMessage',
+      message: `[CXT] Addon had received a ${addonMessage.type} message from host`,
       context: [JSON.stringify(messageEvent)]
     });
 
@@ -244,15 +255,17 @@ class AddonsSdk {
       case AddonMessageType.REQUEST_NOTIFY:
       case AddonMessageType.REQUEST_RELOAD:
         this.logger.log({
+          type: EventType.INTERNAL,
           message:
-            '[CXT][AddonSdk]:onReceived - Client event received from host',
+            `[CXT][AddonSdk] :: onReceived - Client event ${addonMessage.type} received from host (ERROR)`,
           level: LogLevel.Error,
           context: [JSON.stringify(addonMessage)]
         });
         return;
       default:
         this.logger.log({
-          message: '[CXT][AddonSdk]:onReceived - Unknown host message of type:',
+          type: EventType.INTERNAL,
+          message: `[CXT][AddonSdk] :: onReceived - Unknown event type: ${addonMessage.type}`,
           level: LogLevel.Warning,
           context: [JSON.stringify(addonMessage)]
         });
@@ -301,12 +314,13 @@ class AddonsSdk {
     }
 
     this.logger.log({
+      type: EventType.INTERNAL,
       message: '[CXT][AddonSdk]::preprocessInitMessage',
       level: LogLevel.Debug,
       context: [
-        JSON.stringify(initMessage),
-        JSON.stringify(outreachContext),
-        this.origin || 'N/A'
+        `message: ${JSON.stringify(initMessage)}`,
+        `context: ${JSON.stringify(outreachContext)}`,
+        `origin: ${this.origin || 'N/A'}`
       ]
     });
 
@@ -326,6 +340,7 @@ class AddonsSdk {
 
     if (!messageEvent.data || typeof messageEvent.data !== 'string') {
       this.logger.log({
+        type: EventType.INTERNAL,
         level: LogLevel.Trace,
         message:
           '[CXT][AddonSdk]::getAddonMessage - message event data is not a string',
@@ -339,9 +354,10 @@ class AddonsSdk {
       hostMessage = JSON.parse(messageEvent.data);
       if (!hostMessage || !hostMessage.type) {
         this.logger.log({
+          type: EventType.INTERNAL,
           level: LogLevel.Debug,
           message:
-            '[CXT][AddonSdk]::getAddonMessage- invalid message data format',
+            '[CXT][AddonSdk]::getAddonMessage - invalid message data format',
           context: [messageEvent.data]
         });
 
@@ -349,8 +365,9 @@ class AddonsSdk {
       }
     } catch (e) {
       this.logger.log({
+        type: EventType.INTERNAL,
         level: LogLevel.Debug,
-        message: '[CXT][AddonSdk]::getAddonMessage- not a json data',
+        message: '[CXT][AddonSdk]::getAddonMessage - not a json data',
         context: [messageEvent.data, JSON.stringify(e)]
       });
 
@@ -360,8 +377,9 @@ class AddonsSdk {
     if (this.origin) {
       if (messageEvent.origin !== this.origin) {
         this.logger.log({
+          type: EventType.INTERNAL,
           level: LogLevel.Error,
-          message: '[CXT][AddonSdk]::getAddonMessage- invalid origin',
+          message: '[CXT][AddonSdk]::getAddonMessage - invalid origin',
           context: [messageEvent.origin, this.origin]
         });
         return null;
@@ -385,14 +403,16 @@ class AddonsSdk {
 
     if (!this.validOrigin(messageEvent.origin)) {
       this.logger.log({
+        type: EventType.INTERNAL,
         level: LogLevel.Error,
-        message: '[CXT][AddonSdk]::getAddonMessage- invalid origin received',
+        message: '[CXT][AddonSdk]::getAddonMessage - invalid origin received',
         context: [messageEvent.origin]
       });
       return null;
     }
 
     this.logger.log({
+      type: EventType.INTERNAL,
       level: LogLevel.Info,
       message: '[CXT][AddonSdk]::getAddonMessage- setting origin',
       context: [messageEvent.origin]
