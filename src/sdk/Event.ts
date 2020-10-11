@@ -2,6 +2,7 @@
 import { LogLevel } from './LogLevel';
 import { EventType } from './EventType';
 import { AddonMessageType } from '../messages/AddonMessageType';
+import { EventOrigin } from './EventOrigin';
 
 export class Event {
   /**
@@ -12,6 +13,14 @@ export class Event {
    * @memberof Event
    */
   type: EventType;
+
+  /**
+   * Contains information on where the event originated (addon or host).
+   *
+   * @type {EventOrigin}
+   * @memberof Event
+   */
+  origin: EventOrigin;
 
   /**
    * In case of EventType.Message events contains the type of the message being received

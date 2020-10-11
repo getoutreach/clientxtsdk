@@ -4,6 +4,7 @@ import runtime from '../sdk/RuntimeContext';
 import addonSdk, { Constants } from '../index';
 import { LogLevel } from '../sdk/LogLevel';
 import { EventType } from '../sdk/EventType';
+import { EventOrigin } from '../sdk/EventOrigin';
 
 class TokenService {
   public getTokenAsync = async (
@@ -46,6 +47,7 @@ class TokenService {
         }
       } catch (e) {
         addonSdk?.logger.log({
+          origin: EventOrigin.ADDON,
           type: EventType.INTERNAL,
           level: LogLevel.Error,
           message: 'Invalid cached token value:' + cachedToken,
@@ -82,6 +84,7 @@ class TokenService {
       return (await r.json()) as Token;
     } catch (e) {
       addonSdk?.logger.log({
+        origin: EventOrigin.ADDON,
         type: EventType.INTERNAL,
         level: LogLevel.Error,
         message: 'Refresh token fetch failed with an error',
