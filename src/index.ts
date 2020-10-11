@@ -200,7 +200,7 @@ class AddonsSdk {
 
     // request from host to start the authentication process
     // this will reload the iframe with a authentication page shown
-    // isntead of the current page
+    // instead of the current page
     this.sendMessage(new AuthenticationMessage());
 
     return null;
@@ -250,7 +250,7 @@ class AddonsSdk {
       messageType: addonMessage.type,
       level: LogLevel.Info,
       message: `[CXT] Addon had received a ${addonMessage.type} message from host`,
-      context: [JSON.stringify(messageEvent)]
+      context: [JSON.stringify(addonMessage)]
     });
 
     switch (addonMessage.type) {
