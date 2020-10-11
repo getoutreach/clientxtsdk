@@ -1,7 +1,27 @@
 // eslint-disable-next-line no-unused-vars
 import { LogLevel } from './LogLevel';
+import { EventType } from './EventType';
+import { AddonMessageType } from '../messages/AddonMessageType';
 
 export class Event {
+  /**
+   * Type of event indicating if it is internal sdk event
+   * or a communication message being sent or received from addon host.
+   *
+   * @type {EventType}
+   * @memberof Event
+   */
+  type: EventType;
+
+  /**
+   * In case of EventType.Message events contains the type of the message being received
+   * In case of EventType.Internal it is Undefined.
+   *
+   * @type {AddonMessageType}
+   * @memberof Event
+   */
+  messageType?: AddonMessageType;
+
   /**
    * Message describing the event.
    *
