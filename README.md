@@ -46,7 +46,7 @@ That manifest file contains things like the URL where the add-on web page is loc
 
 5. Some of the add-ons will need to have **client access to Outreach API**, and for that, they will need to add support on the add-on server required for obtaining and refreshing access tokens. This will include implementing additional endpoints, server to server calls to Outreach API, token caching, etc.
 
-    Go to [host authentication support]() page to learn more about API access requirements.
+    Go to [host authentication support](/docs/host.md#outreach-api-access-support) page to learn more about API access requirements.
 
 
 *If you have any questions/comments/concerns about the extensibility, please email us at **cxt-sdk@outreach.io.***

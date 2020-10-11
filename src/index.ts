@@ -19,6 +19,7 @@ import runtime from './sdk/RuntimeContext';
 import tokenService from './services/tokenService';
 import { AuthenticationMessage } from './messages/AuthenticationMessage';
 import { Logger, ILogger } from './sdk/Logger';
+import { Constants } from './sdk/Constants';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -35,6 +36,7 @@ export * from './messages/NotificationMessage';
 export * from './messages/NotificationType';
 export * from './messages/ReadyMessage';
 
+export * from './sdk/Constants';
 export * from './sdk/Event';
 export { ILogger } from './sdk/Logger';
 export * from './sdk/Locale';
@@ -169,7 +171,7 @@ class AddonsSdk {
     }
 
     // start the OAuth consent flow
-    const cookie = `ctx-sdk-user=${
+    const cookie = `${Constants.AUTH_USER_STATE_COOKIE_NAME}=${
       runtime.userIdentifier
     };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
 

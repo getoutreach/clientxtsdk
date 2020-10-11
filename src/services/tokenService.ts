@@ -1,10 +1,13 @@
 import { Token } from '../sdk/Token';
 import runtime from '../sdk/RuntimeContext';
 
-class TokenService {
-  private AUTH_TOKEN_CACHE_KEY = 'ctx-sdk-token';
+import addonSdk, { Constants } from '../index';
+import { LogLevel } from '../sdk/LogLevel';
 
-  public getTokenAsync = async (skipCache?: boolean): Promise<string | null> => {
+class TokenService {
+  public getTokenAsync = async (
+    skipCache?: boolean
+  ): Promise<string | null> => {
     if (!runtime.api) {
       throw new Error(
         "This addon manifest is not having api definition so token can't be retrieved"
@@ -22,7 +25,10 @@ class TokenService {
     // 2. try to refresh a token
     const refreshedToken = await this.getRefreshedTokenAsync();
     if (refreshedToken) {
-      localStorage.setItem(this.AUTH_TOKEN_CACHE_KEY, JSON.stringify(refreshedToken));
+      localStorage.setItem(
+        Constants.AUTH_TOKEN_CACHE_KEY,
+        JSON.stringify(refreshedToken)
+      );
       return refreshedToken.value;
     }
 
@@ -30,7 +36,7 @@ class TokenService {
   };
 
   private getCachedTokenAsync = (): Promise<string | null> => {
-    var cachedToken = localStorage.getItem(this.AUTH_TOKEN_CACHE_KEY);
+    var cachedToken = localStorage.getItem(Constants.AUTH_TOKEN_CACHE_KEY);
     if (cachedToken) {
       try {
         const token = JSON.parse(cachedToken) as Token;
@@ -38,8 +44,11 @@ class TokenService {
           return Promise.resolve(token.value);
         }
       } catch (e) {
-        // TODO: nimal, 8.10.2020 - report this to rollbar?
-        console.error('Invalid cached token value', cachedToken);
+        addonSdk?.logger.log({
+          level: LogLevel.Error,
+          message: 'Invalid cached token value:' + cachedToken,
+          context: [JSON.stringify(e)]
+        });
       }
     }
 
@@ -57,17 +66,24 @@ class TokenService {
         // TODO: nimal, 8.10.2020 - xt-74 token endpoint authentication
         credentials: 'omit',
         headers: {
-          'outreach-user-id': runtime.userIdentifier
-        }
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: runtime.userIdentifier
+        })
       });
 
       if (!r.ok) {
         return Promise.resolve(null);
       }
 
-      return await r.json() as Token;
+      return (await r.json()) as Token;
     } catch (e) {
-      console.error(e);
+      addonSdk?.logger.log({
+        level: LogLevel.Error,
+        message: 'Refresh token fetch failed with an error',
+        context: [JSON.stringify(e)]
+      });
       return Promise.resolve(null);
     }
   };
