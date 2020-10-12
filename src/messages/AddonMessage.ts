@@ -10,11 +10,10 @@ import { AddonMessageType } from './AddonMessageType';
 export class AddonMessage {
   /**
     *Creates an instance of AddonMessage.
-    * @param {AddonMessageType} type
     * @memberof AddonMessage
     */
-  constructor (type: AddonMessageType) {
-    this.type = type;
+  constructor () {
+    this.type = AddonMessageType.READY;
   }
 
   /**

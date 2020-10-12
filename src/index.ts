@@ -86,8 +86,8 @@ class AddonsSdk {
         type: EventType.MESSAGE,
         messageType: AddonMessageType.INIT,
         level: LogLevel.Info,
-        message: '[CXT] Addon received init context from host',
-        context: [JSON.stringify(context)]
+        message: '[CXT] addon.onInit received initialization context',
+        context: [`context: ${JSON.stringify(context, null, 2)}`]
       });
     };
 
@@ -97,7 +97,7 @@ class AddonsSdk {
         type: EventType.MESSAGE,
         messageType: message.type,
         level: LogLevel.Info,
-        message: '[CXT] Addon received message from host',
+        message: `[CXT] Addon received message:${message.type}  from host`,
         context: [JSON.stringify(message)]
       });
     };
@@ -115,17 +115,16 @@ class AddonsSdk {
       window.addEventListener('message', this.handleReceivedMessage);
     }
 
-    const postMessage = JSON.stringify(
-      new AddonMessage(AddonMessageType.READY)
-    );
+    const message = new AddonMessage();
+    const postMessage = JSON.stringify(message);
 
     this.logger.log({
       origin: EventOrigin.ADDON,
       type: EventType.MESSAGE,
       messageType: AddonMessageType.READY,
       level: LogLevel.Info,
-      message: '[CXT] Addon is sending ready message to host',
-      context: [postMessage]
+      message: `[CXT] Addon is sending ${message.type} message to host`,
+      context: []
     });
 
     window.parent.postMessage(postMessage, '*');
@@ -157,8 +156,8 @@ class AddonsSdk {
       type: EventType.MESSAGE,
       messageType: message.type,
       level: LogLevel.Info,
-      message: '[CXT] Addon is sending notification request message to host',
-      context: [text, type]
+      message: `[CXT] Addon is sending ${message.type} message to host`,
+      context: [`Notification text: ${text}`, `Notification type: ${type}`]
     });
   };
 
@@ -178,8 +177,8 @@ class AddonsSdk {
       type: EventType.MESSAGE,
       messageType: message.type,
       level: LogLevel.Info,
-      message: '[CXT]Addon is sending decoration request message to host',
-      context: [text]
+      message: `[CXT] Addon is sending ${message.type} message to host`,
+      context: [`Decoration text: ${text}`]
     });
   };
 
