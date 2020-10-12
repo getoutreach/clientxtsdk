@@ -1,27 +1,28 @@
 <!-- omit in toc -->
-# Addon host
-If an addon is not a stateless addon (e.g., calculator), it will need toimplement the [query parameters parsing](#query-parameters-parsing). 
+
+# Add-on host
+
+If an add-on is not a stateless add-on (e.g., calculator), it will need to implement the [query parameters parsing](#query-parameters-parsing). 
 
 If the add-on would need Outreach API access, it will need to implement [Outreach API access support](#outreach-api-access-support)
 
 **Table of content**
 
-- [Query parameters parsing](#query-parameters-parsing)
-  - [200 (OK)](#200-ok)
-  - [302 (FOUND)](#302-found)
-  - [404 (NOT FOUND)](#404-not-found)
-- [Outreach API access support](#outreach-api-access-support)
-  - [Define required  scopes](#define-required-scopes)
-  - [Setup Outreach OAuth application](#setup-outreach-oauth-application)
-  - [Initial authentication flow](#initial-authentication-flow)
-    - [Obtaining authorization token](#obtaining-authorization-token)
-    - [Obtain access and refresh token](#obtain-access-and-refresh-token)
-    - [Caching the tokens](#caching-the-tokens)
-    - [Passing back access token](#passing-back-access-token)
-  - [Refresh token flow](#refresh-token-flow)
-
-
-
+- [Add-on host](#add-on-host)
+  - [Query parameters parsing](#query-parameters-parsing)
+    - [200 (OK)](#200-ok)
+    - [302 (FOUND)](#302-found)
+    - [404 (NOT FOUND)](#404-not-found)
+  - [Outreach API access support](#outreach-api-access-support)
+    - [OAuth sequence diagram](#oauth-sequence-diagram)
+    - [Define required  scopes](#define-required-scopes)
+    - [Setup Outreach OAuth application](#setup-outreach-oauth-application)
+    - [Initial authentication flow](#initial-authentication-flow)
+      - [Obtaining authorization token](#obtaining-authorization-token)
+      - [Obtain access and refresh token](#obtain-access-and-refresh-token)
+      - [Caching the tokens](#caching-the-tokens)
+      - [Passing back access token](#passing-back-access-token)
+    - [Refresh token flow](#refresh-token-flow)
 
 ## Query parameters parsing
 
@@ -30,9 +31,9 @@ Any time when the Outreach app loads an addon, it will set as iframe soruice an 
 - host.URL value [defined in the manifest](manifest.md#url)
 - query parameters representing [context values of current Outreach user](manifest.md#context) also defined in the manifest (e.g. "opp.id")
 - query params which are always sent regardless of the manifest:
-  - locale='en', 
+  - locale='en',
   - theme='light'
-  - uid={usr.id} 
+  - uid={usr.id}
 
 That's how the resulting URL which Outreach will set as a source of iframe will be something like this:
 
@@ -47,11 +48,13 @@ When the add-on loading request comes, the add-on has to parse out of request qu
 When received parameters are sufficient for the add-on to initialize itself into a state matching the given Outreach context, the add-on should return the initialized page as **200 (OK)** response containing the add-on page content, which will be shown in the iframe.
 
 ### 302 (FOUND)
+
 In case when host URL [defined in the manifest](manifest.md#url) needs to be transformed to some other URL, the add-on hosting page should implement the logic which will determine a new URL based on the received context. That new URL is then being returned as a response with **302 (FOUND)** status code to the iframe, which will update itself and show the content of that new URL automatically.
 
 ### 404 (NOT FOUND)
-In case the add-on determines that, with a received set of parameters, there is nothing to be shown in the Outreach app, it will just return **404 (NOT FOUND)** response, and the Outreach app will hide the add-on in that case. 
-An alternative to this "do not show add-on" approach, we recommend, is to create a landing page that will offer the creation of the new add-on resources so the user will be onboarded with that. 
+
+In case the add-on determines that, with a received set of parameters, there is nothing to be shown in the Outreach app, it will just return **404 (NOT FOUND)** response and the Outreach app will hide the add-on in that case. 
+An alternative to this "do not show add-on" approach, we recommend, is to create a landing page that will offer the creation of the new add-on resources so the user will be onboarded with that.
 
 ## Outreach API access support
 
@@ -61,20 +64,26 @@ Suppose an add-on needs to make an impersonalized call to Outreach API  in the c
 
 All [Outreach API](https://api.outreach.io/api/v2/docs#authentication) requests must be authenticated with a token in the request's HTTP Authorization header.
 
-To enable obtaining that token, Outreach API supports OAuth flow where the Outreach user needs to consent for giving API access rights with the [scopes](scopes.md) defined in the add-on manifest. 
+To enable obtaining that token, Outreach API supports OAuth flow where the Outreach user needs to consent for giving API access rights with the [scopes](scopes.md) defined in the add-on manifest.
 
 ![alt text](assets/api-consent.png "API consent screen")
 
 Once a user consent to that and authorize Outreach API access, [initial authentication flow](#initial-authentication-flow) will start.
 
-A request to the endpoint defined in [redirectUri](host.md#redirectUri) will be made with a **"code"** query parameter value sent from Outreach authentication server. This code is a short-lived authorization token, which is used with [Outreach application](manifest.md#applicationId) and [Outreach OAuth app secret](outreach-oauth-settings.md) so a proper Outreach API access token and refresh tokens could be obtained.
+A request to the endpoint defined in [redirectUri](host.md#redirectUri) will be made with a **"code"** query parameter value sent from Outreach authentication server. This code is a short-lived authorization token, which is used with [Outreach application](manifest.md#applicationId) and [Outreach OAuth app secret](outreach-OAuth-settings.md) so a proper Outreach API access token and refresh tokens could be obtained.
 
 The add-on host will cache the retrieved tokens, so the next time user needs to obtain a new Outreach API access token, it doesn't have to go again through the consent flow.
 
-There are a few steps add-on host needs to implement in order to support Outreach API access:
+### OAuth sequence diagram
+
+![alt text](assets/cxt-oauth-diagram.png "OAuth sequence diagram")
+
+As you can tell from the sequence diagram, there are a few steps "Add-on host API" needs to implement in order to support Outreach API access:
+
 - [Define required scopes](#define-required-scopes)
-- [Setup Outreach Oauth application](#setup-outreach-oauth-application)
+- [Setup Outreach Oauth application](#setup-outreach-OAuth-application)
 - [Initial authentication flow](#initial-authentication-flow)
+- [Refresh token flow](#refresh-token-flow)
 
 ### Define required  scopes
 
@@ -99,11 +108,12 @@ With that add-on OAuth application created, you will have:
 
 _The redirect URI can be the same as the add-on host URL defined in the manifest or a dedicated URL._
 
-
-You can see this data on the [Outreach app settings page](outreach-oauth-settings.md).
+You can see this data on the [Outreach app settings page](outreach-OAuth-settings.md).
 
 ### Initial authentication flow
+
 Before the add-on performs the first Outreach API call for a new Outreach user, it has to perform initial authentication flow, which consists of 4 steps:
+
 - Receiving [authorization token](#obtaining-authorization-token) from Outreach 
 - [Generating access and refresh token](#obtain-access-and-refresh-token) from authorization code
 - [Caching the tokens](#caching-the-tokens)
@@ -135,7 +145,7 @@ curl https://api.outreach.io/oauth/token
   -d code=<Authorization_Code>
   ```
 
-** response** will contain all the data needed for accessing the token.
+**response** will contain all the data needed for accessing the token.
 
 ```json
 {
@@ -152,7 +162,7 @@ curl https://api.outreach.io/oauth/token
 
 Now when the add-on host has obtained this data, it needs to store somewhere access and refresh tokens of this user, so later, when the user loads add-on again, it could generate a new access token without forcing the user to go through [user consent](#user-consent) phase.
 
-The add-on host needs to know the Outreach user for whom these tokens should be cached to be used later to implement the caching. 
+The add-on host needs to know the Outreach user for whom these tokens should be cached to be used later to implement the caching.
 
 Considering that [manifest api.redirectUri](manifest.md#redirectUri) can not contain parameters, Outreach addons SDK stores current Outreach user identifier in ["cxt-sdk-user" cookie](sdk.md#auth-user-cookie) at the start of authentication.
 
@@ -163,7 +173,7 @@ The add-on host implementing the caching should read from the cookie userId valu
 Now when the add-on host obtained the access token and cached the refresh token, it needs to send the token back to the add-on, so the add-on can perform Outreach API calls using that token.
 
 To do that, the add-on host has to respond to the original request, with a [302 Found](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/302) status code with the [Location header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Location) with value defined like this
- 
+
  ``` http
  {REQUEST_URL} + "&token=<ACCESS_TOKEN>&expiresAt=<EXPIRES_AT>"
 ```
@@ -174,7 +184,7 @@ To do that, the add-on host has to respond to the original request, with a [302 
 
 ### Refresh token flow
 
-If add-on wants to support Outreach API access, it has to implement an additional [ endpoint](#auth-endpoint), which will help the token refresh flow. This endpoint aims to be used as an API endpoint, which will return only new token info if possible without any content, etc.
+If add-on wants to support Outreach API access, it has to implement an additional [endpoint](#auth-endpoint), which will help the token refresh flow. This endpoint aims to be used as an API endpoint, which will return only new token info if possible without any content, etc.
 
 When called, this endpoint will receive a UID query parameter containing a unique user id value (same one as used in [caching the tokens](#caching-the-tokens) section), and endpoint implementation have to check if it has previously cached tokens for that given user id.
 
