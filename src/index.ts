@@ -115,7 +115,7 @@ class AddonsSdk {
       window.addEventListener('message', this.handleReceivedMessage);
     }
 
-    const message = new AddonMessage();
+    const message = new ReadyMessage();
     const postMessage = JSON.stringify(message);
 
     this.logger.log({
