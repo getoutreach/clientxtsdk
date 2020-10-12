@@ -11,9 +11,9 @@ export class Constants {
 
   /**
    * Name of the cookie storing the identifier of the
-   * current Outreach user. The cookie is submited to the
+   * current Outreach user. The cookie is submitted to the
    * server as part of initial loading sequence so addon host
-   * can correlate and cache retreived token information with
+   * can correlate and cache retrieved token information with
    * a given user identifier.
    *
    * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/host.md#outreach-api-access-support
