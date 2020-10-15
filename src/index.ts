@@ -22,6 +22,9 @@ import { Logger, ILogger } from './sdk/Logger';
 import { Constants } from './sdk/Constants';
 import { EventType } from './sdk/EventType';
 import { EventOrigin } from './sdk/EventOrigin';
+import { utils } from './utils';
+import { TokenMessage } from './messages/TokenMessage';
+import { Token } from './sdk/Token';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -37,6 +40,7 @@ export * from './messages/InitMessage';
 export * from './messages/NotificationMessage';
 export * from './messages/NotificationType';
 export * from './messages/ReadyMessage';
+export * from './messages/TokenMessage';
 
 export * from './sdk/Constants';
 export * from './sdk/Event';
@@ -45,6 +49,7 @@ export * from './sdk/EventType';
 export { ILogger } from './sdk/Logger';
 export * from './sdk/Locale';
 export * from './sdk/LogLevel';
+export * from './sdk/Token';
 export * from './sdk/Theme';
 export * from './sdk/Validator';
 
@@ -64,8 +69,16 @@ export * from './store/ManifestHost';
 export * from './store/Scopes';
 export * from './utils';
 
+class Task<T> {
+  public promise: Promise<T>;
+  public onfulfilled: ((value: T) => void);
+  public onrejected: (reason: any) => void;
+}
+
 class AddonsSdk {
   private origin: string | null;
+
+  private tokenTask?: Task<string | null>
 
   public activeListener: boolean = false;
 
@@ -182,27 +195,31 @@ class AddonsSdk {
     });
   };
 
-  public getToken = async (skipCache?: boolean): Promise<string | null> => {
-    const token = await tokenService.getTokenAsync(skipCache);
-    if (token) {
-      return token;
-    }
+  public getToken = (skipCache?: boolean): Promise<string | null> => {
+    this.tokenTask = new Task<string | null>();
+    this.tokenTask.promise = new Promise<string | null>((resolve, reject) => {
+      this.tokenTask!.onfulfilled = resolve;
+      this.tokenTask!.onrejected = reject;
 
-    // start the OAuth consent flow
-    const cookie = `${Constants.AUTH_USER_STATE_COOKIE_NAME}=${
-      runtime.userIdentifier
-    };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
+      tokenService.getTokenAsync(skipCache)
+        .then(token => resolve(token));
 
-    // user identifier goes to cookie to enable addon oauth server
-    // linking the outreach user with the addon external identity.
-    document.cookie = cookie;
+      // start the OAuth consent flow
+      const cookie = `${Constants.AUTH_USER_STATE_COOKIE_NAME}=${
+        runtime.userIdentifier
+      };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
 
-    // request from host to start the authentication process
-    // this will reload the iframe with a authentication page shown
-    // instead of the current page
-    this.sendMessage(new AuthenticationMessage());
+      // user identifier goes to cookie to enable addon oauth server
+      // linking the outreach user with the addon external identity.
+      document.cookie = cookie;
 
-    return null;
+      // request from host to start the authentication process
+      // this will reload the iframe with a authentication page shown
+      // instead of the current page
+      this.sendMessage(new AuthenticationMessage());
+    })
+
+    return this.tokenTask.promise;
   };
 
   public sendMessage<T extends AddonMessage> (message: T, logged?: boolean) {
@@ -259,20 +276,27 @@ class AddonsSdk {
         this.onInit(context);
         return;
       }
+      case AddonMessageType.CONNECT_AUTH_TOKEN: {
+        this.handleAuthTokenConnectMessage(addonMessage as TokenMessage)
+        return;
+      }
       case AddonMessageType.READY:
       case AddonMessageType.REQUEST_DECORATION_UPDATE:
       case AddonMessageType.REQUEST_NOTIFY:
       case AddonMessageType.REQUEST_RELOAD:
+      {
         this.logger.log({
           origin: EventOrigin.HOST,
           type: EventType.INTERNAL,
           message:
-            `[CXT][AddonSdk] :: onReceived - Client event ${addonMessage.type} received from host (ERROR)`,
+              `[CXT][AddonSdk] :: onReceived - Client event ${addonMessage.type} received from host (ERROR)`,
           level: LogLevel.Error,
           context: [JSON.stringify(addonMessage)]
         });
         return;
+      }
       default:
+      {
         this.logger.log({
           origin: EventOrigin.HOST,
           type: EventType.INTERNAL,
@@ -280,8 +304,35 @@ class AddonsSdk {
           level: LogLevel.Warning,
           context: [JSON.stringify(addonMessage)]
         });
+      }
     }
   };
+
+  private handleAuthTokenConnectMessage = (message: TokenMessage) => {
+    this.logger.log({
+      origin: EventOrigin.ADDON,
+      type: EventType.MESSAGE,
+      messageType: message.type,
+      level: LogLevel.Debug,
+      message: `[CXT] Addon received ${message.type} message from host with a new API token`,
+      context: [`Token: ${message.token}. ExpiresAt:${message.expiresAt}`]
+    });
+
+    // cache the token in local storage
+    const token: Token = {
+      value: message.token,
+      expiresAt: message.expiresAt
+    }
+    localStorage.setItem(
+      Constants.AUTH_TOKEN_CACHE_KEY,
+      JSON.stringify(token)
+    );
+
+    if (this.tokenTask) {
+      // resolve the sdk.getToken() promise with a token information
+      this.tokenTask.onfulfilled(message.token)
+    }
+  }
 
   private preprocessInitMessage = (initMessage: InitMessage) => {
     runtime.locale = initMessage.locale;
@@ -448,7 +499,8 @@ class AddonsSdk {
       origin.endsWith('outreach.io') ||
       origin.endsWith('outreach-staging.com') ||
       origin.endsWith('outreach-dev.com') ||
-      origin.endsWith('localhost')
+      origin.endsWith('localhost') ||
+      origin === utils.getUrlDomain(new URL(window.location.href))
     );
   };
 }
