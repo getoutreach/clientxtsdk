@@ -7,21 +7,11 @@ import { EventType } from '../sdk/EventType';
 import { EventOrigin } from '../sdk/EventOrigin';
 
 class TokenService {
-  public getTokenAsync = async (
-    skipCache?: boolean
-  ): Promise<string | null> => {
+  public fetchTokenAsync = async (): Promise<string | null> => {
     if (!runtime.api) {
       throw new Error(
         "This addon manifest is not having api definition so token can't be retrieved"
       );
-    }
-
-    // 1. check the local cache for valid token
-    if (!skipCache) {
-      const cachedToken = await this.getCachedTokenAsync();
-      if (cachedToken) {
-        return cachedToken;
-      }
     }
 
     // 2. try to refresh a token
@@ -37,7 +27,13 @@ class TokenService {
     return null;
   };
 
-  private getCachedTokenAsync = (): Promise<string | null> => {
+  public getCachedTokenAsync = (): Promise<string | null> => {
+    if (!runtime.api) {
+      throw new Error(
+        "This addon manifest is not having api definition so token can't be retrieved"
+      );
+    }
+    // 1. check the local cache for valid token
     var cachedToken = localStorage.getItem(Constants.AUTH_TOKEN_CACHE_KEY);
     if (cachedToken) {
       try {
@@ -58,6 +54,17 @@ class TokenService {
 
     return Promise.resolve(null);
   };
+
+  public cacheToken = (token: Token) => {
+    addonSdk?.logger.log({
+      origin: EventOrigin.ADDON,
+      type: EventType.INTERNAL,
+      level: LogLevel.Debug,
+      message: 'New token value stored in cache',
+      context: [JSON.stringify(token)]
+    });
+    localStorage.setItem(Constants.AUTH_TOKEN_CACHE_KEY, JSON.stringify(token));
+  }
 
   private getRefreshedTokenAsync = async (): Promise<Token | null> => {
     if (!runtime.api) {

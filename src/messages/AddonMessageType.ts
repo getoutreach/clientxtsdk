@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export enum AddonMessageType {
   /**
    * Message sent from client to host signalizing that the client is ready for initialization
@@ -32,4 +33,10 @@ export enum AddonMessageType {
    */
   // eslint-disable-next-line no-unused-vars
   REQUEST_OAUTH_AUTHENTICATE = 'cxt:sdk:authenticate',
+
+  /**
+   * Message received from host containing the new authentication token
+   */
+  CONNECT_AUTH_TOKEN = 'cxt:sdk:token',
+
 }
