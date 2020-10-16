@@ -40,6 +40,17 @@ class TokenService {
         const token = JSON.parse(cachedToken) as Token;
         if (token.expiresAt > Date.now()) {
           return Promise.resolve(token.value);
+        } else {
+          addonSdk?.logger.log({
+            origin: EventOrigin.ADDON,
+            type: EventType.INTERNAL,
+            level: LogLevel.Debug,
+            message: 'Cached token had expired',
+            context: [
+              `expiresAt:${token.expiresAt}`,
+              `date.now:${Date.now()}`
+            ]
+          });
         }
       } catch (e) {
         addonSdk?.logger.log({
@@ -85,6 +96,16 @@ class TokenService {
       });
 
       if (!r.ok) {
+        addonSdk?.logger.log({
+          origin: EventOrigin.ADDON,
+          type: EventType.INTERNAL,
+          level: r.status === 404 ? LogLevel.Debug : LogLevel.Error,
+          message: 'Token fetch failed',
+          context: [
+            `status:${r.status}`,
+            `statusText:${r.statusText}`
+          ]
+        });
         return Promise.resolve(null);
       }
 
