@@ -37,6 +37,11 @@ export enum AddonMessageType {
   /**
    * Message received from host containing the new authentication token
    */
-  CONNECT_AUTH_TOKEN = 'cxt:sdk:token',
+  REFRESH_AUTH_TOKEN = 'cxt:sdk:token',
+
+  /**
+   * Message received from the OAuth popup window containing new token information.
+   */
+  CONNECT_AUTH_TOKEN = 'ctx:connect:token',
 
 }

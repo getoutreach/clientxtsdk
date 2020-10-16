@@ -22,8 +22,7 @@ import { Logger, ILogger } from './sdk/Logger';
 import { Constants } from './sdk/Constants';
 import { EventType } from './sdk/EventType';
 import { EventOrigin } from './sdk/EventOrigin';
-import { TokenMessage } from './messages/TokenMessage';
-import { Token } from './sdk/Token';
+import { RefreshTokenMessage } from './messages/RefreshTokenMessage';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -34,11 +33,14 @@ export * from './context/UserContext';
 
 export * from './messages/AddonMessage';
 export * from './messages/AddonMessageType';
+export * from './messages/AuthenticationMessage';
+export * from './messages/ConnectTokenMessage';
 export * from './messages/DecorationMessage';
 export * from './messages/InitMessage';
 export * from './messages/NotificationMessage';
 export * from './messages/NotificationType';
 export * from './messages/ReadyMessage';
+export * from './messages/RefreshTokenMessage';
 
 export * from './sdk/Constants';
 export * from './sdk/Event';
@@ -309,15 +311,16 @@ class AddonsSdk {
         this.onInit(context);
         break;
       }
-      case AddonMessageType.CONNECT_AUTH_TOKEN:
+      case AddonMessageType.REFRESH_AUTH_TOKEN:
       {
-        this.handleRefreshTokenMessage(addonMessage as TokenMessage);
+        this.handleRefreshTokenMessage(addonMessage as RefreshTokenMessage);
         break;
       }
       case AddonMessageType.READY:
       case AddonMessageType.REQUEST_DECORATION_UPDATE:
       case AddonMessageType.REQUEST_NOTIFY:
       case AddonMessageType.REQUEST_RELOAD:
+      case AddonMessageType.CONNECT_AUTH_TOKEN:
         this.logger.log({
           origin: EventOrigin.ADDON,
           type: EventType.INTERNAL,
@@ -394,13 +397,8 @@ class AddonsSdk {
     this.onInit(outreachContext);
   };
 
-  private handleRefreshTokenMessage = (tokenMessage: TokenMessage) => {
-    const token: Token = {
-      value: tokenMessage.token,
-      expiresAt: tokenMessage.expiresAt
-    };
-
-    tokenService.cacheToken(token)
+  private handleRefreshTokenMessage = (tokenMessage: RefreshTokenMessage) => {
+    tokenService.cacheToken(tokenMessage.token)
 
     if (this.authorizeTask) {
       this.logger.log({
@@ -410,8 +408,8 @@ class AddonsSdk {
         level: LogLevel.Debug,
         context: []
       });
-      if (token.value) {
-        this.authorizeTask.onfulfilled(token.value);
+      if (tokenMessage.token.value) {
+        this.authorizeTask.onfulfilled(tokenMessage.token.value);
       } else {
         this.authorizeTask.onrejected('No token value received');
       }

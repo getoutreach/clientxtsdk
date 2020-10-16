@@ -1,10 +1,19 @@
 import { AddonMessage } from './AddonMessage';
 import { AddonMessageType } from './AddonMessageType';
+import { Token } from '../sdk/Token';
 
-export class TokenMessage extends AddonMessage {
+/**
+ * Message received from OAuth connect window containing
+ * the valid access token for Outreach API access.
+ *
+ * @export
+ * @class ConnectTokenMessage
+ * @extends {AddonMessage}
+ */
+export class ConnectTokenMessage extends AddonMessage {
   /**
-     *Creates an instance of ReadyMessage.
-     * @memberof ReadyMessage
+     *Creates an instance of ConnectTokenMessage.
+     * @memberof ConnectTokenMessage
      */
   constructor () {
     super(AddonMessageType.CONNECT_AUTH_TOKEN);
