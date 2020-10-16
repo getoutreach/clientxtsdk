@@ -1,6 +1,5 @@
 import { AddonMessage } from './AddonMessage';
 import { AddonMessageType } from './AddonMessageType';
-import { Token } from '../sdk/Token';
 
 /**
  * Message received from OAuth connect window containing
