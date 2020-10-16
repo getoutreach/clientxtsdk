@@ -1,13 +1,13 @@
 export class Constants {
   /**
-   * Name of the local storage setting storing last retreived access token information
+   * Name of the local storage setting storing last retrieved access token information
    * which host uses to implement refresh token flow.
    *
    * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/host.md#refresh-token-flow
    * @static
    * @memberof Constants
    */
-  public static AUTH_TOKEN_CACHE_KEY = 'ctx-sdk-token';
+  public static AUTH_TOKEN_CACHE_KEY = 'cxt-sdk-token';
 
   /**
    * Name of the cookie storing the identifier of the
@@ -21,5 +21,5 @@ export class Constants {
    * @static
    * @memberof Constants
    */
-  public static AUTH_USER_STATE_COOKIE_NAME = 'ctx-sdk-user';
+  public static AUTH_USER_STATE_COOKIE_NAME = 'cxt-sdk-user';
 }
