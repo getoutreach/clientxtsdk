@@ -22,6 +22,8 @@ import { Logger, ILogger } from './sdk/Logger';
 import { Constants } from './sdk/Constants';
 import { EventType } from './sdk/EventType';
 import { EventOrigin } from './sdk/EventOrigin';
+import { TokenMessage } from './messages/TokenMessage';
+import { Token } from './sdk/Token';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -64,8 +66,16 @@ export * from './store/ManifestHost';
 export * from './store/Scopes';
 export * from './utils';
 
+class Task<T> {
+  public promise: Promise<T>;
+  public onfulfilled: ((value: T) => void);
+  public onrejected: (reason: any) => void;
+}
+
 class AddonsSdk {
   private origin: string | null;
+
+  private authorizeTask: Task<string | null>;
 
   public activeListener: boolean = false;
 
@@ -182,27 +192,67 @@ class AddonsSdk {
     });
   };
 
+  /**
+   *
+   * Initialize the OAuth consent process by presenting to Outreach user
+   * a form where he needs to consent with granting access rights defined
+   * in manifest.api.scopes.
+   * It is a promise, which will resolve once the OAuth popup closes and
+   * user consents
+   *
+   * @memberof AddonsSdk
+   */
+  public authenticate = (): Promise<string | null> => {
+    this.authorizeTask = new Task<string | null>();
+    this.authorizeTask.promise = new Promise<string | null>((resolve, reject) => {
+        this.authorizeTask!.onfulfilled = resolve;
+        this.authorizeTask!.onrejected = reject;
+
+        // start the OAuth consent flow
+        const cookie = `${Constants.AUTH_USER_STATE_COOKIE_NAME}=${
+          runtime.userIdentifier
+        };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
+
+        // user identifier goes to cookie to enable addon oauth server
+        // linking the outreach user with the addon external identity.
+        document.cookie = cookie;
+
+        // request from host to start the authentication process
+        // this will reload the iframe with a authentication page shown
+        // instead of the current page
+        this.sendMessage(new AuthenticationMessage());
+    })
+
+    this.logger.log({
+      origin: EventOrigin.ADDON,
+      type: EventType.INTERNAL,
+      message: '[CXT][AddonSdk]::authenticate-starting authorize promise',
+      level: LogLevel.Debug,
+      context: []
+    });
+
+    return this.authorizeTask!.promise;
+  }
+
+  /**
+   *
+   * Tries to obtain valid Outreach API token first by checking the local cache
+   * and then by asking addon host if it can produce a new access token from its own cache
+   * or by using previously obtained refresh token.
+   *
+   * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/host.md#refresh-token-flow
+   *
+   * @memberof AddonsSdk
+   */
   public getToken = async (skipCache?: boolean): Promise<string | null> => {
-    const token = await tokenService.getTokenAsync(skipCache);
-    if (token) {
-      return token;
+    if (!skipCache) {
+      const cachedToken = await tokenService.getCachedTokenAsync();
+      if (cachedToken) {
+        return cachedToken;
+      }
     }
 
-    // start the OAuth consent flow
-    const cookie = `${Constants.AUTH_USER_STATE_COOKIE_NAME}=${
-      runtime.userIdentifier
-    };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
-
-    // user identifier goes to cookie to enable addon oauth server
-    // linking the outreach user with the addon external identity.
-    document.cookie = cookie;
-
-    // request from host to start the authentication process
-    // this will reload the iframe with a authentication page shown
-    // instead of the current page
-    this.sendMessage(new AuthenticationMessage());
-
-    return null;
+    return await tokenService.fetchTokenAsync();
   };
 
   public sendMessage<T extends AddonMessage> (message: T, logged?: boolean) {
@@ -257,14 +307,19 @@ class AddonsSdk {
         const context = addonMessage as InitMessage;
         this.preprocessInitMessage(context);
         this.onInit(context);
-        return;
+        break;
+      }
+      case AddonMessageType.CONNECT_AUTH_TOKEN:
+      {
+        this.handleRefreshTokenMessage(addonMessage as TokenMessage);
+        break;
       }
       case AddonMessageType.READY:
       case AddonMessageType.REQUEST_DECORATION_UPDATE:
       case AddonMessageType.REQUEST_NOTIFY:
       case AddonMessageType.REQUEST_RELOAD:
         this.logger.log({
-          origin: EventOrigin.HOST,
+          origin: EventOrigin.ADDON,
           type: EventType.INTERNAL,
           message:
             `[CXT][AddonSdk] :: onReceived - Client event ${addonMessage.type} received from host (ERROR)`,
@@ -274,7 +329,7 @@ class AddonsSdk {
         return;
       default:
         this.logger.log({
-          origin: EventOrigin.HOST,
+          origin: EventOrigin.ADDON,
           type: EventType.INTERNAL,
           message: `[CXT][AddonSdk] :: onReceived - Unknown event type: ${addonMessage.type}`,
           level: LogLevel.Warning,
@@ -338,6 +393,39 @@ class AddonsSdk {
 
     this.onInit(outreachContext);
   };
+
+  private handleRefreshTokenMessage = (tokenMessage: TokenMessage) => {
+    const token: Token = {
+      value: tokenMessage.token,
+      expiresAt: tokenMessage.expiresAt
+    };
+
+    tokenService.cacheToken(token)
+
+    if (this.authorizeTask) {
+      this.logger.log({
+        origin: EventOrigin.ADDON,
+        type: EventType.INTERNAL,
+        message: '[CXT][AddonSdk]::onReceived-Resolving authorize promise',
+        level: LogLevel.Debug,
+        context: []
+      });
+      if (token.value) {
+        this.authorizeTask.onfulfilled(token.value);
+      } else {
+        this.authorizeTask.onrejected('No token value received');
+      }
+    } else {
+      this.logger.log({
+        origin: EventOrigin.ADDON,
+        type: EventType.INTERNAL,
+        message:
+          `[CXT][AddonSdk] ::onReceived - Client event ${tokenMessage.type} received without promise to resolve`,
+        level: LogLevel.Warning,
+        context: [JSON.stringify(tokenMessage)]
+      });
+    }
+  }
 
   private getAddonMessage = (
     messageEvent: MessageEvent
