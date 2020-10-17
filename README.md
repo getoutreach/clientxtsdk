@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 # Outreach client extensibility SDK
 
-This document contains all the information a developer needs to create an Outreach add-on. 
+This document contains all the information a developer needs to create an Outreach add-on.
 
 In case you have any questions/comments/concerns about the client extensibility, please email us at **cxt-sdk@outreach.io.**
 
@@ -9,17 +9,16 @@ _NOTE: This document is an early preview of the client extensibility framework w
 
 Table of content
 
-- [How it works?](#how-it-works)
+- [How it works](#how-it-works)
 - [Required steps to build an add-on](#required-steps-to-build-an-add-on)
 
-## How it works?
+## How it works
 
 When Outreach user goes to a specific part of the Outreach application (e.g., opportunity page), the application will check if that user has installed add-ons for that part of the app and if yes:
 
 - Add a tab with the title of the add-on
 - Add an iframe with the source pointing to an add-on hosting page
 - Send the current user contextual information to the add-on to initialize itself into a proper state.
-
 
 ## Required steps to build an add-on
 
@@ -29,8 +28,8 @@ The client extensibility framework supports a few integration methods, which hav
 
     During the development phase, add-on creators can skip this requirement and use only a [Locally hosted add-on page](/docs/devxp.md) without the need to have a publicly available page.
 
-2. Every add-on also needs to **create and upload a manifest file**. 
-That manifest file contains things like the URL where the add-on web page is located, contextual information which add-on needs from Outreach, details about Outreach API access, etc. 
+2. Every add-on also needs to **create and upload a manifest file**.
+That manifest file contains things like the URL where the add-on web page is located, contextual information which add-on needs from Outreach, details about Outreach API access, etc.
 
     If your add-on is **stateless** (e.g., currency exchange calculator add-on)  or your add-on has **independent initialization** (e.g., initialize itself based on its cookie), there is no need for any additional work to be done.
 
@@ -38,7 +37,7 @@ That manifest file contains things like the URL where the add-on web page is loc
 
 3. All of the stateful add-ons would need contextual information from Outreach to initialize itself in the proper state. For that, they need to **parse from the URL** a set of contextual information (e.g., opportunity id, prospect email, etc.) sent by Outreach.
 
-    Go to [host query parameters parsing](/docs/host.md#query-parameters-parsing) section to learn more.
+    Go to [host url parameters parsing](/docs/url-parsing.md) page to learn more.
 
 4. Most of the add-ons would want to have **deeper integration with Outreach application** (e.g., to notify Outreach user about some add-on event), and for that, the add-on will need to integrate Outreach client sdk.
   
@@ -46,7 +45,6 @@ That manifest file contains things like the URL where the add-on web page is loc
 
 5. Some of the add-ons will need to have **client access to Outreach API**, and for that, they will need to add support on the add-on server required for obtaining and refreshing access tokens. This will include implementing additional endpoints, server to server calls to Outreach API, token caching, etc.
 
-    Go to [host authentication support](/docs/host.md#outreach-api-access-support) page to learn more about API access requirements.
-
+    Go to [Outreach API access](/docs/outreach-api.md) page to learn more about API access requirements.
 
 *If you have any questions/comments/concerns about the extensibility, please email us at **cxt-sdk@outreach.io.***
