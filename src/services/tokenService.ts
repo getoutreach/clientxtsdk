@@ -8,7 +8,7 @@ import { EventOrigin } from '../sdk/EventOrigin';
 
 class TokenService {
   public fetchTokenAsync = async (): Promise<string | null> => {
-    if (!runtime.api) {
+    if (!runtime.manifest.api) {
       throw new Error(
         "This addon manifest is not having api definition so token can't be retrieved"
       );
@@ -28,7 +28,7 @@ class TokenService {
   };
 
   public getCachedTokenAsync = (): Promise<string | null> => {
-    if (!runtime.api) {
+    if (!runtime.manifest.api) {
       throw new Error(
         "This addon manifest is not having api definition so token can't be retrieved"
       );
@@ -78,12 +78,12 @@ class TokenService {
   }
 
   private getRefreshedTokenAsync = async (): Promise<Token | null> => {
-    if (!runtime.api) {
+    if (!runtime.manifest.api) {
       return Promise.resolve(null);
     }
 
     try {
-      const r = await fetch(runtime.api.token, {
+      const r = await fetch(runtime.manifest.api.token, {
         method: 'POST',
         // TODO: nimal, 8.10.2020 - xt-74 token endpoint authentication
         credentials: 'omit',

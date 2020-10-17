@@ -23,16 +23,11 @@ export enum AddonMessageType {
   // eslint-disable-next-line no-unused-vars
   REQUEST_NOTIFY = 'cxt:sdk:notify',
   /**
-   * Message sent from client to host requesting host to update addon extension point adorment
+   * Message sent from client to host requesting host to update addon extension point adornment
    * (e.g. Tab title to "Messages(2)"")
    */
   // eslint-disable-next-line no-unused-vars
   REQUEST_DECORATION_UPDATE = 'cxt:sdk:decorate',
-  /**
-   * Message sent from client to host requesting an oAuth flow to be triggered
-   */
-  // eslint-disable-next-line no-unused-vars
-  REQUEST_OAUTH_AUTHENTICATE = 'cxt:sdk:authenticate',
 
   /**
    * Message received from host containing the new authentication token
@@ -43,5 +38,4 @@ export enum AddonMessageType {
    * Message received from the OAuth popup window containing new token information.
    */
   CONNECT_AUTH_TOKEN = 'cxt:connect:token',
-
 }

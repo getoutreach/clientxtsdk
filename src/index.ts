@@ -17,12 +17,13 @@ import { UserContext } from './context/UserContext';
 
 import runtime from './sdk/RuntimeContext';
 import tokenService from './services/tokenService';
-import { AuthenticationMessage } from './messages/AuthenticationMessage';
+import authService from './services/oauthService';
+
 import { Logger, ILogger } from './sdk/Logger';
 import { Constants } from './sdk/Constants';
 import { EventType } from './sdk/EventType';
 import { EventOrigin } from './sdk/EventOrigin';
-import { RefreshTokenMessage } from './messages/RefreshTokenMessage';
+import { ConnectTokenMessage } from './messages/ConnectTokenMessage';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -33,14 +34,12 @@ export * from './context/UserContext';
 
 export * from './messages/AddonMessage';
 export * from './messages/AddonMessageType';
-export * from './messages/AuthenticationMessage';
 export * from './messages/ConnectTokenMessage';
 export * from './messages/DecorationMessage';
 export * from './messages/InitMessage';
 export * from './messages/NotificationMessage';
 export * from './messages/NotificationType';
 export * from './messages/ReadyMessage';
-export * from './messages/RefreshTokenMessage';
 
 export * from './sdk/Constants';
 export * from './sdk/Event';
@@ -75,8 +74,6 @@ class Task<T> {
 }
 
 class AddonsSdk {
-  private origin: string | null;
-
   private authorizeTask: Task<string | null>;
 
   public activeListener: boolean = false;
@@ -202,6 +199,10 @@ class AddonsSdk {
    * It is a promise, which will resolve once the OAuth popup closes and
    * user consents
    *
+   * NOTE: This method is showing a popup and to avoid popup blocking
+   * it has to be invoked in a handler of the direct user action
+   * (e.g. user clicked a button)
+   *
    * @memberof AddonsSdk
    */
   public authenticate = (): Promise<string | null> => {
@@ -219,10 +220,7 @@ class AddonsSdk {
         // linking the outreach user with the addon external identity.
         document.cookie = cookie;
 
-        // request from host to start the authentication process
-        // this will reload the iframe with a authentication page shown
-        // instead of the current page
-        this.sendMessage(new AuthenticationMessage());
+        authService.openPopup();
     })
 
     this.logger.log({
@@ -258,7 +256,7 @@ class AddonsSdk {
   };
 
   public sendMessage<T extends AddonMessage> (message: T, logged?: boolean) {
-    if (!this.origin) {
+    if (!runtime.origin) {
       console.error(
         'You can not send messages before SDK is initialized',
         message
@@ -274,11 +272,11 @@ class AddonsSdk {
         messageType: message.type,
         level: LogLevel.Info,
         message: `[CXT] Addon is sending ${message.type} message to host`,
-        context: [postMessage, this.origin]
+        context: [postMessage, runtime.origin]
       });
     }
 
-    window.parent.postMessage(postMessage, this.origin);
+    window.parent.postMessage(postMessage, runtime.origin);
   }
 
   private handleReceivedMessage = (messageEvent: MessageEvent) => {
@@ -311,16 +309,13 @@ class AddonsSdk {
         this.onInit(context);
         break;
       }
-      case AddonMessageType.REFRESH_AUTH_TOKEN:
-      {
-        this.handleRefreshTokenMessage(addonMessage as RefreshTokenMessage);
+      case AddonMessageType.CONNECT_AUTH_TOKEN:
+        this.handleRefreshTokenMessage(addonMessage as ConnectTokenMessage)
         break;
-      }
       case AddonMessageType.READY:
       case AddonMessageType.REQUEST_DECORATION_UPDATE:
       case AddonMessageType.REQUEST_NOTIFY:
       case AddonMessageType.REQUEST_RELOAD:
-      case AddonMessageType.CONNECT_AUTH_TOKEN:
         this.logger.log({
           origin: EventOrigin.ADDON,
           type: EventType.INTERNAL,
@@ -345,7 +340,7 @@ class AddonsSdk {
     runtime.locale = initMessage.locale;
     runtime.theme = initMessage.theme;
     runtime.userIdentifier = initMessage.userIdentifier;
-    runtime.api = initMessage.api;
+    runtime.manifest = initMessage.manifest;
 
     const outreachContext = new OutreachContext();
     outreachContext.locale = runtime.locale;
@@ -390,15 +385,18 @@ class AddonsSdk {
       context: [
         `message: ${JSON.stringify(initMessage)}`,
         `context: ${JSON.stringify(outreachContext)}`,
-        `origin: ${this.origin || 'N/A'}`
+        `origin: ${runtime.origin || 'N/A'}`
       ]
     });
 
     this.onInit(outreachContext);
   };
 
-  private handleRefreshTokenMessage = (tokenMessage: RefreshTokenMessage) => {
-    tokenService.cacheToken(tokenMessage.token)
+  private handleRefreshTokenMessage = (tokenMessage: ConnectTokenMessage) => {
+    tokenService.cacheToken({
+      value: tokenMessage.token,
+      expiresAt: tokenMessage.expiresAt
+    })
 
     if (this.authorizeTask) {
       this.logger.log({
@@ -408,8 +406,8 @@ class AddonsSdk {
         level: LogLevel.Debug,
         context: []
       });
-      if (tokenMessage.token.value) {
-        this.authorizeTask.onfulfilled(tokenMessage.token.value);
+      if (tokenMessage.token) {
+        this.authorizeTask.onfulfilled(tokenMessage.token);
       } else {
         this.authorizeTask.onrejected('No token value received');
       }
@@ -475,14 +473,14 @@ class AddonsSdk {
       return null;
     }
 
-    if (this.origin) {
-      if (messageEvent.origin !== this.origin) {
+    if (runtime.origin) {
+      if (messageEvent.origin !== runtime.origin) {
         this.logger.log({
           origin: EventOrigin.ADDON,
           type: EventType.INTERNAL,
           level: LogLevel.Error,
           message: '[CXT][AddonSdk]::getAddonMessage - invalid origin',
-          context: [messageEvent.origin, this.origin]
+          context: [messageEvent.origin, runtime.origin]
         });
         return null;
       }
@@ -522,8 +520,8 @@ class AddonsSdk {
       context: [messageEvent.origin]
     });
 
-    this.origin = messageEvent.origin;
-    return this.origin;
+    runtime.origin = messageEvent.origin;
+    return runtime.origin;
   };
 
   private validOrigin = (origin: string): boolean => {
@@ -533,8 +531,7 @@ class AddonsSdk {
     return (
       origin.endsWith('outreach.io') ||
       origin.endsWith('outreach-staging.com') ||
-      origin.endsWith('outreach-dev.com') ||
-      origin.endsWith('localhost')
+      origin.endsWith('outreach-dev.com')
     );
   };
 }

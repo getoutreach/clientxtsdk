@@ -5,7 +5,7 @@ import { AddonMessageType } from './AddonMessageType';
 import { Theme } from '../sdk/Theme';
 import { Locale } from '../sdk/Locale';
 import { ContextParam } from '../context/ContextParam';
-import { ManifestApi } from '../store/ManifestApi';
+import { Manifest } from '../store/Manifest';
 
 export class InitMessage extends AddonMessage implements OutreachContext {
   /**
@@ -47,11 +47,10 @@ export class InitMessage extends AddonMessage implements OutreachContext {
   context: ContextParam[] = [];
 
   /**
-   * An api definition of token endpoint and scopes addon needs.
-   * In case addon doesn't need OAuth access to Outreach API this will be undefined.
+   * A manifest definition used to initialize this addon.
    *
-   * @type {ManifestApi}
+   * @type {Manifest}
    * @memberof InitMessage
    */
-  api?: ManifestApi;
+  manifest: Manifest;
 }
