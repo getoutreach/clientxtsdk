@@ -76,6 +76,7 @@ class Task<T> {
 class AddonsSdk {
   private authorizeTask: Task<string | null>;
 
+  public manifest = () => runtime.manifest;
   public activeListener: boolean = false;
 
   public onInit: (context: OutreachContext) => void;

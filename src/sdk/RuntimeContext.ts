@@ -2,7 +2,7 @@ import { Locale } from './Locale';
 import { Theme } from './Theme';
 import { Manifest } from '../store/Manifest';
 
-class RuntimeContext {
+export class RuntimeContext {
   /**
    *
    * A manifest definition used to initialize this addon.
