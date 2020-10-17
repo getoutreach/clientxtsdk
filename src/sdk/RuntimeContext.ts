@@ -1,9 +1,24 @@
-import { ManifestApi } from '../store/ManifestApi';
 import { Locale } from './Locale';
 import { Theme } from './Theme';
+import { Manifest } from '../store/Manifest';
 
 class RuntimeContext {
-  public api?: ManifestApi;
+  /**
+   *
+   * A manifest definition used to initialize this addon.
+   *
+   * @type {Manifest}
+   * @memberof RuntimeContext
+   */
+  public manifest: Manifest;
+
+  /**
+   * Addon host origin address.
+   *
+   * @type {string}
+   * @memberof RuntimeContext
+   */
+  public origin: string;
 
   public locale: Locale = Locale.ENGLISH;
 
