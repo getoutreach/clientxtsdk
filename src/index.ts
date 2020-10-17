@@ -241,7 +241,7 @@ class AddonsSdk {
    * and then by asking addon host if it can produce a new access token from its own cache
    * or by using previously obtained refresh token.
    *
-   * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/host.md#refresh-token-flow
+   * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/outreach-api.md#token-endpoint
    *
    * @memberof AddonsSdk
    */

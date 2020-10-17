@@ -22,7 +22,8 @@ Table of content:
   - [applicationId](#applicationid)
   - [redirectUri](#redirecturi)
   - [scopes](#scopes)
-  - [token endpoint](#token-endpoint)
+  - [token](#token)
+  - [connect](#connect)
 - [Uploading the manifest](#uploading-the-manifest)
 
 ## Sample manifest
@@ -31,7 +32,7 @@ Here is the sample manifest file of the hello world addon
 
 ```json
 {
-    "version": "0.10"
+    "version": "0.10",
     "identifier": "addon-outreach-hello",
     "store": "public",
     "title":  [
@@ -52,18 +53,16 @@ Here is the sample manifest file of the hello world addon
         "websiteUrl": "https://addon-host.com",
         "privacyUrl": "https://addon-host.com/privacy",
         "termsOfUseUrl": "https://addon-host.com/tos",
-    }
-    "context":  [ 
-      "usr.id", "opp.id", "prospect.emails" ],
+    },
+    "context":  [
+      "usr.id", "opp.id", "prospect.emails"
+    ],
     "api": {
       "token": "https://addon-host.com/token",
       "scopes": "prospects.read, opportunity.read",
       "applicationId": "AbCd123456qW",
       "redirectUri": "https://addon-host.com/hello-world",
-
     }
-    
-
 }
 ```
 
@@ -106,7 +105,7 @@ Type property defines what the type of addon is and where it should be loaded.
 
 _e.g **type: "tab-opportunity"** will result with addon being loaded as an additional tab on the Outreach opportunity page_
 
-[SDK supported addon types](https://github.com/getoutreach/clientxtsdk/blob/develop/src/store/AddonType.ts) (we will expand this list as the time goes):
+[SDK supported addon types](../src/store/AddonType.ts) (we will expand this list as the time goes):
 
 - tab-account
 - tab-opportunity
@@ -165,6 +164,7 @@ http://somesite.com/something/456?oid=123
 
 base64 string represents the icon to be shown in the addon store and (if possible) in Outreach client.
 
+
 ### author
 
 This section contains information to be presented to a user of the addon in the marketplace and on the consent screen: addon creator name, website URL, privacy policy document URL, and terms of use document URL.
@@ -188,11 +188,13 @@ Outreach User will be asked to consent to share this information on the addon's 
 
 This section is optional - if addon doesn't need access to outreach API, this section can be omitted.
 
-### applicationId 
+### applicationId
+
 This is the value of the [Outreach OAuth application](outreach-OAuth-settings.md), which is to be used for [API authentication flow](https://api.outreach.io/api/v2/docs#authentication)as client_id value.
 
 ### redirectUri
-This URL is defined in [Outreach OAuth settings](outreach-oauth-settings.md) to which the authorization form will redirect once the user consent with granting access to Outreach API in his name. This URL can be the same as the [host url](#url) or a separate URL, but in both cases, it has to support [host requirements](host.md).
+
+This URL is defined in [Outreach OAuth settings](outreach-oauth-settings.md) to which the authorization form will redirect once the user consent with granting access to Outreach API in his name. This URL can be the same as the [host url](#url) or a separate URL, but in both cases, it has to be implemented in a way matching [Outreach API access requirements](outreach-api.md).
 
 ### scopes
 
@@ -203,10 +205,13 @@ A complete list of all of the API scopes can be found on [API Scopes page](scope
 On the first [SDK authentication](sdk.md#authentication) Outreach user is asked to consent with granting requested scopes to the addon
 ![alt text](assets/api-consent.png "API consent screen")
 
-### token endpoint
+### token
 
-Address of the endpoint, which will support [refresh token flow](#refresh-token-flow). We recommend it to be a dedicated endpoint as it will need to support POST request and return a JSON data response, but it can be the same as the [redirectUri](#redirecturi) or [host.url](#url)  as long the refresh token flow requirements are fulfilled.
+This value contains URL of the [token endpoint](outreach-api.md#token-endpoint)
 
+### connect
+
+This value contains URL of the [token endpoint](outreach-api.md#connect-endpoint)
 
 ## Uploading the manifest
 

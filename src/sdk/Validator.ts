@@ -33,7 +33,7 @@ export const validate = (manifest: Manifest): string[] => {
     }
     if (!urlValidation(manifest.api.token)) {
       issues.push(
-        'Api token endpoint is invalid url. Value: ' + manifest.api.token
+        'Manifest Api section needs to have a valid token endpoint url. Value: ' + manifest.api.token
       );
     }
 
@@ -45,6 +45,13 @@ export const validate = (manifest: Manifest): string[] => {
       issues.push(
         'Manifest Api section needs to have a valid redirect url. Value: ' +
           manifest.api.redirectUri
+      );
+    }
+
+    if (!urlValidation(manifest.api.connect)) {
+      issues.push(
+        'Manifest Api section needs to have a valid connect endpoint url. Value: ' +
+          manifest.api.connect
       );
     }
   }

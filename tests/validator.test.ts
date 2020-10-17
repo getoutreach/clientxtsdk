@@ -67,6 +67,23 @@ describe('manifest tests', () => {
       expect(issues[0]).toBe("Manifest Api section needs to have a valid redirect url. Value: bananas");
     });
 
+    test('token endpoint should be valid URL', () => {
+      const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+      manifest.api!.token = 'bananas';
+      
+      var issues = validate(manifest);
+      expect(issues.length).toBe(1);
+      expect(issues[0]).toBe("Manifest Api section needs to have a valid token endpoint url. Value: bananas");
+    });
+
+    test('connect endpoint should be valid URL', () => {
+      const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+      manifest.api!.connect = 'bananas';
+      
+      var issues = validate(manifest);
+      expect(issues.length).toBe(1);
+      expect(issues[0]).toBe("Manifest Api section needs to have a valid connect endpoint url. Value: bananas");
+    });
   });
 
   describe('host', () => {
@@ -153,9 +170,10 @@ const validManifest = {
   version: '0.10',
   api: {
     scopes: [Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
-    token: 'https://someurl.com/token',
     applicationId: "AbCd123456qW",
-    redirectUri: "https://addon-host.com/hello-world"
+    redirectUri: "https://addon-host.com/hello-world",
+    token: 'https://someurl.com/token',
+    connect: 'https://someurl.com/connect'
   }
 } as Manifest;
 
@@ -184,7 +202,8 @@ const invalidContextManifest = {
     scopes: [Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
     token: 'https://someurl.com/token',
     applicationId: "AbCd123456qW",
-    redirectUri: "https://addon-host.com/hello-world"
+    redirectUri: "https://addon-host.com/hello-world",
+    connect: 'https://someurl.com/connect'
   }
 } as Manifest;
 
@@ -213,7 +232,8 @@ const invalidHostTypeManifest = {
     scopes: [Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
     token: 'https://someurl.com/token',
     applicationId: "AbCd123456qW",
-    redirectUri: "https://addon-host.com/hello-world"
+    redirectUri: "https://addon-host.com/hello-world",
+    connect: 'https://someurl.com/connect'
   }
 };
 
@@ -242,7 +262,8 @@ const invalidStoreTypeManifest = {
     scopes: [Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
     token: 'https://someurl.com/token',
     applicationId: "AbCd123456qW",
-    redirectUri: "https://addon-host.com/hello-world"
+    redirectUri: "https://addon-host.com/hello-world",
+    connect: 'https://someurl.com/connect'
   }
 };
 
@@ -271,6 +292,7 @@ const invalidScopeTypeManifest = {
     scopes: ['BANANA',Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
     token: 'https://someurl.com/token',
     applicationId: "AbCd123456qW",
-    redirectUri: "https://addon-host.com/hello-world"
+    redirectUri: "https://addon-host.com/hello-world",
+    connect: 'https://someurl.com/connect'
   }
 } as Manifest;

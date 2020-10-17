@@ -4,16 +4,18 @@ import { Scopes } from './Scopes';
 export class ManifestApi {
     /**
      * Outreach OAuth application id
-     * (Defined in Outreach application)
      *
+     * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/outreach-oauth-settings.md
      * @type {string}
      * @memberof ManifestApi
      */
     applicationId: string;
 
     /**
-     * Outrach OAuth redirect ui
+     * Outreach OAuth App redirect uri on which the Authorization endpoint is implemented.
      *
+     * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/outreach-oauth-settings.md
+     * @see https://github.com/getoutreach/clientxtsdk/tree/develop/docs/outreach-api.md#authorization-endpoint
      * @type {string}
      * @memberof ManifestApi
      */
@@ -33,9 +35,21 @@ export class ManifestApi {
     /**
      * Address of the endpoint, which will return support refresh token flow.
      *
-     * @see https://github.com/getoutreach/clientxtsdk#token-endpoint
+     * @see https://github.com/getoutreach/clientxtsdk/tree/develop/docs/outreach-api.md#token-endpoint
      * @type {string}
      * @memberof Api
      */
     token: string;
+
+    /**
+     *
+     * Address of the connect endpoint, which will contain a page
+     * posting authentication token info back to addon page which
+     * had opened the popup.
+     *
+     * @see https://github.com/getoutreach/clientxtsdk/tree/develop/docs/outreach-api.md#connect-endpoint
+     * @type {string}
+     * @memberof Api
+     */
+    connect: string;
 }

@@ -3,7 +3,7 @@ export class Constants {
    * Name of the local storage setting storing last retrieved access token information
    * which host uses to implement refresh token flow.
    *
-   * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/host.md#refresh-token-flow
+   * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/outrach-api.md#caching-the-tokens
    * @static
    * @memberof Constants
    */
@@ -16,7 +16,7 @@ export class Constants {
    * can correlate and cache retrieved token information with
    * a given user identifier.
    *
-   * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/host.md#outreach-api-access-support
+   * @see https://github.com/getoutreach/clientxtsdk/blob/develop/docs/outreach-api.md#token-endpoint
    *
    * @static
    * @memberof Constants
