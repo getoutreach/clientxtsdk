@@ -24,6 +24,7 @@ import { Constants } from './sdk/Constants';
 import { EventType } from './sdk/EventType';
 import { EventOrigin } from './sdk/EventOrigin';
 import { ConnectTokenMessage } from './messages/ConnectTokenMessage';
+import { Manifest } from './store/Manifest';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -76,7 +77,7 @@ class Task<T> {
 class AddonsSdk {
   private authorizeTask: Task<string | null>;
 
-  public manifest = () => runtime.manifest;
+  public getManifest = (): Manifest => runtime.manifest;
   public activeListener: boolean = false;
 
   public onInit: (context: OutreachContext) => void;

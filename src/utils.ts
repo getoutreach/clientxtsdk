@@ -35,7 +35,7 @@ export class utils {
     }
 
     /**
-     * Paramaterize url by appending context params to the url parameters.
+     * Parameterize url by appending context params to the url parameters.
      *
      * @static
      * @memberof utils
