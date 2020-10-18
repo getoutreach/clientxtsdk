@@ -514,13 +514,6 @@ class AddonsSdk {
     }
 
     if (!this.validOrigin(messageEvent.origin)) {
-      this.logger.log({
-        origin: EventOrigin.ADDON,
-        type: EventType.INTERNAL,
-        level: LogLevel.Error,
-        message: '[CXT][AddonSdk]::getAddonMessage - invalid origin received',
-        context: [messageEvent.origin]
-      });
       return null;
     }
 
@@ -566,6 +559,14 @@ class AddonsSdk {
         context: [origin, connectOrigin]
       });
     }
+
+    this.logger.log({
+      origin: EventOrigin.ADDON,
+      type: EventType.INTERNAL,
+      level: LogLevel.Trace,
+      message: '[CXT][AddonSdk]::getAddonMessage - invalid origin received',
+      context: [origin, runtime.manifest.api?.connect || 'NO API']
+    });
 
     return false;
   };
