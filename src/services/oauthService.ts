@@ -21,7 +21,7 @@ class OAuthService {
       throw new Error('Invalid runtime origin url:' + originUrl.origin);
     }
 
-    return originUrl.origin.replace(regex[1], 'account');
+    return originUrl.origin.replace(regex[1], 'accounts');
   };
 
   private getOAuthAuthorizeUrl = (api: ManifestApi) => {
