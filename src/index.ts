@@ -492,18 +492,7 @@ class AddonsSdk {
       return null;
     }
 
-    if (runtime.origin) {
-      if (messageEvent.origin !== runtime.origin) {
-        this.logger.log({
-          origin: EventOrigin.ADDON,
-          type: EventType.INTERNAL,
-          level: LogLevel.Error,
-          message: '[CXT][AddonSdk]::getAddonMessage - invalid origin',
-          context: [messageEvent.origin, runtime.origin]
-        });
-        return null;
-      }
-    } else {
+    if (!runtime.origin) {
       const initializedOrigin = this.initializeOrigin(hostMessage, messageEvent);
       if (!initializedOrigin) {
         this.logger.log({
