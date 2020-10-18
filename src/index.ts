@@ -551,7 +551,16 @@ class AddonsSdk {
     if (runtime.manifest.api) {
       // connect endpoint is posting a message with token to addon so it is valid origin
       // see: https://github.com/getoutreach/clientxtsdk/blob/develop/docs/outreach-api.md#connect-endpoint
-      return origin === utils.getUrlDomain(new URL(runtime.manifest.api.connect));
+      const connectUri = new URL(runtime.manifest.api.connect);
+      const connectOrigin = utils.getUrlDomain(connectUri);
+      const connectMessage = origin === connectOrigin;
+      if (connectMessage) {
+        return true;
+      } else {
+        console.log('[CXT][Index]::validOrigin', origin, connectOrigin);
+      }
+    } else {
+      console.log('[CXT][Index]::validOrigin - no api');
     }
 
     return false
