@@ -15,7 +15,7 @@ import { OpportunityContext } from './context/OpportunityContext';
 import { ProspectContext } from './context/ProspectContext';
 import { UserContext } from './context/UserContext';
 
-import runtime from './sdk/RuntimeContext';
+import runtime, { RuntimeContext } from './sdk/RuntimeContext';
 import tokenService from './services/tokenService';
 import authService from './services/oauthService';
 
@@ -24,7 +24,6 @@ import { Constants } from './sdk/Constants';
 import { EventType } from './sdk/EventType';
 import { EventOrigin } from './sdk/EventOrigin';
 import { ConnectTokenMessage } from './messages/ConnectTokenMessage';
-import { Manifest } from './store/Manifest';
 import { utils } from './utils';
 
 export * from './context/AccountContext';
@@ -50,6 +49,7 @@ export * from './sdk/EventType';
 export { ILogger } from './sdk/Logger';
 export * from './sdk/Locale';
 export * from './sdk/LogLevel';
+export * from './sdk/RuntimeContext';
 export * from './sdk/Theme';
 export * from './sdk/Validator';
 
@@ -78,7 +78,7 @@ class Task<T> {
 class AddonsSdk {
   private authorizeTask: Task<string | null>;
 
-  public getManifest = (): Manifest => runtime.manifest;
+  public getRuntime = (): RuntimeContext => runtime;
   public activeListener: boolean = false;
 
   public onInit: (context: OutreachContext) => void;
