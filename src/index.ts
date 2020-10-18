@@ -326,7 +326,7 @@ class AddonsSdk {
           level: LogLevel.Error,
           context: [JSON.stringify(addonMessage)]
         });
-        return;
+        break;
       default:
         this.logger.log({
           origin: EventOrigin.ADDON,
@@ -533,7 +533,8 @@ class AddonsSdk {
     return (
       origin.endsWith('outreach.io') ||
       origin.endsWith('outreach-staging.com') ||
-      origin.endsWith('outreach-dev.com')
+      origin.endsWith('outreach-dev.com') ||
+      origin === runtime.origin
     );
   };
 }
