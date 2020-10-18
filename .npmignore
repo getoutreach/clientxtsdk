@@ -1,0 +1,10 @@
+build
+src
+docs
+tests
+.circleci
+*.tgz
+webpack.config.js
+tsconfig.json
+jest.config.js
+dts-bundle.json

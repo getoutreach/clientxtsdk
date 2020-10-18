@@ -1,0 +1,33 @@
+version: 2.1
+
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+        - image: circleci/node:latest
+    steps:
+        - checkout
+        - run:
+            name: Installing package dependencies
+            command: yarn install --frozen-lockfile
+        - run:
+            name: Lint SDK
+            command: yarn lint          
+        - run:
+            name: Build SDK
+            command: yarn build
+        - run:
+            name: Test SDK
+            command: yarn test
+        - run:
+            name: Package SDK
+            command: yarn package
+        - run:
+            name: Authenticate with registry
+            command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+        - run:
+            name: Publish package
+            command: npm publish
+
+
+            

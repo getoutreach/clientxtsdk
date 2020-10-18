@@ -1,0 +1,5 @@
+{
+    "name": "@outreach/client-addon-sdk",
+    "main": "build/index.d.ts",
+    "out": "../dist/index.d.ts"
+}

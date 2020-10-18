@@ -1,0 +1,49 @@
+{
+  "name": "@outreach/client-addon-sdk",
+  "license": "MIT",
+  "version": "0.0.97",
+  "private": false,
+  "contributors": [
+    "Outreach Client Extensibility Team <cxt-sdk@outreach.io>"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "check": "npm run build && npm run lint && npm run test",
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "package": "yarn dts-bundle && yarn copy-to-dist",
+    "dts-bundle": "npx dts-bundle --configJson dts-bundle.json",
+    "copy-to-dist": "npx copyfiles \"./build/**/*.js*\" dist -a -u 1",
+    "lint": "npx eslint ./src/**/*.ts",
+    "test": "jest",
+    "deploy": "npm run package && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getoutreach/client-ext-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getoutreach/client-ext-sdk/issues"
+  },
+  "homepage": "https://github.com/getoutreach/client-ext-sdk#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "copyfiles": "^2.3.0",
+    "dts-bundle": "^0.7.3",
+    "eslint": "^7.10.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.4.2",
+    "prettier": "^2.0.5",
+    "ts-jest": "^26.4.1",
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7"
+  }
+}
