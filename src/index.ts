@@ -556,14 +556,18 @@ class AddonsSdk {
       const connectMessage = origin === connectOrigin;
       if (connectMessage) {
         return true;
-      } else {
-        console.log('[CXT][Index]::validOrigin', origin, connectOrigin);
       }
-    } else {
-      console.log('[CXT][Index]::validOrigin - no api');
+
+      this.logger.log({
+        origin: EventOrigin.ADDON,
+        type: EventType.INTERNAL,
+        level: LogLevel.Trace,
+        message: '[CXT][AddonSdk]::validOrigin - not a connect origin too',
+        context: [origin, connectOrigin]
+      });
     }
 
-    return false
+    return false;
   };
 }
 
