@@ -70,7 +70,7 @@ export * from './utils';
 
 class Task<T> {
   public promise: Promise<T>;
-  public onfulfilled: ((value: T) => void);
+  public onfulfilled: (value: T) => void;
   public onrejected: (reason: any) => void;
 }
 
@@ -209,21 +209,25 @@ class AddonsSdk {
    */
   public authenticate = (): Promise<string | null> => {
     this.authorizeTask = new Task<string | null>();
-    this.authorizeTask.promise = new Promise<string | null>((resolve, reject) => {
+    this.authorizeTask.promise = new Promise<string | null>(
+      (resolve, reject) => {
         this.authorizeTask!.onfulfilled = resolve;
         this.authorizeTask!.onrejected = reject;
 
         // start the OAuth consent flow
         const cookie = `${Constants.AUTH_USER_STATE_COOKIE_NAME}=${
           runtime.userIdentifier
-        };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${7 * 24 * 60 * 60}`;
+        };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${
+          7 * 24 * 60 * 60
+        }`;
 
         // user identifier goes to cookie to enable addon oauth server
         // linking the outreach user with the addon external identity.
         document.cookie = cookie;
 
         authService.openPopup();
-    })
+      }
+    );
 
     this.logger.log({
       origin: EventOrigin.ADDON,
@@ -234,7 +238,7 @@ class AddonsSdk {
     });
 
     return this.authorizeTask!.promise;
-  }
+  };
 
   /**
    *
@@ -312,7 +316,7 @@ class AddonsSdk {
         break;
       }
       case AddonMessageType.CONNECT_AUTH_TOKEN:
-        this.handleRefreshTokenMessage(addonMessage as ConnectTokenMessage)
+        this.handleRefreshTokenMessage(addonMessage as ConnectTokenMessage);
         break;
       case AddonMessageType.READY:
       case AddonMessageType.REQUEST_DECORATION_UPDATE:
@@ -321,8 +325,7 @@ class AddonsSdk {
         this.logger.log({
           origin: EventOrigin.ADDON,
           type: EventType.INTERNAL,
-          message:
-            `[CXT][AddonSdk] :: onReceived - Client event ${addonMessage.type} received from host (ERROR)`,
+          message: `[CXT][AddonSdk] :: onReceived - Client event ${addonMessage.type} received from host (ERROR)`,
           level: LogLevel.Error,
           context: [JSON.stringify(addonMessage)]
         });
@@ -398,7 +401,7 @@ class AddonsSdk {
     tokenService.cacheToken({
       value: tokenMessage.token,
       expiresAt: tokenMessage.expiresAt
-    })
+    });
 
     if (this.authorizeTask) {
       this.logger.log({
@@ -417,13 +420,12 @@ class AddonsSdk {
       this.logger.log({
         origin: EventOrigin.ADDON,
         type: EventType.INTERNAL,
-        message:
-          `[CXT][AddonSdk] ::onReceived - Client event ${tokenMessage.type} received without promise to resolve`,
+        message: `[CXT][AddonSdk] ::onReceived - Client event ${tokenMessage.type} received without promise to resolve`,
         level: LogLevel.Warning,
         context: [JSON.stringify(tokenMessage)]
       });
     }
-  }
+  };
 
   private getAddonMessage = (
     messageEvent: MessageEvent
@@ -433,6 +435,13 @@ class AddonsSdk {
     }
 
     if (!this.validOrigin(messageEvent.origin)) {
+      this.logger.log({
+        origin: EventOrigin.ADDON,
+        type: EventType.INTERNAL,
+        level: LogLevel.Trace,
+        message: '[CXT][AddonSdk]::getAddonMessage - message origin is invalid',
+        context: [messageEvent.origin]
+      });
       return null;
     }
 
