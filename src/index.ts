@@ -435,10 +435,21 @@ class AddonsSdk {
       return null;
     }
 
-    if (
-      !utils.validHostOrigin(messageEvent.origin, this.logger) &&
-      !utils.validConnectOrigin(messageEvent.origin, this.logger)
-    ) {
+    const hostOrigin = utils.validHostOrigin(messageEvent.origin, this.logger);
+    const connectOrigin = utils.validConnectOrigin(messageEvent.origin, this.logger);
+    if (!hostOrigin && !connectOrigin) {
+      this.logger.log({
+        origin: EventOrigin.ADDON,
+        type: EventType.INTERNAL,
+        level: LogLevel.Trace,
+        message:
+          '[CXT][AddonSdk]::getAddonMessage - invalid origin',
+        context: [
+          messageEvent.origin,
+          `host:${hostOrigin}`,
+          `connect:${connectOrigin}`
+        ]
+      });
       return null;
     }
 
@@ -493,7 +504,16 @@ class AddonsSdk {
         return null;
       }
     } else {
-      if (!this.initializeOrigin(hostMessage, messageEvent)) {
+      const initializedOrigin = this.initializeOrigin(hostMessage, messageEvent);
+      if (!initializedOrigin) {
+        this.logger.log({
+          origin: EventOrigin.ADDON,
+          type: EventType.INTERNAL,
+          level: LogLevel.Trace,
+          message:
+            '[CXT][AddonSdk]::getAddonMessage - origin not initialized',
+          context: []
+        });
         return null;
       }
     }
