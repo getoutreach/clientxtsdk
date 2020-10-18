@@ -97,6 +97,10 @@ export class utils {
       return false;
     }
 
+    if (!runtime.manifest) {
+      return false;
+    }
+
     if (!runtime.manifest.api) {
       logger.log({
         origin: EventOrigin.ADDON,
