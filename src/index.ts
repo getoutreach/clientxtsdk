@@ -25,6 +25,7 @@ import { EventType } from './sdk/EventType';
 import { EventOrigin } from './sdk/EventOrigin';
 import { ConnectTokenMessage } from './messages/ConnectTokenMessage';
 import { Manifest } from './store/Manifest';
+import { utils } from './utils';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -539,12 +540,21 @@ class AddonsSdk {
     if (!origin) {
       return false;
     }
-    return (
+    const outreachHostMessage =
       origin.endsWith('outreach.io') ||
       origin.endsWith('outreach-staging.com') ||
-      origin.endsWith('outreach-dev.com') ||
-      origin === runtime.origin
-    );
+      origin.endsWith('outreach-dev.com');
+    if (outreachHostMessage) {
+      return true;
+    }
+
+    if (runtime.manifest.api) {
+      // connect endpoint is posting a message with token to addon so it is valid origin
+      // see: https://github.com/getoutreach/clientxtsdk/blob/develop/docs/outreach-api.md#connect-endpoint
+      return origin === utils.getUrlDomain(new URL(runtime.manifest.api.connect));
+    }
+
+    return false
   };
 }
 
