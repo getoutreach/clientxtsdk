@@ -435,14 +435,10 @@ class AddonsSdk {
       return null;
     }
 
-    if (!this.validOrigin(messageEvent.origin)) {
-      this.logger.log({
-        origin: EventOrigin.ADDON,
-        type: EventType.INTERNAL,
-        level: LogLevel.Trace,
-        message: '[CXT][AddonSdk]::getAddonMessage - message origin is invalid',
-        context: [messageEvent.origin]
-      });
+    if (
+      !utils.validHostOrigin(messageEvent.origin, this.logger) &&
+      !utils.validConnectOrigin(messageEvent.origin, this.logger)
+    ) {
       return null;
     }
 
@@ -513,62 +509,20 @@ class AddonsSdk {
       return null;
     }
 
-    if (!this.validOrigin(messageEvent.origin)) {
+    if (!utils.validHostOrigin(messageEvent.origin, this.logger)) {
       return null;
     }
 
     this.logger.log({
       origin: EventOrigin.ADDON,
       type: EventType.INTERNAL,
-      level: LogLevel.Info,
+      level: LogLevel.Debug,
       message: '[CXT][AddonSdk]::getAddonMessage- setting origin',
       context: [messageEvent.origin]
     });
 
     runtime.origin = messageEvent.origin;
     return runtime.origin;
-  };
-
-  private validOrigin = (origin: string): boolean => {
-    if (!origin) {
-      return false;
-    }
-    const outreachHostMessage =
-      origin.endsWith('outreach.io') ||
-      origin.endsWith('outreach-staging.com') ||
-      origin.endsWith('outreach-dev.com');
-    if (outreachHostMessage) {
-      return true;
-    }
-
-    if (runtime.manifest.api) {
-      // connect endpoint is posting a message with token to addon so it is valid origin
-      // see: https://github.com/getoutreach/clientxtsdk/blob/develop/docs/outreach-api.md#connect-endpoint
-      const connectUri = new URL(runtime.manifest.api.connect);
-      const connectOrigin = utils.getUrlDomain(connectUri);
-      const connectMessage = origin === connectOrigin;
-      if (connectMessage) {
-        return true;
-      }
-
-      this.logger.log({
-        origin: EventOrigin.ADDON,
-        type: EventType.INTERNAL,
-        level: LogLevel.Trace,
-        message: '[CXT][AddonSdk]::validOrigin - not a connect origin too',
-        context: [origin, connectOrigin]
-      });
-    }
-
-    this.logger.log({
-      origin: EventOrigin.ADDON,
-      type: EventType.INTERNAL,
-      level: LogLevel.Trace,
-      message: '[CXT][AddonSdk]::getAddonMessage - invalid origin received',
-      context: [origin, runtime.manifest.api?.connect || 'NO API']
-    });
-
-    return false;
   };
 }
 
