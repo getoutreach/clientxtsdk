@@ -130,4 +130,4 @@ http://some-site.com/addon?...&clientId=a12345
 
 #### SDK support
 
-All of the configuration values are sent to addon through the addon [initilization message config property](https://github.com/getoutreach/clientxtsdk/blob/master/docs/sdk.md#init-event-handler).
+All of the configuration values are sent to addon through the addon [initilization message config property](https://github.com/getoutreach/clientxtsdk/blob/master/docs/sdk.md#addon-initialization).
