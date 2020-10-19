@@ -37,10 +37,34 @@ The add-on creator will add a config section into the manifest with three config
 
 ```json
 manifest: {
-  configuration: [
-    { key: 'clientId', text: { en: 'Enter client id' }, type: 'string', required: true, urlInclude: true },
-    { key: 'clientKey', text: { en: 'Enter client secret' }, type: 'string', required: true, urlInclude: false },
-    { key: 'clientSecret', text: { en: 'Enter client key' }, type: 'string', required: true, urlInclude: false }
+  "configuration": [
+    {
+      "key": "clientId",
+      "text": {
+        "en": "Enter client id"
+      },
+      "type": "string",
+      "required": true,
+      "urlInclude": true
+    },
+    {
+      "key": "clientKey",
+      "text": {
+        "en": "Enter client secret"
+      },
+      "type": "string",
+      "required": true,
+      "urlInclude": false
+    },
+    {
+      "key": "clientSecret",
+      "text": {
+        "en": "Enter client key"
+      },
+      "type": "string",
+      "required": true,
+      "urlInclude": false
+    }
   ]
 }
 
