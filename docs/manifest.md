@@ -18,6 +18,7 @@ Table of content:
   - [author](#author)
 - [Integration manifest properties](#integration-manifest-properties)
   - [context](#context)
+- [configuration](#configuration)
 - [api (optional)](#api-optional)
   - [applicationId](#applicationid)
   - [redirectUri](#redirecturi)
@@ -32,37 +33,65 @@ Here is the sample manifest file of the hello world addon
 
 ```json
 {
-    "version": "0.10",
-    "identifier": "addon-outreach-hello",
-    "store": "public",
-    "title":  [
-        "en": "Hello world",
-        "fr": "Salut tout le monde"
-    ],
-    "description": [
-        "en": "This is a sample addon created as a guide for Outreach addon creators ",
-        "fr": "Il s’agit d’un addon échantillon créé comme
-               un guide pour les créateurs addon Outreach",
-    ],
-    "host": {
-        "type": "tab-opportunity",
-        "url": "https://addon-host.com/something",
-        "icon": "https://addon-host.com/icon.png"
+  "version": "0.10",
+  "identifier": "addon-outreach-hello",
+  "store": "public",
+  "title": [
+    "en": "Hello world",
+    "fr": "Salut tout le monde"
+  ],
+  "description": [
+    "en": "This is a sample addon created as a guide for Outreach addon creators ",
+    "fr": "Il s’agit d’un addon échantillon créé comme
+    un guide pour les créateurs addon Outreach ",
+  ],
+  "host": {
+    "type": "tab-opportunity",
+    "url": "https://addon-host.com/something",
+    "icon": "https://addon-host.com/icon.png"
+  },
+  "author": {
+    "websiteUrl": "https://addon-host.com",
+    "privacyUrl": "https://addon-host.com/privacy",
+    "termsOfUseUrl": "https://addon-host.com/tos",
+  },
+  "context": [
+    "usr.id", "opp.id", "prospect.emails"
+  ],
+  "api": {
+    "token": "https://addon-host.com/token",
+    "scopes": "prospects.read, opportunity.read",
+    "applicationId": "AbCd123456qW",
+    "redirectUri": "https://addon-host.com/hello-world",
+  },
+  "configuration": [{
+      "key": "clientId",
+      "text": {
+        "en": "Enter client id"
+      },
+      "type": "string",
+      "required": true,
+      "urlInclude": true
     },
-    "author": {
-        "websiteUrl": "https://addon-host.com",
-        "privacyUrl": "https://addon-host.com/privacy",
-        "termsOfUseUrl": "https://addon-host.com/tos",
+    {
+      "key": "clientKey",
+      "text": {
+        "en": "Enter client secret"
+      },
+      "type": "string",
+      "required": true,
+      "urlInclude": false
     },
-    "context":  [
-      "usr.id", "opp.id", "prospect.emails"
-    ],
-    "api": {
-      "token": "https://addon-host.com/token",
-      "scopes": "prospects.read, opportunity.read",
-      "applicationId": "AbCd123456qW",
-      "redirectUri": "https://addon-host.com/hello-world",
+    {
+      "key": "clientSecret",
+      "text": {
+        "en": "Enter client key"
+      },
+      "type": "string",
+      "required": true,
+      "urlInclude": false
     }
+  ]
 }
 ```
 
@@ -124,7 +153,7 @@ manifest.host.url = "http://somesite.com/something"
 manifest.context = ["opp.id", "usr.id"]
 ```
 
-In the case of outreach user with id 456 looking at opportunity 123, this will result during the runtime.
+In the case of Outreach user with id 456 looking at opportunity 123, this will result during the runtime.
 
 ```bash
  http://somesite.com/something?opp.id=123&usr.id=456
@@ -164,7 +193,6 @@ http://somesite.com/something/456?oid=123
 
 base64 string represents the icon to be shown in the addon store and (if possible) in Outreach client.
 
-
 ### author
 
 This section contains information to be presented to a user of the addon in the marketplace and on the consent screen: addon creator name, website URL, privacy policy document URL, and terms of use document URL.
@@ -178,15 +206,24 @@ It is a string array of predefined Outreach properties describing attributes of 
 
 e.g. ["opp.id", "acc.id"]
 
-A complete list of all of the supported context properties can be found on the [context property page](context.md).
+Outreach User will be asked to consent to share this information before the addon is installed from the addon store.
+In case addon is installed by admin for other users, admin is the one consenting to share the defined context properties for all the org users he is installing it for.
 
-Outreach User will be asked to consent to share this information on the addon's first use.  If the manifest addon creator's future version adds additional contextual fields, the Outreach user will consent again.
+To learn more about the list of all of the supported context properties, go to [context property page](context.md).
 
-[ADD-CONTEXT-CONSENT-SCREENSHOT-HERE]
+## configuration
+
+This section is optional.
+If the addon doesn't need a user-specific runtime configuration, this section can be omitted.
+
+In this section, the addon creator defines what information should collect from the user and pass it to the addon as a part of the initialization process.
+
+To learn more about configuration section, go to [manifest configuration page](configuration.md)
 
 ## api (optional)
 
-This section is optional - if addon doesn't need access to outreach API, this section can be omitted.
+This section is optional.
+If the addon doesn't need access to outreach API, this section can be omitted.
 
 ### applicationId
 
@@ -202,7 +239,7 @@ In the scopes section, the addon creator defines Outreach API scopes that are ne
 
 A complete list of all of the API scopes can be found on [API Scopes page](scopes.md).
 
-On the first [SDK authentication](sdk.md#authentication) Outreach user is asked to consent with granting requested scopes to the addon
+On the first [SDK authentication](sdk.md#authentication) Outreach, the user is asked to consent to grant requested scopes to the addon
 ![alt text](assets/api-consent.png "API consent screen")
 
 ### token

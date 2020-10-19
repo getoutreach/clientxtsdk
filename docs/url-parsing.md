@@ -4,6 +4,7 @@ Any time when the Outreach app loads an addon, it will set as iframe source an U
 
 - host.URL value [defined in the manifest](manifest.md#url)
 - query parameters representing [context values of current Outreach user](manifest.md#context) also defined in the manifest (e.g. "opp.id")
+- [config parameters](configuration.md) (if any) which have [urlInclude](configuration.md##urlinclude) property enabled.
 - query params which are always sent regardless of the manifest:
   - locale='en',
   - theme='light'
