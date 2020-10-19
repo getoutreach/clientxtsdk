@@ -1,7 +1,14 @@
 
+/**
+ * Section of the manifest describing the addon author.
+ * @see https://github.com/getoutreach/clientxtsdk/blob/master/docs/manifest.md#author
+ * @export
+ * @class ManifestAuthor
+ */
 export class ManifestAuthor {
     /**
      *
+     * Website of the addon creator.
      *
      * @type {string}
      * @memberof Author
@@ -9,7 +16,7 @@ export class ManifestAuthor {
     websiteUrl: string;
 
     /**
-     *
+     * Url of the addon creator privacy policy.
      *
      * @type {string}
      * @memberof Author
@@ -17,16 +24,10 @@ export class ManifestAuthor {
     privacyUrl: string;
 
     /**
-     *
+     * Terms of use policy url.
      *
      * @type {string}
      * @memberof Author
      */
     termsOfUseUrl: string;
-
-    constructor () {
-      this.websiteUrl = '';
-      this.privacyUrl = '';
-      this.termsOfUseUrl = '';
-    }
 }

@@ -6,6 +6,8 @@ import { Theme } from '../sdk/Theme';
 import { Locale } from '../sdk/Locale';
 import { ContextParam } from '../context/ContextParam';
 import { Manifest } from '../store/Manifest';
+import { ConfigurationItem } from '../store/configuration/ConfigurationItem';
+import { ConfigurationValue } from '../store/configuration/ConfigurationValue';
 
 export class InitMessage extends AddonMessage implements OutreachContext {
   /**
@@ -53,4 +55,13 @@ export class InitMessage extends AddonMessage implements OutreachContext {
    * @memberof InitMessage
    */
   manifest: Manifest;
+
+  /**
+   * Optional section containing configuration values
+   * provided by user.
+   *
+   * @type {ConfigurationItem[]}
+   * @memberof InitMessage
+   */
+  configuration?: ConfigurationValue[];
 }

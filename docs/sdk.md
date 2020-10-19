@@ -6,20 +6,19 @@ Table of content
 - [Summary](#summary)
 - [Addon initialization](#addon-initialization)
   - [Init event handler](#init-event-handler)
+    - [Outreach context](#outreach-context)
   - [Info event handler (optional)](#info-event-handler-optional)
   - [Ready function](#ready-function)
 - [Additional addon functions](#additional-addon-functions)
   - [Notify function](#notify-function)
   - [Decorate function](#decorate-function)
 - [Add-on authentication](#add-on-authentication)
-  - [Auth user cookie](#auth-user-cookie)
-  - [Auth temp cookie creation](#auth-temp-cookie-creation)
-  - [Caching access token](#caching-access-token)
-  - [Obtaining an access token](#obtaining-an-access-token)
+  - [getToken function](#gettoken-function)
+  - [authorize function](#authorize-function)
 
 ## Summary
 
-The outreach host is using iframes to load addons due to security and performance reasons. Once an addon is loaded, the Outreach host communicates with it using POST messages. 
+The outreach host is using iframes to load addons due to security and performance reasons. Once an addon is loaded, the Outreach host communicates with it using POST messages.
 
 Outreach client extensibility SDK is created as a thin wrapper around this communication, so the addon creator doesn't need to think about how this is implemented, but in case you would prefer your own integration library, that is totally OK too.
 
@@ -29,7 +28,7 @@ The code from this repository is packaged into an NPM package, which can be foun
 https://www.npmjs.com/package/@outreach/client-addon-sdk
 ```
 
-In case you don't want to use the NPM package, we are also publishing it as a javascript bundle on Outreach CDN so you can just reference it on your Html page using a standard script tag.
+In case you don't want to use the NPM package, we are also publishing it as a javascript bundle on Outreach CDN, so you can just reference it on your Html page using a standard script tag.
 
 ## Addon initialization
 
@@ -37,21 +36,34 @@ In order for the addon to get into initialized state, there are a few simple ste
 
 - Subscribe to an [initialization event](#init-event-handler)
 - Subscribe to [info event](#info-event-handler-optional)(optional)
-- Invoke a [READY function](#ready-function). 
+- Invoke a [READY function](#ready-function).
 
 ### Init event handler
 
-The Outreach host sends to addon contextual information of the current Outreach user loading the addon, which triggers on addon side init event handler. In case the initialization context changes after the addon are loaded, another Init message will be sent to the addon so it can reinitialize itself with the new context. 
+The Outreach host sends to addon contextual information of the current Outreach user loading the addon, which triggers on addon side init event handler. In case the initialization context changes after the addon are loaded, another Init message will be sent to the addon so it can reinitialize itself with the new context.
 
 The manifest Context section determines the payload of the initialization context (e.g., if there is Opportunity scope defined, the initialization context will contain current opportunity information).
 
 ```javascript
-addonSdk.onInit = (ctx: Context) => {
+addonSdk.onInit = (ctx: OutreachContext) => {
     // addon initialization based on this values
 }
 ```
 
-This event handler is invoked once on initial addon loading and every time after that when the initialization context of Outreach context changes.
+This event handler is invoked once on initial addon loading and every time after that when the initialization context
+of Outreach context changes.
+
+#### Outreach context
+
+[Outreach context](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/OutreachContext.ts) sent to onInit method has next properties:
+
+- locale - Outreach User locale to be used for rendering addon UI (e.g. en)
+- theme - Outreach app theme to be used for rendering addon UI (e.g. light)
+- account - [Information about current account](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/AccountContext.ts) Outreach user is looking at (optional)
+- user - [Information about current outreach user](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/UserContext.ts) Outreach user is looking at (optional)
+- opportunity - [Information about current opportunity](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/OpportunityContext.ts) Outreach user is looking at (optional)
+- prospect - [Information about current prospect](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/ProspectContext.ts) Outreach user is looking at (optional)
+- config - User-specific [addon configuration](configuration.md#) (if any)
 
 ### Info event handler (optional)
 
@@ -59,7 +71,7 @@ To support the case when the addon developer is interested in getting informatio
 
  ```javascript
 addonSdk.onInfo = (info: AddonInfo) => {
-    // addon process the message 
+    // addon process the message
 }
 ```
 
@@ -86,7 +98,7 @@ Add-on sdk has a few additional functions allowing to addon to request a certain
 
 ### Notify function
 
-In case when an addon wants to inform the Outreach user about some information, warning, or Error, it will need to invoke the Notify function requesting from an Outreach app to notify the user about that. 
+In case when an addon wants to inform the Outreach user about some information, warning, or Error, it will need to invoke the Notify function requesting from an Outreach app to notify the user about that.
 
 ```javascript
 addonSdk.notify({type: ‘info’, text:’Saved!’);
@@ -94,7 +106,7 @@ addonSdk.notify({type: ‘info’, text:’Saved!’);
 
 The Outreach host will notify the user in a way consistent with the Outreach application UX.
 
-### Decorate function 
+### Decorate function
 
 In case when an addon would like to update its decoration of the addon entry point (e.g., Tab title), it will need to invoke the Decorate function requesting from an Outreach app to update its entry point decoration.
 
@@ -104,26 +116,13 @@ addonSdk.decorate({text:’Messages (2)’);
 
 ## Add-on authentication
 
-In order to support addons needing Outreach API access, addon SDK implements a few supporting features.
+To support addons needing Outreach API access, addon SDK implements two actions: getToken() and authorize()
 
+### getToken function
 
-### Auth user cookie
+[source here](https://github.com/getoutreach/clientxtsdk/blob/master/src/index.ts#L254)
 
-### Auth temp cookie creation
-
-Every time when addon starts, it will take the user identifier value and store it in a cookie called "ctx-sdk-token", so the addon host can later read it when it is [caching the retrieved tokens](#caching-the-tokens).
-
-*This is happening automatically without the need for any coding from the addon creator.*
-
-### Caching access token
-
-Every time when addon starts, it will also check for token and expiresAt parameters (as defined in [passing back](#pass)), and if the URL contains them, it will take those values and cache them locally in browser local storage and use them from there as long the token doesn't expire. 
-
-*This is happening automatically without the need for any coding from the addon creator.*
-
-### Obtaining an access token
-
-Every time when addon creator wants to call Outreach API, it needs a valid access token, and to obtain it, addon SDK defines the getToken method.
+This function addon calls anytime it needs a token to access Outreach API - no need to tie it to any user generated action (e.g. button click) as there are no popups
 
 ```javascript
     addonSdk.getToken = (skipCache?: bool) => Promise<string> {
@@ -131,10 +130,28 @@ Every time when addon creator wants to call Outreach API, it needs a valid acces
     }
 ```
 
-If there is a **token in local storage** and the token didn't expire, the function just returns that token immediately.
+This function will:
 
-If no valid access token in the local cache, addon sdk will try to **refresh access token** by calling the [refresh token endpoint](#refresh-token-flow), cache it, and return it.
+- check if local storage has item with key **cxt-sdk-token**
+- it will check if the cached access token didn't expire
+- if cached token is still active the promise will resolve and addon creator will get a token.
 
-If the token refresh call will fail to **obtain a new access token**, addon sdk will ask the Outreach host to start the authentication process, so the user will see the Outreach API OAuth consent screen, and the flow will go as described in [initial auth flow](#initial-authentication-flow) section. At the end of this initial auth flow, the addon will load again, but this time it will have a locally cached access token, and getToken() will this time resolve with a valid access token.
+Suppose a valid access token is not in the local storage.
 
-_if **skipCache** parameter is passed with true value, the locally cached value will be ignored, and a new access token will be retrieved from the server through refreshing or outreach user consent flows._
+In that case, function will call the [token endpoint](outreach-api.md#token-endpoint) and try to obtain new access token, cache it to local storage and return it to user resolving the promise.
+
+### authorize function
+
+[source here](https://github.com/getoutreach/clientxtsdk/blob/master/src/index.ts#L211)
+
+```javascript
+    addonSdk.authenticate= () => Promise<string> {
+        ...
+    }
+```
+
+If a sdk.getToken() function fails, addon creator has to show some clickable element ("Login button"). Once a user clicks that button, a [Outreach OAuth consent popup](outreach-api.md#outreach-api-consent) will be shown to user and a [authorize endpoint](outreach-api.md##authorization-endpoint) will be called. Authorize flow will [cache on server refresh token](outreach-api.md#caching-the-tokens) and on client local storage access token so future getToken() calls will work and there won't be no need to show popup to user again.
+
+In case addon creator will call authorize() function after user provided content, Outreach user will briefly see a popup being loaded and immediately closed after a very breif period.
+
+An important implementation detail of this function is that before a popup is shown, sdk will create a cookie called "ctx-sdk-token" where user identifier will be stored so the addon host can read that value later for [caching tokens](outreach-api.md#caching-the-tokens) implementation.
