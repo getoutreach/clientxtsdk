@@ -1,5 +1,12 @@
 /* eslint-disable no-unused-vars */
 
+/**
+ * List of Outreach API scopes addon can request
+ *
+ * @see https://github.com/getoutreach/clientxtsdk/blob/master/docs/scopes.md
+ * @export
+ * @enum {number}
+ */
 export enum Scopes {
     AUDITS_ALL = 'audits.all',
     AUDITS_READ = 'audits.read',

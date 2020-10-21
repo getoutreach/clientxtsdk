@@ -113,7 +113,7 @@ export class utils {
     }
 
     // connect endpoint is posting a message with token to addon so it is valid origin
-    // see: https://github.com/getoutreach/clientxtsdk/blob/develop/docs/outreach-api.md#connect-endpoint
+    // see: https://github.com/getoutreach/clientxtsdk/blob/master/docs/outreach-api.md#connect-endpoint
     const connectUri = new URL(runtime.manifest.api.connect);
     const connectOrigin = utils.getUrlDomain(connectUri);
     const connectMessage = origin === connectOrigin;

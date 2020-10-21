@@ -5,6 +5,7 @@ import { AccountContext } from './AccountContext'
 import { Theme } from '../sdk/Theme'
 import { Locale } from '../sdk/Locale'
 import { ProspectContext } from './ProspectContext'
+import { ConfigurationValue } from '../store/configuration/ConfigurationValue'
 
 export class OutreachContext {
     /**
@@ -62,4 +63,13 @@ export class OutreachContext {
      * @memberof OutreachContext
      */
     public prospect?: ProspectContext;
+
+    /**
+     * Optional section containing configuration values
+    * provided by user.
+     *
+     * @type {ConfigurationValue[]}
+     * @memberof OutreachContext
+     */
+    public config?: ConfigurationValue[];
 }
