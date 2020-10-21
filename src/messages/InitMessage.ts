@@ -6,7 +6,6 @@ import { Theme } from '../sdk/Theme';
 import { Locale } from '../sdk/Locale';
 import { ContextParam } from '../context/ContextParam';
 import { Manifest } from '../store/Manifest';
-import { ConfigurationItem } from '../store/configuration/ConfigurationItem';
 import { ConfigurationValue } from '../store/configuration/ConfigurationValue';
 
 export class InitMessage extends AddonMessage implements OutreachContext {
