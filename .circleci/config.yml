@@ -1,33 +1,87 @@
-version: 2.1
+version: 2
 
 jobs:
-  build:
-    working_directory: ~/repo
-    docker:
-        - image: circleci/node:latest
-    steps:
-        - checkout
-        - run:
-            name: Installing package dependencies
-            command: yarn install --frozen-lockfile
-        - run:
-            name: Lint SDK
-            command: yarn lint          
-        - run:
-            name: Build SDK
-            command: yarn build
-        - run:
-            name: Test SDK
-            command: yarn test
-        - run:
-            name: Package SDK
-            command: yarn package
-        - run:
-            name: Authenticate with registry
-            command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-        - run:
-            name: Publish package
-            command: npm publish
+    build_public_package:
+        working_directory: ~/repo
+        docker:
+            - image: circleci/node:latest
+        steps:
+            - checkout
+            - run:
+                name: Installing package dependencies
+                command: yarn install --frozen-lockfile
+            - run:
+                name: Lint SDK
+                command: yarn lint          
+            - run:
+                name: Build SDK
+                command: yarn build
+            - run:
+                name: Test SDK
+                command: yarn test
+            - run:
+                name: Package SDK
+                command: yarn package
+            - run:
+                name: Authenticate with registry
+                command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+            - run:
+                name: Publish package
+                command: npm publish
 
+    build_develop_package:
+        working_directory: ~/repo
+        docker:
+            - image: circleci/node:latest
+        steps:
+            - checkout
+            - run:
+                name: Backup package.json file
+                command: cp package.json package.json.bak
+            - run:
+                name: Change the package name
+                command: sed -i 's/sdk/sdk-develop/g' package.json
+            - run:
+                name: Change the private property to true
+                command: sed -i '4s/false/true/g' package.json
+            - run:
+                name: Installing package dependencies
+                command: yarn install --frozen-lockfile
+            - run:
+                name: Lint SDK
+                command: yarn lint
+            - run:
+                name: Build SDK
+                command: yarn build
+            - run:
+                name: Test SDK
+                command: yarn test
+            - run:
+                name: Package SDK
+                command: yarn package
+            - run:
+                name: Authenticate with registry
+                command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+            - run:
+                name: Publish package
+                command: npm publish
+            - run:
+                name: Return back package.json file
+                command: cp package.json.bak package.json
+            - run:
+                name: Remove back up file
+                command: rm package.json.bak
 
-            
+workflows:
+    version: 2
+    build:
+        jobs:
+            - build_public_package:
+                filters:
+                    branches:
+                        only: master
+
+            - build_develop_package:
+                filters:
+                    branches:
+                        only: develop
