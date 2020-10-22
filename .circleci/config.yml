@@ -1,7 +1,7 @@
-version: 2
+version: 2.1
 
 jobs:
-    build_public_package:
+    test:
         working_directory: ~/repo
         docker:
             - image: circleci/node:latest
@@ -12,13 +12,26 @@ jobs:
                 command: yarn install --frozen-lockfile
             - run:
                 name: Lint SDK
-                command: yarn lint          
+                command: yarn lint
             - run:
                 name: Build SDK
                 command: yarn build
             - run:
                 name: Test SDK
                 command: yarn test
+
+    build_public_package:
+        working_directory: ~/repo
+        docker:
+            - image: circleci/node:latest
+        steps:
+            - checkout
+            - run:
+                name: Installing package dependencies
+                command: yarn install --frozen-lockfile
+            - run:
+                name: Build SDK
+                command: yarn build
             - run:
                 name: Package SDK
                 command: yarn package
@@ -48,14 +61,8 @@ jobs:
                 name: Installing package dependencies
                 command: yarn install --frozen-lockfile
             - run:
-                name: Lint SDK
-                command: yarn lint
-            - run:
                 name: Build SDK
                 command: yarn build
-            - run:
-                name: Test SDK
-                command: yarn test
             - run:
                 name: Package SDK
                 command: yarn package
@@ -73,15 +80,21 @@ jobs:
                 command: rm package.json.bak
 
 workflows:
-    version: 2
+    version: 2.1
     build:
         jobs:
+            - test
+
             - build_public_package:
+                requires:
+                    - test
                 filters:
                     branches:
                         only: master
 
             - build_develop_package:
+                requires:
+                    - test
                 filters:
                     branches:
                         only: develop
