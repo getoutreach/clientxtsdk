@@ -76,7 +76,7 @@ workflows:
     version: 2.1
     build:
         jobs:
-             - test
+             - test:
 
              - build_public_package:
                 requires:
