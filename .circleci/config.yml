@@ -1,6 +1,18 @@
-version: 2
+version: 2.1
 
 jobs:
+    test:
+        working_directory: ~/repo
+        docker:
+            - image: circleci/node:latest
+        steps:
+            - run:
+                name: Lint SDK
+                command: yarn lint 
+            - run:
+                name: Test SDK
+                command: yarn test
+
     build_public_package:
         working_directory: ~/repo
         docker:
@@ -11,14 +23,8 @@ jobs:
                 name: Installing package dependencies
                 command: yarn install --frozen-lockfile
             - run:
-                name: Lint SDK
-                command: yarn lint          
-            - run:
                 name: Build SDK
                 command: yarn build
-            - run:
-                name: Test SDK
-                command: yarn test
             - run:
                 name: Package SDK
                 command: yarn package
@@ -48,14 +54,8 @@ jobs:
                 name: Installing package dependencies
                 command: yarn install --frozen-lockfile
             - run:
-                name: Lint SDK
-                command: yarn lint
-            - run:
                 name: Build SDK
                 command: yarn build
-            - run:
-                name: Test SDK
-                command: yarn test
             - run:
                 name: Package SDK
                 command: yarn package
@@ -73,10 +73,14 @@ jobs:
                 command: rm package.json.bak
 
 workflows:
-    version: 2
+    version: 2.1
     build:
         jobs:
-            - build_public_package:
+             - test
+
+             - build_public_package:
+                requires:
+                    - test
                 filters:
                     branches:
                         only: master
