@@ -6,6 +6,7 @@ jobs:
         docker:
             - image: circleci/node:latest
         steps:
+            - checkout
             - run:
                 name: Lint SDK
                 command: yarn lint 
@@ -76,7 +77,7 @@ workflows:
     version: 2.1
     build:
         jobs:
-             - test:
+            - test:
 
             - build_public_package:
                 filters:
