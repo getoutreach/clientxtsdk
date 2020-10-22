@@ -77,14 +77,17 @@ workflows:
     version: 2.1
     build:
         jobs:
-            - test:
+            - test
 
             - build_public_package:
-                filters:
-                    branches:
-                        only: master
+                requires:
+                    - test
+                branches:
+                    only: master
 
             - build_develop_package:
+                requires:
+                    - test
                 filters:
                     branches:
                         only: develop
