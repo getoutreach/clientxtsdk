@@ -80,10 +80,15 @@ workflows:
             - test
 
             - build_public_package:
-                branches:
-                    only: master
+                requires:
+                    - test
+                filters:
+                    branches:
+                        only: master
 
             - build_develop_package:
+                requires:
+                    - test
                 filters:
                     branches:
                         only: develop
