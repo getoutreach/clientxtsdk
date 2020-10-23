@@ -1,11 +1,12 @@
 <!-- omit in toc -->
+
 # Addon configuration
 
 Some of the add-ons require a user-specific configuration to be initialized properly.
 
 That configuration contains one or more user values either when the user installed the add-on or at the moment of first interaction (if the add-on was installed for the user by an admin).
 
-Add-on creator needs to define in manifest what are the configuration values Outreach needs to collect for them, and Outreach will then construct a UI component that will gather and persist configuration data from the user. 
+Add-on creator needs to define in manifest what are the configuration values Outreach needs to collect for them, and Outreach will then construct a UI component that will gather and persist configuration data from the user.
 Outreach application will send to add-on all of those collected with every add-on initialization.
 
 - [Manifest configuration definition](#manifest-configuration-definition)
@@ -50,7 +51,7 @@ manifest: {
     {
       "key": "clientKey",
       "text": {
-        "en": "Enter client secret"
+        "en": "Enter client key"
       },
       "type": "string",
       "required": true,
@@ -59,7 +60,7 @@ manifest: {
     {
       "key": "clientSecret",
       "text": {
-        "en": "Enter client key"
+        "en": "Enter client secret"
       },
       "type": "string",
       "required": true,

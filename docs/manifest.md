@@ -1,4 +1,5 @@
 <!-- omit in toc -->
+
 # Manifest file
 
 Manifest is a simple JSON file that the addon developer uploads to Outreach and which contains all of the data needed for Outreach to host addon in an iframe.
@@ -76,7 +77,7 @@ Here is the sample manifest file of the hello world addon
     {
       "key": "clientKey",
       "text": {
-        "en": "Enter client secret"
+        "en": "Enter client key"
       },
       "type": "string",
       "required": true,
@@ -85,7 +86,7 @@ Here is the sample manifest file of the hello world addon
     {
       "key": "clientSecret",
       "text": {
-        "en": "Enter client key"
+        "en": "Enter client secret"
       },
       "type": "string",
       "required": true,
@@ -106,15 +107,15 @@ Unique identifier of the addon as defined by the addon creator
 Defines the store in which addon will be served:
 
 - **Public**
-  
+
   The addon is going to be available in the addon store to all of the Outreach users.
 
 - **Private**
-  
- The addon is going to be available only internally for users of a company that created the addon.
+
+The addon is going to be available only internally for users of a company that created the addon.
 
 - **Personal**
-  
+
   The addon is going to be available only to a developer who uploaded the manifest.
 
 ### title
@@ -185,7 +186,7 @@ manifest.host.url = "http://somesite.com/something/{usr.id}?oid={opp.id}"
 
 will become during the runtime
 
-``` bash
+```bash
 http://somesite.com/something/456?oid=123
 ```
 
