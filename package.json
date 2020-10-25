@@ -1,7 +1,7 @@
 {
   "name": "@outreach/client-addon-sdk",
   "license": "MIT",
-  "version": "0.0.103",
+  "version": "0.0.106",
   "private": false,
   "contributors": [
     "Outreach Client Extensibility Team <cxt-sdk@outreach.io>"
@@ -17,7 +17,8 @@
     "copy-to-dist": "npx copyfiles \"./build/**/*.js*\" dist -a -u 1",
     "lint": "npx eslint ./src/**/*.ts",
     "test": "jest",
-    "deploy": "npm run package && npm publish"
+    "deploy": "npm run package && npm publish",
+    "tag-version" : "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags"
   },
   "repository": {
     "type": "git",
