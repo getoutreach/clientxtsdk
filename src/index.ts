@@ -347,6 +347,7 @@ class AddonsSdk {
     runtime.theme = initMessage.theme;
     runtime.userIdentifier = initMessage.userIdentifier;
     runtime.manifest = initMessage.manifest;
+    runtime.configuration = initMessage.configuration;
 
     const outreachContext = new OutreachContext();
     outreachContext.locale = runtime.locale;

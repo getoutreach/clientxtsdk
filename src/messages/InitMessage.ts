@@ -62,5 +62,5 @@ export class InitMessage extends AddonMessage implements OutreachContext {
    * @type {ConfigurationItem[]}
    * @memberof InitMessage
    */
-  configuration?: ConfigurationValue[];
+  configuration: ConfigurationValue[];
 }

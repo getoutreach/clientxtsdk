@@ -1,6 +1,7 @@
 import { Locale } from './Locale';
 import { Theme } from './Theme';
 import { Manifest } from '../store/Manifest';
+import { ConfigurationValue } from '../store/configuration/ConfigurationValue';
 
 export class RuntimeContext {
   /**
@@ -25,6 +26,8 @@ export class RuntimeContext {
   public theme: Theme = Theme.LIGHT;
 
   public userIdentifier!: string;
+
+  public configuration?: ConfigurationValue[] = [];
 }
 
 export default new RuntimeContext();
