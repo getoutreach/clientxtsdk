@@ -38,4 +38,9 @@ export enum AddonMessageType {
    * Message received from the OAuth popup window containing new token information.
    */
   CONNECT_AUTH_TOKEN = 'cxt:connect:token',
+
+  /**
+   * Message sent from client to host displaying configuration form
+   */
+  CONFIGURE = 'cxt:sdk:configure',
 }
