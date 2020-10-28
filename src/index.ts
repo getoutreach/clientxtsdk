@@ -25,6 +25,7 @@ import { EventType } from './sdk/EventType';
 import { EventOrigin } from './sdk/EventOrigin';
 import { ConnectTokenMessage } from './messages/ConnectTokenMessage';
 import { utils } from './utils';
+import { ConfigureMessage } from './messages/ConfigureMessage';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -191,6 +192,25 @@ class AddonsSdk {
       level: LogLevel.Info,
       message: `[CXT] Addon is sending ${message.type} message to host`,
       context: [`Decoration text: ${text}`]
+    });
+  };
+
+  /**
+   * Sends request to Outreach hosting app to display the configuration form.
+   *
+   * @memberof AddonsSdk
+   */
+  public configure = () => {
+    const message = new ConfigureMessage();
+    this.sendMessage(message, true);
+
+    this.logger.log({
+      origin: EventOrigin.ADDON,
+      type: EventType.MESSAGE,
+      messageType: message.type,
+      level: LogLevel.Info,
+      message: `[CXT] Addon is sending ${message.type} message to host`,
+      context: []
     });
   };
 
