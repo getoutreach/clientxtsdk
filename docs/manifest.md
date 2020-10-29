@@ -2,31 +2,40 @@
 
 # Manifest file
 
-Manifest is a simple JSON file that the addon developer uploads to Outreach and which contains all of the data needed for Outreach to host addon in an iframe.
-
 Table of content:
 
-- [Sample manifest](#sample-manifest)
-- [Basic manifest properties](#basic-manifest-properties)
-  - [identifier](#identifier)
-  - [store](#store)
-  - [title](#title)
-  - [description](#description)
-  - [host](#host)
-    - [type](#type)
-    - [url](#url)
-    - [icon](#icon)
-  - [author](#author)
-- [Integration manifest properties](#integration-manifest-properties)
-  - [context](#context)
-- [configuration](#configuration)
-- [api (optional)](#api-optional)
-  - [applicationId](#applicationid)
-  - [redirectUri](#redirecturi)
-  - [scopes](#scopes)
-  - [token](#token)
-  - [connect](#connect)
-- [Uploading the manifest](#uploading-the-manifest)
+- [Manifest file](#manifest-file)
+  - [Sample manifest](#sample-manifest)
+  - [Basic manifest properties](#basic-manifest-properties)
+    - [identifier](#identifier)
+    - [store](#store)
+    - [title](#title)
+    - [description](#description)
+    - [host](#host)
+      - [type](#type)
+      - [url](#url)
+      - [icon](#icon)
+    - [author](#author)
+  - [Integration manifest properties](#integration-manifest-properties)
+    - [context](#context)
+  - [configuration](#configuration)
+  - [api (optional)](#api-optional)
+    - [applicationId](#applicationid)
+    - [redirectUri](#redirecturi)
+    - [scopes](#scopes)
+    - [token](#token)
+    - [connect](#connect)
+  - [Uploading the manifest](#uploading-the-manifest)
+
+Manifest is a simple JSON file that the addon developer uploads to Outreach and which contains all of the data needed for Outreach to host addon in an iframe.
+
+All of the manifest properties are grouped in a few groups:
+
+- **Basic properties** (name, description, author info, etc.)
+- **Host section** (where is addon page located and where it should be hosted in Outreach app)
+- **Context section** (what contextual info should Outreach send during the addon  initialization)
+- **API section** - optional (what scopes addon needs for accessing Outreach API)
+- **Configuration section** - optional (what values we should collect from an Outreach user installing the addon.
 
 ## Sample manifest
 
@@ -65,33 +74,25 @@ Here is the sample manifest file of the hello world addon
     "applicationId": "AbCd123456qW",
     "redirectUri": "https://addon-host.com/hello-world",
   },
-  "configuration": [{
-      "key": "clientId",
+  "configuration": [
+    {
+      "key": "project", "type": "string", "required": true, "urlInclude": true,
       "text": {
-        "en": "Enter client id"
+        "en": "Project name."
       },
-      "type": "string",
-      "required": true,
-      "urlInclude": true
     },
     {
-      "key": "clientKey",
+      "key": "startDate", "type": "date", "required": true, "urlInclude": true,
       "text": {
-        "en": "Enter client key"
+        "en": "Start date"
       },
-      "type": "string",
-      "required": true,
-      "urlInclude": false
     },
     {
-      "key": "clientSecret",
+      "key": "reference", "type": "url", "required": true, "urlInclude": true,
       "text": {
-        "en": "Enter client secret"
+        "en": "Reference documentation"
       },
-      "type": "string",
-      "required": true,
-      "urlInclude": false
-    }
+    },
   ]
 }
 ```
