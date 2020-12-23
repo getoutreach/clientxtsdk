@@ -33,7 +33,7 @@ All of the manifest properties are grouped in a few groups:
 
 - **Basic properties** (name, description, author info, etc.)
 - **Host section** (where is addon page located and where it should be hosted in Outreach app)
-- **Context section** (what contextual info should Outreach send during the addon  initialization)
+- **Context section** (what contextual info should Outreach send during the addon initialization)
 - **API section** - optional (what scopes addon needs for accessing Outreach API)
 - **Configuration section** - optional (what values we should collect from an Outreach user installing the addon.
 
@@ -46,53 +46,60 @@ Here is the sample manifest file of the hello world addon
   "version": "0.10",
   "identifier": "addon-outreach-hello",
   "store": "public",
-  "title": [
+  "title": {
     "en": "Hello world",
     "fr": "Salut tout le monde"
-  ],
-  "description": [
-    "en": "This is a sample addon created as a guide for Outreach addon creators ",
-    "fr": "Il s’agit d’un addon échantillon créé comme
-    un guide pour les créateurs addon Outreach ",
-  ],
+  },
+  "description": {
+    "en": "This is a sample addon created as a guide for Outreach addon creators",
+    "fr": "Il s’agit d’un addon échantillon créé comme un guide pour les créateurs addon Outreach"
+  },
   "host": {
     "type": "tab-opportunity",
     "url": "https://addon-host.com/something",
     "icon": "https://addon-host.com/icon.png"
   },
   "author": {
-    "websiteUrl": "https://addon-host.com",
+    "websiteUrl": "https://addon-host.com/",
     "privacyUrl": "https://addon-host.com/privacy",
-    "termsOfUseUrl": "https://addon-host.com/tos",
+    "termsOfUseUrl": "https://addon-host.com/tos"
   },
-  "context": [
-    "usr.id", "opp.id", "prospect.emails"
-  ],
+  "context": ["usr.id", "opp.id", "pro.id"],
   "api": {
     "token": "https://addon-host.com/token",
-    "scopes": "prospects.read, opportunity.read",
+    "scopes": ["prospects.read", "opportunities.read"],
     "applicationId": "AbCd123456qW",
     "redirectUri": "https://addon-host.com/hello-world",
+    "connect": "https://addon-host.com/connect"
   },
   "configuration": [
     {
-      "key": "project", "type": "string", "required": true, "urlInclude": true,
+      "key": "project",
+      "type": "string",
+      "required": true,
+      "urlInclude": true,
       "text": {
-        "en": "Project name."
-      },
+        "en": "Project name"
+      }
     },
     {
-      "key": "startDate", "type": "date", "required": true, "urlInclude": true,
+      "key": "startDate",
+      "type": "date",
+      "required": true,
+      "urlInclude": true,
       "text": {
         "en": "Start date"
-      },
+      }
     },
     {
-      "key": "reference", "type": "url", "required": true, "urlInclude": true,
+      "key": "reference",
+      "type": "url",
+      "required": true,
+      "urlInclude": true,
       "text": {
         "en": "Reference documentation"
-      },
-    },
+      }
+    }
   ]
 }
 ```
@@ -151,8 +158,8 @@ This URL can be a direct URL without any value placeholders, in which case Outre
 e.g.
 
 ```javascript
-manifest.host.url = "http://somesite.com/something"
-manifest.context = ["opp.id", "usr.id"]
+manifest.host.url = "http://somesite.com/something";
+manifest.context = ["opp.id", "usr.id"];
 ```
 
 In the case of Outreach user with id 456 looking at opportunity 123, this will result during the runtime.
@@ -166,7 +173,7 @@ In addition to this default behavior, the addon creator can customize how the ad
 e.g.
 
 ```javascript
-manifest.host.url = "http://somesite.com/something/{usr.id}"
+manifest.host.url = "http://somesite.com/something/{usr.id}";
 ```
 
 will become during the runtime
@@ -182,7 +189,7 @@ The addon creator can templatize the name of the query parameters.
 e.g.
 
 ```javascript
-manifest.host.url = "http://somesite.com/something/{usr.id}?oid={opp.id}"
+manifest.host.url = "http://somesite.com/something/{usr.id}?oid={opp.id}";
 ```
 
 will become during the runtime
