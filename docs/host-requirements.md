@@ -1,34 +1,29 @@
-# Query parameters parsing
 
-Any time when the Outreach app loads an addon, it will set as iframe source an URL created out of:
+<!-- omit in toc -->
+# Addon page host requirements
 
-- host.URL value [defined in the manifest](manifest.md#url)
-- query parameters representing [context values of current Outreach user](manifest.md#context) also defined in the manifest (e.g. "opp.id")
-- [config parameters](configuration.md) (if any) which have [urlInclude](configuration.md##urlinclude) property enabled.
-- query params which are always sent regardless of the manifest:
-  - locale='en',
-  - theme='light'
-  - uid={usr.id}
+This document outlines the page's general add-on hosting requirements defined in [manifest.url](manifest.md#url). Outreach will create an iframe for the add-on and set its src property to this URL. Thus, the URL response needs to fulfill a few simple requirements for proper add-on functionality.
 
-That's how the resulting URL which Outreach will set as a source of iframe will be something like this:
+Table of content:
 
-```http
-    https://addon-host.com/something?locale=en&uid=a1234&opp.id=123456
-```
+- [Content Security Policies (CSP)](#content-security-policies-csp)
+- [Valid response codes](#valid-response-codes)
+- [Expected response times](#expected-response-times)
 
-When the addon loading request comes, the addon has to parse out of request query parameter values and, based on them to return some of the next responses: 200, 302, and 404.
+## Content Security Policies (CSP)
 
-## 200 (OK)
+Response served from manifest URL address has to enable embedding the page content. The most secure way to achieve that is utilizing [framew ancestor](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors) policy, which explicitly defines what domains are allowed to host an iframe that will load the add-on page.
 
-When received parameters are sufficient for the addon to initialize itself into a state matching the given Outreach context, the addon should return the initialized page as **200 (OK)** response containing the addon page content will be shown in the iframe.
+That is why the response needs to have the next header:
 
-## 302 (FOUND)
+content-security-policy: frame-ancestor 'self' *.outreach.io
 
-When the host URL [defined in the manifest](manifest.md#url) needs to be transformed to some other URL, the addon hosting page should implement the logic that will determine a new URL based on the received context. That new URL is then being returned as a response with **302 (FOUND)** status code to the iframe, which will update itself and show the content of that new URL automatically.
+## Valid response codes
 
-A typical use case is that manifest contains URL without any parameters and upon the first request based on received Outreach context is transformed to a different URL which addon host needs. That URL will be returned as a Location header in the response with the 302 (FOUND) status code.
+In most cases, the response will contain 200 (OK) status code, but as described in [url parsing](URL-parsing.md) document, it can sometimes result in 404 (NOT FOUND) status code (add-on host has no content to serve for provided Outreach context) and 302 (FOUND) in case additional Outreach needs to make a further request for the add-on to works properly.
 
-## 404 (NOT FOUND)
+Outreach host will treat any other response codes as invalid and not load the add-on in that case.
 
-In case the addon determines that, with a received set of parameters, there is nothing to be shown in the Outreach app, it will just return **404 (NOT FOUND)** response, and the Outreach app will hide the addon in that case. 
-An alternative to this "do not show addon" approach, we recommend, is to create a landing page that will offer the creation of the new addon resources so the user will be onboarded with that.
+## Expected response times
+
+Every add-on needs to provide a response in no more than 5 seconds to protect the user experience of Outreach users. If the add-on does not produce a valid response in that time, it will not be loaded.
