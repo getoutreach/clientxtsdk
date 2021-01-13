@@ -16,7 +16,9 @@ Response served from manifest URL address has to enable embedding the page conte
 
 That is why the response needs to have the next header:
 
+```http
 content-security-policy: frame-ancestor 'self' *.outreach.io
+```
 
 ## Valid response codes
 
