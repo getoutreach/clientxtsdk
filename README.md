@@ -1,3 +1,4 @@
+
 <!-- omit in toc -->
 # Outreach client extensibility SDK
 
@@ -14,7 +15,7 @@ Table of content
 
 ## How it works
 
-When Outreach user goes to a specific part of the Outreach application (e.g., opportunity page), the application will check if that user has installed add-ons for that part of the app and if yes:
+When an Outreach user goes to a specific part of the Outreach application (e.g., opportunity page), the application will check if that user has installed add-ons for that part of the app and if yes:
 
 - Add a tab with the title of the add-on
 - Add an iframe with the source pointing to an add-on hosting page
@@ -24,9 +25,9 @@ When Outreach user goes to a specific part of the Outreach application (e.g., op
 
 The client extensibility framework supports a few integration methods, which have different coding requirements and provide a different integration level with Outreach. Each one of the methods requires one or more steps to be implemented based on the add-on requirements.
 
-1. Every add-on needs to have an add-on page for Outreach users and host it on some publicly available internet address.
+1. Every add-on needs to have an add-on web page, which will Outreach users see loaded as a source of add-on iframe. This page implementation has to follow [a very small set of requirements](/docs/host-requirements.md).
 
-    During the development phase, add-on creators can skip this requirement and use only a [Locally hosted add-on page](/docs/devxp.md) without the need to have a publicly available page.
+    _During the development phase, add-on creators can skip this requirement and use only a [Locally hosted add-on page](/docs/devxp.md) without the need to have a publicly available page._
 
 2. Every add-on also needs to **create and upload a manifest file**.
 That manifest file contains things like the URL where the add-on web page is located, contextual information which add-on needs from Outreach, details about Outreach API access, etc.
