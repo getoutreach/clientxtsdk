@@ -51,7 +51,7 @@ describe('manifest tests', () => {
     });
 
     test('applicationId should be defined', () => {
-      const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+      const manifest = JSON.parse(JSON.stringify(validManifest));
       delete manifest.api!.applicationId;
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
@@ -88,7 +88,7 @@ describe('manifest tests', () => {
 
   describe('host', () => {
     test('host has to be defined', () => {
-      const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+      const manifest = JSON.parse(JSON.stringify(validManifest));
       delete manifest.host;
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
