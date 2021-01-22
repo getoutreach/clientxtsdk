@@ -97,13 +97,6 @@ workflows:
         jobs:
             - test
 
-            - build_public_package:
-                requires:
-                    - test
-                filters:
-                    branches:
-                        only: main
-
             - build_develop_package:
                 requires:
                     - test
