@@ -148,6 +148,9 @@ _e.g **type: "tab-opportunity"** will result with addon being loaded as an addit
 - tab-account
 - tab-opportunity
 - tab-prospect
+- left-side-menu
+
+![alt text](assets/tab-addon-example.png "Tab addon example") ![alt text](assets/left-side-menu-addon-example.png "Left side menu addon example")
 
 #### url
 
