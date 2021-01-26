@@ -90,7 +90,7 @@ class AddonsSdk {
    * Init handler being invoked when addon initialized is completed
    * and addon receives from the Outreach host initialization context 
    * 
-   * @deprecated Since version 0.10. Use instead await sdk.init()
+   * @deprecated Since version 0.10. Will be removed in version 1.0. Use instead await sdk.init()
    *
    * @memberof AddonsSdk
    */
@@ -133,7 +133,7 @@ class AddonsSdk {
    * ready to receive messages from host and other participants.
    *
    * @memberof AddonsSdk
-   * @deprecated Since version 0.10. Use instead await sdk.init()
+   * @deprecated Since version 0.10. Will be removed in version 1.0. Use instead await sdk.init()
    */
   public ready () {
     console.warn("Ready function is depricated. Use instead await sdk.init()");
