@@ -26,6 +26,7 @@ import { EventOrigin } from './sdk/EventOrigin';
 import { ConnectTokenMessage } from './messages/ConnectTokenMessage';
 import { utils } from './utils';
 import { ConfigureMessage } from './messages/ConfigureMessage';
+import { DecorationType } from './messages/DecorationType';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -77,11 +78,23 @@ class Task<T> {
 }
 
 class AddonsSdk {
+
+  private initTimer?: number;
+  private initTask?: Task<OutreachContext>;
+  
   private authorizeTask: Task<string | null>;
 
   public getRuntime = (): RuntimeContext => runtime;
   public activeListener: boolean = false;
 
+  /**
+   * Init handler being invoked when addon initialized is completed
+   * and addon receives from the Outreach host initialization context 
+   * 
+   * @deprecated Since version 0.10. Will be removed in version 1.0. Use instead await sdk.init()
+   *
+   * @memberof AddonsSdk
+   */
   public onInit: (context: OutreachContext) => void;
 
   public onMessage: (message: AddonMessage) => void;
@@ -121,8 +134,11 @@ class AddonsSdk {
    * ready to receive messages from host and other participants.
    *
    * @memberof AddonsSdk
+   * @deprecated Since version 0.10. Will be removed in version 1.0. Use instead await sdk.init()
    */
   public ready () {
+    console.warn("Ready function is depricated. Use instead await sdk.init()");
+
     if (!this.activeListener) {
       this.activeListener = true;
       window.addEventListener('message', this.handleReceivedMessage);
@@ -158,7 +174,10 @@ class AddonsSdk {
    *
    * @memberof AddonsSdk
    */
-  public notify = (text: string, type: NotificationType) => {
+  public notify = async (text: string, type: NotificationType) => {
+
+    await this.verifySdkInitialized();
+
     const message = new NotificationMessage();
     message.notificationText = text;
     message.notificationType = type;
@@ -178,11 +197,18 @@ class AddonsSdk {
    * Sends request to Outreach hosting app to notify Outreach user
    * about a certain even happening in addon.
    *
+   * @param {string} value The new decoration value being requested to be shown by the host 
+   * @param {DecorationType} [type='text'] Type of decoration update (text by default)
    * @memberof AddonsSdk
    */
-  public decorate = (text: string) => {
+  public decorate = async (value: string, type: DecorationType = 'text') => {
+
+    await this.verifySdkInitialized();
+    
     const message = new DecorationMessage();
-    message.decorationText = text;
+    message.decorationValue = value;
+    message.decorationType = type;
+
     this.sendMessage(message, true);
 
     this.logger.log({
@@ -191,7 +217,7 @@ class AddonsSdk {
       messageType: message.type,
       level: LogLevel.Info,
       message: `[CXT] Addon is sending ${message.type} message to host`,
-      context: [`Decoration text: ${text}`]
+      context: [`Decoration text: ${value}`]
     });
   };
 
@@ -200,7 +226,10 @@ class AddonsSdk {
    *
    * @memberof AddonsSdk
    */
-  public configure = () => {
+  public configure = async () => {
+
+    await this.verifySdkInitialized();
+
     const message = new ConfigureMessage();
     this.sendMessage(message, true);
 
@@ -214,6 +243,38 @@ class AddonsSdk {
     });
   };
 
+
+  /**
+   * Initialize the SDK by sending a ready() signal to the Outreach host
+   * and resolving a promise when Outreach host responds with a current user
+   * initialization context
+   *
+   * @returns {Promise<OutreachContext>}
+   * @memberof AddonsSdk
+   */
+  public init = async (): Promise<OutreachContext> => {
+    if (this.initTask) {
+      return this.initTask.promise;
+    }
+
+    this.initTask = new Task<OutreachContext>();
+    this.initTask.promise =  new Promise<OutreachContext>((resolve, reject) => {
+      this.initTask!.onfulfilled = resolve;
+      this.initTask!.onrejected = reject;
+
+      this.ready();
+
+      this.initTimer = window.setTimeout(() => {
+        const error = "[CTX] Addon initialization failed - timeout error";
+        console.error(error);
+        reject(error);
+      }, 10 * 1000);
+    });
+
+    return this.initTask.promise;
+  }
+
+
   /**
    *
    * Initialize the OAuth consent process by presenting to Outreach user
@@ -226,9 +287,13 @@ class AddonsSdk {
    * it has to be invoked in a handler of the direct user action
    * (e.g. user clicked a button)
    *
+   * @returns {Promise<string | null>}
    * @memberof AddonsSdk
    */
-  public authenticate = (): Promise<string | null> => {
+  public authenticate = async (): Promise<string | null> => {
+
+    await this.verifySdkInitialized();
+
     this.authorizeTask = new Task<string | null>();
     this.authorizeTask.promise = new Promise<string | null>(
       (resolve, reject) => {
@@ -272,6 +337,9 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public getToken = async (skipCache?: boolean): Promise<string | null> => {
+    
+    await this.verifySdkInitialized();
+
     if (!skipCache) {
       const cachedToken = await tokenService.getCachedTokenAsync();
       if (cachedToken) {
@@ -306,6 +374,28 @@ class AddonsSdk {
     window.parent.postMessage(postMessage, runtime.origin);
   }
 
+  private verifySdkInitialized = async () => {
+    
+    // check if sdk.init() was called
+    if (!this.initTask) {
+      const error = "[CXT] Please initialize SDK by calling sdk.init() before performing any additional calls";
+      this.logger.log({
+        origin: EventOrigin.ADDON,
+        type: EventType.INTERNAL,
+        messageType: AddonMessageType.INIT,
+        level: LogLevel.Error,
+        message: error,
+        context: [ runtime.origin]
+      });
+      
+      // throw an error - case is THAT important
+      throw new Error(error);
+    }
+      
+    // check if sdk.init() was resolved
+    await this.initTask
+  }
+
   private handleReceivedMessage = (messageEvent: MessageEvent) => {
     const addonMessage = this.getAddonMessage(messageEvent);
     if (!addonMessage) {
@@ -333,6 +423,7 @@ class AddonsSdk {
       case AddonMessageType.INIT: {
         const context = addonMessage as InitMessage;
         this.preprocessInitMessage(context);
+        this.resolveInitPromise(context);
         this.onInit(context);
         break;
       }
@@ -361,6 +452,13 @@ class AddonsSdk {
         });
     }
   };
+
+  private resolveInitPromise = (ctx: OutreachContext) => {
+    window.clearTimeout(this.initTimer);
+    if (this.initTask) {
+      this.initTask.onfulfilled(ctx)
+    }
+  }
 
   private preprocessInitMessage = (initMessage: InitMessage) => {
     runtime.locale = initMessage.locale;
@@ -416,7 +514,6 @@ class AddonsSdk {
       ]
     });
 
-    this.onInit(outreachContext);
   };
 
   private handleRefreshTokenMessage = (tokenMessage: ConnectTokenMessage) => {
