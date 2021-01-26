@@ -17,7 +17,7 @@ export class DecorationMessage extends AddonMessage {
      * @type {string}
      * @memberof NotificationMessage
      */
-    public decorationValue: string;
+    public decorationText: string;
 
     /**
      * 

@@ -206,7 +206,7 @@ class AddonsSdk {
     await this.verifySdkInitialized();
     
     const message = new DecorationMessage();
-    message.decorationValue = value;
+    message.decorationText = value;
     message.decorationType = type;
 
     this.sendMessage(message, true);
