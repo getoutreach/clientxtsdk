@@ -1,5 +1,6 @@
 import { AddonMessage } from './AddonMessage';
 import { AddonMessageType } from './AddonMessageType';
+import { DecorationType } from './DecorationType';
 
 export class DecorationMessage extends AddonMessage {
   /**
@@ -16,5 +17,13 @@ export class DecorationMessage extends AddonMessage {
      * @type {string}
      * @memberof NotificationMessage
      */
-    public decorationText: string;
+    public decorationValue: string;
+
+    /**
+     * 
+     *
+     * @type {DecorationType}
+     * @memberof DecorationMessage
+     */
+    public decorationType: DecorationType; 
 }
