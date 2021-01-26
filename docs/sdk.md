@@ -101,8 +101,28 @@ The Outreach host will notify the user in a way consistent with the Outreach app
 
 In case when an addon would like to update its decoration of the addon entry point (e.g., Tab title), it will need to invoke the Decorate function requesting from an Outreach app to update its entry point decoration.
 
+Currently, there are two supported decoration update types: text and badge.
+
+To update the text decoration of addon endtry point, you can use one of this calls:
+
 ```javascript
-addonSdk.decorate({text:’Messages (2)’);
+addonSdk.decorate('Messages (2)');
+
+or
+
+addonSdk.decorate('Messages (2)', 'text');
+```
+
+To update the badge reprensentation of addon entry point:
+
+```javascript
+  addonSdk.decorate('2', 'badge');
+```
+
+To clear the badge reprensentation of addon entry point:
+
+```javascript
+  addonSdk.decorate('', 'badge');
 ```
 
 ## Add-on authentication

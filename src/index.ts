@@ -26,6 +26,7 @@ import { EventOrigin } from './sdk/EventOrigin';
 import { ConnectTokenMessage } from './messages/ConnectTokenMessage';
 import { utils } from './utils';
 import { ConfigureMessage } from './messages/ConfigureMessage';
+import { DecorationType } from './messages/DecorationType';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -196,14 +197,18 @@ class AddonsSdk {
    * Sends request to Outreach hosting app to notify Outreach user
    * about a certain even happening in addon.
    *
+   * @param {string} value The new decoration value being requested to be shown by the host 
+   * @param {DecorationType} [type='text'] Type of decoration update (text by default)
    * @memberof AddonsSdk
    */
-  public decorate = async (text: string) => {
+  public decorate = async (value: string, type: DecorationType = 'text') => {
 
     await this.verifySdkInitialized();
     
     const message = new DecorationMessage();
-    message.decorationText = text;
+    message.decorationValue = value;
+    message.decorationType = type;
+
     this.sendMessage(message, true);
 
     this.logger.log({
@@ -212,7 +217,7 @@ class AddonsSdk {
       messageType: message.type,
       level: LogLevel.Info,
       message: `[CXT] Addon is sending ${message.type} message to host`,
-      context: [`Decoration text: ${text}`]
+      context: [`Decoration text: ${value}`]
     });
   };
 
