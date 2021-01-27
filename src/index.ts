@@ -39,6 +39,7 @@ export * from './messages/AddonMessage';
 export * from './messages/AddonMessageType';
 export * from './messages/ConnectTokenMessage';
 export * from './messages/DecorationMessage';
+export * from './messages/DecorationType';
 export * from './messages/InitMessage';
 export * from './messages/NotificationMessage';
 export * from './messages/NotificationType';
