@@ -139,24 +139,7 @@ class AddonsSdk {
   public ready () {
     console.warn('Ready function is depricated. Use instead await sdk.init()');
 
-    if (!this.activeListener) {
-      this.activeListener = true;
-      window.addEventListener('message', this.handleReceivedMessage);
-    }
-
-    const message = new ReadyMessage();
-    const postMessage = JSON.stringify(message);
-
-    this.logger.log({
-      origin: EventOrigin.ADDON,
-      type: EventType.MESSAGE,
-      messageType: AddonMessageType.READY,
-      level: LogLevel.Info,
-      message: `[CXT] Addon is sending ${message.type} message to host`,
-      context: []
-    });
-
-    window.parent.postMessage(postMessage, '*');
+    this.init();
   }
 
   /**
@@ -258,7 +241,24 @@ class AddonsSdk {
       this.initTask!.onfulfilled = resolve;
       this.initTask!.onrejected = reject;
 
-      this.ready();
+      if (!this.activeListener) {
+        this.activeListener = true;
+        window.addEventListener('message', this.handleReceivedMessage);
+      }
+
+      const message = new ReadyMessage();
+      const postMessage = JSON.stringify(message);
+
+      this.logger.log({
+        origin: EventOrigin.ADDON,
+        type: EventType.MESSAGE,
+        messageType: AddonMessageType.READY,
+        level: LogLevel.Info,
+        message: `[CXT] Addon is sending ${message.type} message to host`,
+        context: []
+      });
+
+      window.parent.postMessage(postMessage, '*');
 
       this.initTimer = window.setTimeout(() => {
         const error = '[CTX] Addon initialization failed - timeout error';
