@@ -20,10 +20,10 @@ export class DecorationMessage extends AddonMessage {
     public decorationText: string;
 
     /**
-     * 
+     * Type of the addon decoration being updated.
      *
      * @type {DecorationType}
      * @memberof DecorationMessage
      */
-    public decorationType: DecorationType; 
+    public decorationType: DecorationType;
 }

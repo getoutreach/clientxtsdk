@@ -78,10 +78,9 @@ class Task<T> {
 }
 
 class AddonsSdk {
-
   private initTimer?: number;
   private initTask?: Task<OutreachContext>;
-  
+
   private authorizeTask: Task<string | null>;
 
   public getRuntime = (): RuntimeContext => runtime;
@@ -89,8 +88,8 @@ class AddonsSdk {
 
   /**
    * Init handler being invoked when addon initialized is completed
-   * and addon receives from the Outreach host initialization context 
-   * 
+   * and addon receives from the Outreach host initialization context
+   *
    * @deprecated Since version 0.10. Will be removed in version 1.0. Use instead await sdk.init()
    *
    * @memberof AddonsSdk
@@ -137,7 +136,7 @@ class AddonsSdk {
    * @deprecated Since version 0.10. Will be removed in version 1.0. Use instead await sdk.init()
    */
   public ready () {
-    console.warn("Ready function is depricated. Use instead await sdk.init()");
+    console.warn('Ready function is depricated. Use instead await sdk.init()');
 
     if (!this.activeListener) {
       this.activeListener = true;
@@ -175,7 +174,6 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public notify = async (text: string, type: NotificationType) => {
-
     await this.verifySdkInitialized();
 
     const message = new NotificationMessage();
@@ -197,14 +195,13 @@ class AddonsSdk {
    * Sends request to Outreach hosting app to notify Outreach user
    * about a certain even happening in addon.
    *
-   * @param {string} value The new decoration value being requested to be shown by the host 
+   * @param {string} value The new decoration value being requested to be shown by the host
    * @param {DecorationType} [type='text'] Type of decoration update (text by default)
    * @memberof AddonsSdk
    */
   public decorate = async (value: string, type: DecorationType = 'text') => {
-
     await this.verifySdkInitialized();
-    
+
     const message = new DecorationMessage();
     message.decorationText = value;
     message.decorationType = type;
@@ -227,7 +224,6 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public configure = async () => {
-
     await this.verifySdkInitialized();
 
     const message = new ConfigureMessage();
@@ -243,7 +239,6 @@ class AddonsSdk {
     });
   };
 
-
   /**
    * Initialize the SDK by sending a ready() signal to the Outreach host
    * and resolving a promise when Outreach host responds with a current user
@@ -258,14 +253,14 @@ class AddonsSdk {
     }
 
     this.initTask = new Task<OutreachContext>();
-    this.initTask.promise =  new Promise<OutreachContext>((resolve, reject) => {
+    this.initTask.promise = new Promise<OutreachContext>((resolve, reject) => {
       this.initTask!.onfulfilled = resolve;
       this.initTask!.onrejected = reject;
 
       this.ready();
 
       this.initTimer = window.setTimeout(() => {
-        const error = "[CTX] Addon initialization failed - timeout error";
+        const error = '[CTX] Addon initialization failed - timeout error';
         console.error(error);
         reject(error);
       }, 10 * 1000);
@@ -273,7 +268,6 @@ class AddonsSdk {
 
     return this.initTask.promise;
   }
-
 
   /**
    *
@@ -291,7 +285,6 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public authenticate = async (): Promise<string | null> => {
-
     await this.verifySdkInitialized();
 
     this.authorizeTask = new Task<string | null>();
@@ -337,7 +330,6 @@ class AddonsSdk {
    * @memberof AddonsSdk
    */
   public getToken = async (skipCache?: boolean): Promise<string | null> => {
-    
     await this.verifySdkInitialized();
 
     if (!skipCache) {
@@ -375,23 +367,22 @@ class AddonsSdk {
   }
 
   private verifySdkInitialized = async () => {
-    
     // check if sdk.init() was called
     if (!this.initTask) {
-      const error = "[CXT] Please initialize SDK by calling sdk.init() before performing any additional calls";
+      const error = '[CXT] Please initialize SDK by calling sdk.init() before performing any additional calls';
       this.logger.log({
         origin: EventOrigin.ADDON,
         type: EventType.INTERNAL,
         messageType: AddonMessageType.INIT,
         level: LogLevel.Error,
         message: error,
-        context: [ runtime.origin]
+        context: [runtime.origin]
       });
-      
+
       // throw an error - case is THAT important
       throw new Error(error);
     }
-      
+
     // check if sdk.init() was resolved
     await this.initTask
   }
@@ -513,7 +504,6 @@ class AddonsSdk {
         `origin: ${runtime.origin || 'N/A'}`
       ]
     });
-
   };
 
   private handleRefreshTokenMessage = (tokenMessage: ConnectTokenMessage) => {
