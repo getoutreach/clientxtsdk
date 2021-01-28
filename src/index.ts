@@ -88,6 +88,18 @@ class AddonsSdk {
   public activeListener: boolean = false;
 
   /**
+   * Setting of the cookie cxt-sdk-user
+   *
+   * @see https://github.com/getoutreach/clientxtsdk/blob/main/docs/outreach-api.md#caching-the-tokens
+   * @memberof AddonsSdk
+   */
+  public cookie = {
+    name: Constants.AUTH_USER_STATE_COOKIE_NAME,
+    domain: window.location.host,
+    maxAge: 1 * 60 * 60 // one hour
+  };
+
+  /**
    * Init handler being invoked when addon initialized is completed
    * and addon receives from the Outreach host initialization context
    *
@@ -261,7 +273,7 @@ class AddonsSdk {
       window.parent.postMessage(postMessage, '*');
 
       this.initTimer = window.setTimeout(() => {
-        const error = '[CTX] Addon initialization failed - timeout error';
+        const error = '[CXT] Addon initialization failed - timeout error';
         console.error(error);
         reject(error);
       }, 10 * 1000);
@@ -294,16 +306,20 @@ class AddonsSdk {
         this.authorizeTask!.onfulfilled = resolve;
         this.authorizeTask!.onrejected = reject;
 
-        // start the OAuth consent flow
-        const cookie = `${Constants.AUTH_USER_STATE_COOKIE_NAME}=${
+        // start the OAuth consent flow by recording user identifier
+        // addon host server will need server will need
+        // to read in its OAuth implementation
+        const cookieContent = `${this.cookie.domain}=${
           runtime.userIdentifier
-        };Secure;SameSite=None;Path=/;Domain=${window.location.host};max-age:${
-          7 * 24 * 60 * 60
+        };Secure;SameSite=None;Path=/;Domain=${
+          this.cookie.domain
+        };max-age:${
+          this.cookie.maxAge
         }`;
 
         // user identifier goes to cookie to enable addon oauth server
         // linking the outreach user with the addon external identity.
-        document.cookie = cookie;
+        document.cookie = cookieContent;
 
         authService.openPopup();
       }
@@ -445,10 +461,10 @@ class AddonsSdk {
     }
   };
 
-  private resolveInitPromise = (ctx: OutreachContext) => {
+  private resolveInitPromise = (cxt: OutreachContext) => {
     window.clearTimeout(this.initTimer);
     if (this.initTask) {
-      this.initTask.onfulfilled(ctx)
+      this.initTask.onfulfilled(cxt)
     }
   }
 

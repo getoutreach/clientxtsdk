@@ -11,6 +11,7 @@
 - [Authorization endpoint](#authorization-endpoint)
   - [Obtain access and refresh token](#obtain-access-and-refresh-token)
   - [Caching the tokens](#caching-the-tokens)
+    - [Customizing the sdk user cookie](#customizing-the-sdk-user-cookie)
   - [Passing back access token](#passing-back-access-token)
   - [Connect endpoint](#connect-endpoint)
 
@@ -40,12 +41,12 @@ As you can tell from the sequence diagram, there are a few steps "Add-on host AP
    - Check the browser local storage for a valid token
    - Call the  [token endpoint](#token-endpoint) with the current user id parameter, which returns user access token out of a valid cached access token or using the previously obtained refresh token.
 2. If no token available, addon renders a "Login with Outreach" button and in click handler of that button invokes **sdk.authorize()** function
-   - It will create a "ctx-sdk-user" cookie which will hold session state(userId) needed in next authorization step
+   - It will create a "cxt-sdk-user" cookie which will hold session state(userId) needed in next authorization step
    - Addon opens popup using the Outreach [API authentication URL](https://api.outreach.io/api/v2/docs#authentication). Constructing of this url relies on manifest.api section configuration: [applicationId](manifest.md#applicationid), [redirectUri](manifest.md#redirecturi) and [scopes](manifest.md#scopes) values.
    - When user clicks **Authorize** button on [Outreach consent screen](assets/api-consent.png), Outreach will redirect to  **/authorize** endpoint on ([manifest.api.redirectUri](manifest.md#redirecturi)) address with a short living authorization code passed as query param.
 
 3. Host **authorize endpoint** will then:
-   - read the session context from request cookie "ctx-sdk-user": userId.
+   - read the session context from request cookie "cxt-sdk-user": userId.
    - use received authorization code with Outreach app id and the secret to obtaining Outreach API access and refresh token
    - cache the retrieved tokens using a cache key with session userId value read from the cookie.
    - redirect to connect endpoint with access token and expiration passed as a query parameter
@@ -193,9 +194,26 @@ When the add-on host has obtained this data, it needs to store access and refres
 
 The add-on host needs to know the Outreach user for whom these tokens should be cached to be used later to implement the caching.
 
-Considering that [manifest api.redirectUri](manifest.md#redirectUri) can not contain state parameters, Outreach addons SDK stores current Outreach user identifier in ["cxt-sdk-user" cookie](sdk.md#auth-user-cookie) at the start of sdk.authorize() implementation.
+Considering that [manifest api.redirectUri](manifest.md#redirectUri) can not contain state parameters, Outreach addons SDK stores current Outreach user identifier in **"cxt-sdk-user"** cookie at the start of sdk.authorize() implementation.
 
 The add-on host implementing the caching should read from the cookie userId value and use it as a cache key for storing retrieved refresh and access tokens.
+
+#### Customizing the sdk user cookie
+
+The cxt-sdk-user cookie works because it is created on the domain where the addon is stored (e.g., "addon.some-host.com") through standard browser behavior, is sent to the api if the api endpoint is hosted on the same domain.
+Sometimes, the API is hosted in a different domain (e.g., "api.some-host.com"), and cookies sent on the addon domain will not be sent so that the OAuth flow will fail to [cache credentials](#caching-the-tokens).
+
+CXT sdk exposes a way to customize the domain to be used for context cookie to accommodate this - make sure cookie domain is set to api domain before starting authorization.
+
+``` javascript
+
+sdk.cookie.domain ='.some-host.com';
+var token = await sdk.authenticate();
+```
+
+In this example, both app.some-host.com and api.some-host.com have access to user cookie through the defined domain.
+
+(You can also change the cookie name (default: 'cxt-sdk-user') and max-age of the cookie (default: 1 hour)
 
 ### Passing back access token
 
