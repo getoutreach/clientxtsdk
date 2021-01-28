@@ -51,7 +51,7 @@ Here is the sample manifest file of the hello world addon
     "fr": "Salut tout le monde"
   },
   "description": {
-    "en": "This is a sample addon created as a guide for Outreach addon creators",
+    "en": "This is a sample addon created as a guide for Outreach addon creators,"
     "fr": "Il s’agit d’un addon échantillon créé comme un guide pour les créateurs addon Outreach"
   },
   "host": {
@@ -79,7 +79,7 @@ Here is the sample manifest file of the hello world addon
       "required": true,
       "urlInclude": true,
       "text": {
-        "en": "Project name"
+        "en": "Project name."
       }
     },
     {
@@ -138,12 +138,12 @@ A localized addon description is shown in the addon store to explain what the ad
 
 #### type
 
-Outreach application supports different types of addons which can be loaded in different parts of the application.
+Outreach application supports different types of addons, which can be loaded in different parts of the application.
 Type property defines what the type of addon is and where it should be loaded.
 
-_e.g **type: "tab-opportunity"** will result with addon being loaded as an additional tab on the Outreach opportunity page_
+_, e.g., **type: "tab-opportunity"** will result with addon being loaded as an additional tab on the Outreach opportunity page_
 
-[SDK supported addon types](../src/store/AddonType.ts) (we will expand this list as the time goes):
+[SDK supported addon types](../src/store/AddonType.ts) (we will expand this list as time goes):
 
 - tab-account
 - tab-opportunity
@@ -156,7 +156,7 @@ _e.g **type: "tab-opportunity"** will result with addon being loaded as an addit
 
 Address where the addon hosting web page is hosted.
 
-This URL can be a direct URL without any value placeholders, in which case Outreach host will add all of the contextual parameters as query parameters.
+This URL can be a direct URL without any value placeholders, in which case the Outreach host will add all of the contextual parameters as query parameters.
 
 e.g.
 
@@ -165,7 +165,7 @@ manifest.host.url = "http://somesite.com/something";
 manifest.context = ["opp.id", "usr.id"];
 ```
 
-In the case of Outreach user with id 456 looking at opportunity 123, this will result during the runtime.
+In the case of an Outreach user with id 456 looking at opportunity 123, this will result during the runtime.
 
 ```bash
  http://somesite.com/something?opp.id=123&usr.id=456
@@ -203,7 +203,7 @@ http://somesite.com/something/456?oid=123
 
 #### icon
 
-base64 string represents the icon to be shown in the addon store and (if possible) in Outreach client.
+base64 string represents the icon to be shown in the addon store and (if possible) in the Outreach client.
 
 ### author
 
@@ -218,7 +218,7 @@ It is a string array of predefined Outreach properties describing attributes of 
 
 e.g. ["opp.id", "acc.id"]
 
-Outreach User will be asked to consent to share this information before the addon is installed from the addon store.
+Outreach Users will be asked to consent to share this information before the addon is installed from the addon store.
 In case addon is installed by admin for other users, admin is the one consenting to share the defined context properties for all the org users he is installing it for.
 
 To learn more about the list of all of the supported context properties, go to [context property page](context.md).
@@ -243,7 +243,7 @@ This is the value of the [Outreach OAuth application](outreach-OAuth-settings.md
 
 ### redirectUri
 
-This URL is defined in [Outreach OAuth settings](outreach-oauth-settings.md) to which the authorization form will redirect once the user consent with granting access to Outreach API in his name. This URL can be the same as the [host url](#url) or a separate URL, but in both cases, it has to be implemented in a way matching [Outreach API access requirements](outreach-api.md).
+This URL is defined in [Outreach OAuth settings](outreach-oauth-settings.md), to which the authorization form will redirect once the user consent with granting access to Outreach API in his name. This URL can be the same as the [host url](#url) or a separate URL, but in both cases, it has to be implemented in a way matching [Outreach API access requirements](outreach-api.md).
 
 ### scopes
 
