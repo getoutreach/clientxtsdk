@@ -62,8 +62,8 @@ The manifest Context section determines the payload of the initialization contex
 To retrieve the Outreach initialization context, sdk needs to initialize
 
 ```javascript
-// ctx: OutreachContext
-  const ctx = await addonSdk.init(); 
+// cxt: OutreachContext
+  const cxt = await addonSdk.init(); 
 
 ```
 
@@ -165,4 +165,4 @@ If a sdk.getToken() function fails, addon creator has to show some clickable ele
 
 In case of an addon, the creator will call authorize() function after user-provided content. Outreach users will briefly see a popup being loaded and immediately closed after a very brief period.
 
-An important implementation detail of this function is that before a popup is shown, sdk will create a cookie called "ctx-sdk-token" where the user identifier will be stored so the addon host can read that value later for [caching tokens](outreach-api.md#caching-the-tokens) implementation.
+An important implementation detail of this function is that before a popup is shown, sdk will create a cookie called "cxt-sdk-token" where the user identifier will be stored so the addon host can read that value later for [caching tokens](outreach-api.md#caching-the-tokens) implementation.
