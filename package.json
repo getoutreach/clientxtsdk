@@ -31,7 +31,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
-    "@typescript-eslint/parser": "^4.13.0",
+    "@typescript-eslint/parser": "^4.14.1",
     "copyfiles": "^2.4.1",
     "dts-bundle": "^0.7.3",
     "eslint": "^7.17.0",

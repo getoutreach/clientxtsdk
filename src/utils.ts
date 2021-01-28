@@ -130,4 +130,8 @@ export class utils {
 
     return true;
   };
+
+  public static objectValues = (data: any) => {
+    return Object.keys(data).map(key => data[key]);
+  }
 }

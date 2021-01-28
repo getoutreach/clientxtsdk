@@ -95,7 +95,7 @@ class AddonsSdk {
    */
   public cookie = {
     name: Constants.AUTH_USER_STATE_COOKIE_NAME,
-    domain: window.location.host,
+    domain: window.location?.host,
     maxAge: 1 * 60 * 60 // one hour
   };
 
