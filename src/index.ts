@@ -309,7 +309,7 @@ class AddonsSdk {
         // start the OAuth consent flow by recording user identifier
         // addon host server will need server will need
         // to read in its OAuth implementation
-        const cookieContent = `${this.cookie.domain}=${
+        const cookieContent = `${this.cookie.name}=${
           runtime.userIdentifier
         };Secure;SameSite=None;Path=/;Domain=${
           this.cookie.domain
