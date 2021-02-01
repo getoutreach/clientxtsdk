@@ -260,7 +260,8 @@ This value contains URL of the [token endpoint](outreach-api.md#token-endpoint)
 
 ### connect
 
-This value contains URL of the [token endpoint](outreach-api.md#connect-endpoint)
+This value contains URL of the [token endpoint](outreach-api.md#connect-endpoint).
+Note: The domain of the connect uri has to be the same as the domain of the [host.url](#url)
 
 ## Uploading the manifest
 
@@ -269,4 +270,3 @@ Once the manifest file is created, it has to be uploaded to Outreach so it can b
 At the moment, there are two ways you can upload the manifest:
 emailing it support email cxt-sdk@outreach.io or by using the Outreach API to POST manifest file.
 
-_ Soon, we will have a section in the Outreach application where you would be able to upload it using the application UI._

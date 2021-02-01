@@ -48,4 +48,4 @@ That manifest file contains things like the URL where the add-on web page is loc
 
     Go to [Outreach API access](/docs/outreach-api.md) page to learn more about API access requirements.
 
-*If you have any questions/comments/concerns about the extensibility, please email us at **cxt-sdk@outreach.io.***
+*If you have any questions/comments/concerns about the extensibility, please check the [FAQ](/docs/faq.md) or email us at **cxt-sdk@outreach.io.***
