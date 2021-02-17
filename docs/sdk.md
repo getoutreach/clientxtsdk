@@ -11,6 +11,7 @@ Table of content
 - [Additional addon functions](#additional-addon-functions)
   - [Notify function](#notify-function)
   - [Decorate function](#decorate-function)
+  - [Navigate function](#navigate-function)
 - [Add-on authentication](#add-on-authentication)
   - [getToken function](#gettoken-function)
   - [authorize function](#authorize-function)
@@ -123,6 +124,17 @@ To clear the badge reprensentation of addon entry point:
 
 ```javascript
   addonSdk.decorate('', 'badge');
+```
+
+### Navigate function
+
+Sometimes, in reaction to a user interaction, an addon needs to navigate to a different part of the Outreach aplication.
+In order to encapsulate internals of the Outreaching routing code and to enable client side navigation without the need for full page reload, sdk provides a navigate function.
+
+For example, to navigate addon iframe to an opportunity with id 123
+
+```javascript
+addonSdk.navigate({type: 'opportunity’, id:'123’);
 ```
 
 ## Add-on authentication
