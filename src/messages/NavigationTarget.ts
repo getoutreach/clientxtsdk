@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 /**
- * List of targets defining the type of navigation 
+ * List of targets defining the type of navigation
  * addon is requesting from the Outreach host.
  *
  * @export
@@ -7,7 +8,6 @@
  */
 
 export enum NavigationTarget {
-  
   /**
    * Navigation should update addon iframe source
    */
