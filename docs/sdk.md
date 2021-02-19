@@ -137,7 +137,7 @@ To encapsulate the Outreaching routing code's internals and enable client-side n
 For example, to navigate addon iframe to an opportunity with id 123
 
 ```javascript
-addonSdk.navigate({type: NavigationDestination.OPPORTUNITY, id:'123’);
+addonSdk.navigate(NavigationDestination.OPPORTUNITY, '123’);
 ```
 
 Id parameter can contain additional navigation information besides the entity id.
@@ -145,7 +145,7 @@ Id parameter can contain additional navigation information besides the entity id
 For example, to navigate to an opportunity with id 123 open with Tasks tab selected.
 
 ```javascript
-addonSdk.navigate({type: NavigationDestination.OPPORTUNITY, id:'123/tasks’);
+addonSdk.navigate(NavigationDestination.OPPORTUNITY, '123/tasks’);
 ```
 
 To add query parameters to the navigation destination, pass them with the optional params parameter
@@ -153,7 +153,7 @@ To add query parameters to the navigation destination, pass them with the option
 For example, to navigate addon iframe to an opportunity with id 123 and wanting to append ?abc=1&xyz=2
 
 ```javascript
-addonSdk.navigate({type: NavigationDestination.OPPORTUNITY, id:'123’, { 'abc': '1', 'xyz': '2' });
+addonSdk.navigate(NavigationDestination.OPPORTUNITY, '123’, { 'abc': '1', 'xyz': '2' });
 ```
 
 ## Add-on authentication
