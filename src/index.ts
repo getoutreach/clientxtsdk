@@ -541,13 +541,27 @@ class AddonsSdk {
       }
     }
 
-    const searchParams = new URLSearchParams(runtime.manifest.host.url);
-    searchParams.forEach((value, key) => {
-      outreachContext.host.urlParams.push({
-        key: key,
-        value: value
+    try {
+      const url = new URL(runtime.manifest.host.url);
+      const searchParams = new URLSearchParams(url.search);
+      searchParams.forEach((value, key) => {
+        outreachContext.host.urlParams.push({
+          key: key,
+          value: value
+        });
+      })
+    } catch (e) {
+      this.logger.log({
+        origin: EventOrigin.ADDON,
+        type: EventType.INTERNAL,
+        message: '[CXT][AddonSdk]::preprocessInitMessage- invalid manifest url',
+        level: LogLevel.Error,
+        context: [
+          `url: ${runtime.manifest.host.url}`,
+          `e: ${e}`
+        ]
       });
-    })
+    }
 
     this.logger.log({
       origin: EventOrigin.ADDON,
