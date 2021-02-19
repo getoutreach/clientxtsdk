@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { OutreachContext } from '../context/OutreachContext';
 import { AddonMessage } from './AddonMessage';
 import { AddonMessageType } from './AddonMessageType';
 import { Theme } from '../sdk/Theme';
@@ -8,7 +7,7 @@ import { ContextParam } from '../context/ContextParam';
 import { Manifest } from '../store/Manifest';
 import { ConfigurationValue } from '../store/configuration/ConfigurationValue';
 
-export class InitMessage extends AddonMessage implements OutreachContext {
+export class InitMessage extends AddonMessage {
   /**
    *Creates an instance of InitMessage.
    * @memberof InitMessage

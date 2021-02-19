@@ -460,8 +460,8 @@ class AddonsSdk {
 
     switch (addonMessage.type) {
       case AddonMessageType.INIT: {
-        const context = addonMessage as InitMessage;
-        this.preprocessInitMessage(context);
+        const initMessage = addonMessage as InitMessage;
+        const context = this.preprocessInitMessage(initMessage);
         this.resolveInitPromise(context);
         this.onInit(context);
         break;
@@ -499,7 +499,7 @@ class AddonsSdk {
     }
   }
 
-  private preprocessInitMessage = (initMessage: InitMessage) => {
+  private preprocessInitMessage = (initMessage: InitMessage): OutreachContext => {
     runtime.locale = initMessage.locale;
     runtime.theme = initMessage.theme;
     runtime.userIdentifier = initMessage.userIdentifier;
@@ -541,6 +541,14 @@ class AddonsSdk {
       }
     }
 
+    const searchParams = new URLSearchParams(runtime.manifest.host.url);
+    searchParams.forEach((value, key) => {
+      outreachContext.host.urlParams.push({
+        key: key,
+        value: value
+      });
+    })
+
     this.logger.log({
       origin: EventOrigin.ADDON,
       type: EventType.INTERNAL,
@@ -552,6 +560,8 @@ class AddonsSdk {
         `origin: ${runtime.origin || 'N/A'}`
       ]
     });
+
+    return outreachContext;
   };
 
   private handleRefreshTokenMessage = (tokenMessage: ConnectTokenMessage) => {
