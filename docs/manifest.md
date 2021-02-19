@@ -51,7 +51,7 @@ Here is the sample manifest file of the hello world addon
     "fr": "Salut tout le monde"
   },
   "description": {
-    "en": "This is a sample addon created as a guide for Outreach addon creators,"
+    "en": "This is a sample addon created as a guide for Outreach addon creators,",
     "fr": "Il s’agit d’un addon échantillon créé comme un guide pour les créateurs addon Outreach"
   },
   "host": {
@@ -269,4 +269,3 @@ Once the manifest file is created, it has to be uploaded to Outreach so it can b
 
 At the moment, there are two ways you can upload the manifest:
 emailing it support email cxt-sdk@outreach.io or by using the Outreach API to POST manifest file.
-

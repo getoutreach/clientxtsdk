@@ -4,6 +4,7 @@
 This document outlines the page's general add-on hosting requirements defined in [manifest.url](manifest.md#url). Outreach will create an iframe for the add-on and set its src property to this URL. Thus, the URL response needs to fulfill a few simple requirements for proper add-on functionality.
 
 Table of content:
+
 - [Content Security Policies (CSP)](#content-security-policies-csp)
 - [Valid response codes](#valid-response-codes)
 - [Expected response times](#expected-response-times)
@@ -24,6 +25,5 @@ Outreach host will treat any other response codes as invalid and not load the ad
 
 ## Expected response times
 
-In case the add-on determines that, with a received set of parameters, there is nothing to be shown in the Outreach app, it will just return **404 (NOT FOUND)** response and the Outreach app will hide the add-on in that case. 
+In case the add-on determines that, with a received set of parameters, there is nothing to be shown in the Outreach app, it will just return **404 (NOT FOUND)** response and the Outreach app will hide the add-on in that case.
 An alternative to this "do not show add-on" approach, we recommend, is to create a landing page that will offer the creation of the new add-on resources so the user will be onboarded with that.
-

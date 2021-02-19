@@ -83,6 +83,7 @@ Once the initialization context is received, sdk is ready to perform its functio
 - opportunity - [Information about current opportunity](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/OpportunityContext.ts) Outreach user is looking at (optional)
 - prospect - [Information about current prospect](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/ProspectContext.ts) Outreach user is looking at (optional)
 - config - User-specific [addon configuration](configuration.md#) (if any)
+- host - [Information about the addon hosting enviroment](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/HostContext.ts)
 
 ## Additional addon functions
 
