@@ -29,7 +29,6 @@ import { ConfigureMessage } from './messages/ConfigureMessage';
 import { DecorationType } from './messages/DecorationType';
 import { NavigationDestination } from './messages/NavigationDestination';
 import { NavigationMessage } from './messages/NavigationMessage';
-import { NavigationTarget } from './messages/NavigationTarget';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -46,7 +45,6 @@ export * from './messages/DecorationType';
 export * from './messages/InitMessage';
 export * from './messages/NavigationDestination';
 export * from './messages/NavigationMessage';
-export * from './messages/NavigationTarget';
 export * from './messages/NotificationMessage';
 export * from './messages/NotificationType';
 export * from './messages/ReadyMessage';
@@ -249,14 +247,13 @@ class AddonsSdk {
    * @param {{ [key: string]: string}} [params] List of key value parameters to be sent to the navigation destination (if any)
    * @param {NavigationTarget} [target]
    */
-  public navigate = async (destination: NavigationDestination, id?: string, params?: { [key: string]: string}, target?: NavigationTarget) => {
+  public navigate = async (destination: NavigationDestination, id?: string, params?: { [key: string]: string}) => {
     await this.verifySdkInitialized();
 
     const message = new NavigationMessage();
     message.destination = destination;
     message.id = id;
     message.params = params;
-    message.target = target || NavigationTarget.SELF;
     this.sendMessage(message, true);
 
     this.logger.log({

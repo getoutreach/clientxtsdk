@@ -1,7 +1,6 @@
 import { AddonMessage } from './AddonMessage';
 import { AddonMessageType } from './AddonMessageType';
 import { NavigationDestination } from './NavigationDestination';
-import { NavigationTarget } from './NavigationTarget';
 
 /**
  * Message sent from the addon to host requesting that host
@@ -43,15 +42,4 @@ export class NavigationMessage extends AddonMessage {
    * @memberof NavigationMessage
    */
   public params?: { [key: string]: string };
-
-  /**
-   * Defines a type of the navigation host is to perform.
-   *
-   * - self   Host is updating addon iframe source
-   * - blank  Host is opening a new browser tab
-   *
-   * @type {NavigationTarget}
-   * @memberof NavigationMessage
-   */
-  public target: NavigationTarget = NavigationTarget.SELF;
 }

@@ -128,13 +128,32 @@ To clear the badge reprensentation of addon entry point:
 
 ### Navigate function
 
-Sometimes, in reaction to a user interaction, an addon needs to navigate to a different part of the Outreach aplication.
-In order to encapsulate internals of the Outreaching routing code and to enable client side navigation without the need for full page reload, sdk provides a navigate function.
+Sometimes, in reaction to user interaction, an addon needs to navigate a different part of the Outreach application.
+
+At this moment, SDK supports redirecting to Opportunity, Prospect, and Account, but we plan to add more navigation destinations based on SDK user feedback. 
+
+To encapsulate the Outreaching routing code's internals and enable client-side navigation without the need for a full page reload, sdk provides a navigate function.
 
 For example, to navigate addon iframe to an opportunity with id 123
 
 ```javascript
-addonSdk.navigate({type: 'opportunity’, id:'123’);
+addonSdk.navigate({type: NavigationDestination.OPPORTUNITY, id:'123’);
+```
+
+Id parameter can contain additional navigation information besides the entity id.
+
+For example, to navigate to an opportunity with id 123 open with Tasks tab selected.
+
+```javascript
+addonSdk.navigate({type: NavigationDestination.OPPORTUNITY, id:'123/tasks’);
+```
+
+To add query parameters to the navigation destination, pass them with the optional params parameter
+
+For example, to navigate addon iframe to an opportunity with id 123 and wanting to append ?abc=1&xyz=2
+
+```javascript
+addonSdk.navigate({type: NavigationDestination.OPPORTUNITY, id:'123’, { 'abc': '1', 'xyz': '2' });
 ```
 
 ## Add-on authentication
