@@ -8,6 +8,7 @@ import { UserContextKeys } from '../store/keys/UserContextKeys';
 import { Manifest } from '../store/Manifest';
 import { Scopes } from '../store/Scopes';
 import { utils } from '../utils';
+import { AccountContextKeys } from '../store/keys/AccountContextKeys';
 
 /**
  * Validates given manifest if it contains all of the required fields with correct values.
@@ -100,6 +101,9 @@ export const validate = (manifest: Manifest): string[] => {
           ) &&
           !Object.values(ProspectContextKeys).includes(
             context as ProspectContextKeys
+          ) &&
+          !Object.values(AccountContextKeys).includes(
+            context as AccountContextKeys
           )
         ) {
           issues.push(
