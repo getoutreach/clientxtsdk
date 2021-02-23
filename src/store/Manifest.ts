@@ -21,7 +21,7 @@ export class Manifest {
    * API section contains the data needed for enabling addon
    * OAuth Outreach API access.
    * In case addon doesn't need client access to Outreach API
-   * this secrion can be ommited from configuration.
+   * this section can be omitted from configuration.
    *
    * @see https://github.com/getoutreach/clientxtsdk/blob/master/docs/manifest.md#api-optional
    * @see https://github.com/getoutreach/clientxtsdk/blob/master/docs/outreach-api.md
@@ -61,7 +61,7 @@ export class Manifest {
    * initialization iframe POST message.
    *
    * All of the *public* configuration items will be sent to Addon
-   * as the query paramters and can be parsed as such.
+   * as the query parameters and can be parsed as such.
    *
    *   *
    * @type {ConfigurationItem[]}

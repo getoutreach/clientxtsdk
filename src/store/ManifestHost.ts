@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { AddonType } from './AddonType';
+import { EnvironmentContext } from '../sdk/EnvironmentContext';
 
 /**
  * Section defining the addon creator hosting property.
@@ -35,4 +36,12 @@ export class ManifestHost {
      * @memberof Host
      */
     icon: string;
+
+    /**
+     * @see https://github.com/getoutreach/clientxtsdk/blob/master/docs/manifest.md#environment
+     *
+     * @type {EnvironmentContext}
+     * @memberof ManifestHost
+     */
+    environment?: EnvironmentContext;
 }
