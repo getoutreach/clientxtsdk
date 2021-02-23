@@ -29,6 +29,7 @@ import { ConfigureMessage } from './messages/ConfigureMessage';
 import { DecorationType } from './messages/DecorationType';
 import { NavigationDestination } from './messages/NavigationDestination';
 import { NavigationMessage } from './messages/NavigationMessage';
+import { EnvironmentContext } from './sdk/EnvironmentContext';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -87,6 +88,13 @@ class AddonsSdk {
   private initTask?: Task<OutreachContext>;
 
   private authorizeTask: Task<string | null>;
+
+  /**
+   * Representing the manifest.host.environment section content
+   *
+   * @memberof AddonsSdk
+   */
+  public environmentContext = new EnvironmentContext();
 
   public getRuntime = (): RuntimeContext => runtime;
   public activeListener: boolean = false;

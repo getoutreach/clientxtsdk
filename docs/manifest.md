@@ -15,6 +15,7 @@ Table of content:
       - [type](#type)
       - [url](#url)
       - [icon](#icon)
+      - [environment](#environment)
     - [author](#author)
   - [Integration manifest properties](#integration-manifest-properties)
     - [context](#context)
@@ -204,6 +205,18 @@ http://somesite.com/something/456?oid=123
 #### icon
 
 base64 string represents the icon to be shown in the addon store and (if possible) in the Outreach client.
+
+#### environment
+
+This is the optional section where the addon creator can express expectations the Outreach host environment has to match for the addon to function correctly.
+
+e.g., to remove right pane and show addon tab using whole page width
+
+```javascript
+manifest.host.environment = {
+  fullWidth: true
+}
+```
 
 ### author
 
