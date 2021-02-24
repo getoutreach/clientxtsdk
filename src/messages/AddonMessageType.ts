@@ -47,5 +47,11 @@ export enum AddonMessageType {
   /**
    * Message sent from the addon to host requesting host to navigate its iframe to another Outreach page.
    */
-  REQUEST_NAVIGATE = 'cxt:sdk:navigate'
+  REQUEST_NAVIGATE = 'cxt:sdk:navigate',
+
+  /**
+   * Message sent from the addon to host requesting from host to update hosting environment
+   */
+  REQUEST_ENVIRONMENT_UPDATE = 'ctx:sdk:environment',
+
 }

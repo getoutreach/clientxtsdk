@@ -29,6 +29,8 @@ import { ConfigureMessage } from './messages/ConfigureMessage';
 import { DecorationType } from './messages/DecorationType';
 import { NavigationDestination } from './messages/NavigationDestination';
 import { NavigationMessage } from './messages/NavigationMessage';
+import { ManifestHostEnvironment } from './store/ManifestHostEnvironment';
+import { EnvironmentMessage } from './messages/EnvironmentMessage';
 
 export * from './context/AccountContext';
 export * from './context/ContextParam';
@@ -311,6 +313,31 @@ class AddonsSdk {
     });
 
     return this.initTask.promise;
+  }
+
+  /**
+   * Requests from host to update hosting environment based on
+   * sent specification of the environment.
+   *
+   * @memberof AddonsSdk
+   */
+  public environment = async (environment: ManifestHostEnvironment): Promise<void> => {
+    await this.verifySdkInitialized();
+
+    const message = new EnvironmentMessage();
+    message.environment = environment;
+    this.sendMessage(message, true);
+
+    this.logger.log({
+      origin: EventOrigin.ADDON,
+      type: EventType.MESSAGE,
+      messageType: message.type,
+      level: LogLevel.Info,
+      message: `[CXT] Addon is requesting environment update by sending ${message.type} message to host`,
+      context: [
+        JSON.stringify(environment)
+      ]
+    });
   }
 
   /**
