@@ -44,6 +44,7 @@ export * from './messages/AddonMessageType';
 export * from './messages/ConnectTokenMessage';
 export * from './messages/DecorationMessage';
 export * from './messages/DecorationType';
+export * from './messages/EnvironmentMessage';
 export * from './messages/InitMessage';
 export * from './messages/NavigationDestination';
 export * from './messages/NavigationMessage';
