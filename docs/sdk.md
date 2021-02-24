@@ -12,6 +12,7 @@ Table of content
   - [Notify function](#notify-function)
   - [Decorate function](#decorate-function)
   - [Navigate function](#navigate-function)
+  - [Environment function](#environment-function)
 - [Add-on authentication](#add-on-authentication)
   - [getToken function](#gettoken-function)
   - [authorize function](#authorize-function)
@@ -83,7 +84,7 @@ Once the initialization context is received, sdk is ready to perform its functio
 - opportunity - [Information about current opportunity](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/OpportunityContext.ts) Outreach user is looking at (optional)
 - prospect - [Information about current prospect](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/ProspectContext.ts) Outreach user is looking at (optional)
 - config - User-specific [addon configuration](configuration.md#) (if any)
-- host - [Information about the addon hosting enviroment](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/HostContext.ts)
+- host - [Information about the addon hosting environment](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/HostContext.ts)
 
 ## Additional addon functions
 
@@ -105,7 +106,7 @@ In case when an addon would like to update its decoration of the addon entry poi
 
 Currently, there are two supported decoration update types: text and badge.
 
-To update the text decoration of addon endtry point, you can use one of this calls:
+To update the text decoration of addon entry point, you can use one of this calls:
 
 ```javascript
 addonSdk.decorate('Messages (2)');
@@ -115,13 +116,13 @@ or
 addonSdk.decorate('Messages (2)', 'text');
 ```
 
-To update the badge reprensentation of addon entry point:
+To update the badge representation of addon entry point:
 
 ```javascript
   addonSdk.decorate('2', 'badge');
 ```
 
-To clear the badge reprensentation of addon entry point:
+To clear the badge representation of addon entry point:
 
 ```javascript
   addonSdk.decorate('', 'badge');
@@ -155,6 +156,28 @@ For example, to navigate addon iframe to an opportunity with id 123 and wanting 
 
 ```javascript
 addonSdk.navigate(NavigationDestination.OPPORTUNITY, '123’, { 'abc': '1', 'xyz': '2' });
+```
+
+### Environment function
+
+Every addon can have some requirements from the Outreach host, which are needed for the addon's proper functioning.
+
+e.g., A tab addon might want the right sidebar to be removed so it could get more screen space
+
+This requirement can be express in its [manifest host environment section](manifest.md#environment), and then it would be applied when the addon initially loads.
+
+In order to support the need for the addon creator to change the environment at a later point (e.g., to show the right sidebar at some point) while the addon is active, sdk has an environment function to support that.
+
+e.g. to show the sidebar for tab addons
+
+```javascript
+addonSdk.environment({ fullWidth: false });
+```
+
+e.g. to hide the sidebar for tab addons
+
+```javascript
+addonSdk.environment({ fullWidth: true });
 ```
 
 ## Add-on authentication
