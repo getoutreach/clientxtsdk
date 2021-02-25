@@ -52,10 +52,10 @@ export enum AddonMessageType {
   /**
    * Message sent from the addon to host requesting from host to update hosting environment
    */
-  REQUEST_ENVIRONMENT_UPDATE = 'ctx:sdk:environment',
+  REQUEST_ENVIRONMENT_UPDATE = 'cxt:sdk:environment',
 
   /**
    * Message sent from host to addon containing the diagnostic info on addon loading
    */
-  HOST_LOAD_INFO = 'ctx:host:load',
+  HOST_LOAD_INFO = 'cxt:host:load',
 }
