@@ -8,7 +8,7 @@ Table of content
   - [Info event handler (optional)](#info-event-handler-optional)
   - [Sdk initialization](#sdk-initialization)
     - [Outreach context](#outreach-context)
-- [Additional addon functions](#additional-addon-functions)
+- [Additional addon function](#additional-addon-function)
   - [Notify function](#notify-function)
   - [Decorate function](#decorate-function)
   - [Navigate function](#navigate-function)
@@ -84,9 +84,9 @@ Once the initialization context is received, sdk is ready to perform its functio
 - opportunity - [Information about current opportunity](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/OpportunityContext.ts) Outreach user is looking at (optional)
 - prospect - [Information about current prospect](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/ProspectContext.ts) Outreach user is looking at (optional)
 - config - User-specific [addon configuration](configuration.md#) (if any)
-- host - [Information about the addon hosting environment](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/HostContext.ts)
+- host - [Information about the addon hosting environment](https://github.com/getoutreach/clientxtsdk/blob/master/src/context/HostContext.ts) including all the of the url parameters defined in manifest host url and in browser location search params.
 
-## Additional addon functions
+## Additional addon function
 
 Add-on sdk has a few additional functions allowing to addon to request a certain action to be performed by a host. Using these functions is optional, and it is OK if the addon creator decides not to use them.
 
