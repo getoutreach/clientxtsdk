@@ -7,7 +7,6 @@ import { ContextParam } from '../context/ContextParam';
 import { Manifest } from '../store/Manifest';
 import { ConfigurationValue } from '../store/configuration/ConfigurationValue';
 import { UrlParam } from '../context/UrlParam';
-import { DiagnosticContext } from '../context/DiagnosticContext';
 
 export class InitMessage extends AddonMessage {
   /**
@@ -75,10 +74,12 @@ export class InitMessage extends AddonMessage {
   configuration: ConfigurationValue[];
 
   /**
-   * Host diagnostic information about addon loading measurements.
+   * Session id value is generated on host and is unique per addon loading.
+   * If can be used used to correlate events on server and addon and enable
+   * e2e tracking or it can be used when reporting an addon issue to Outreach.
    *
-   * @type {DiagnosticContext}
+   * @type {string}
    * @memberof InitMessage
    */
-  diag: DiagnosticContext;
+  public sessionId: string;
 }

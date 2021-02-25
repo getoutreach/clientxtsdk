@@ -1,84 +1,87 @@
 /* eslint-disable no-unused-vars */
-import { InitMessage } from "./messages/InitMessage";
-import { AddonMessage } from "./messages/AddonMessage";
-import { AddonMessageType } from "./messages/AddonMessageType";
+import { InitMessage } from './messages/InitMessage';
+import { AddonMessage } from './messages/AddonMessage';
+import { AddonMessageType } from './messages/AddonMessageType';
 
-import { OutreachContext } from "./context/OutreachContext";
-import { NotificationType } from "./messages/NotificationType";
-import { NotificationMessage } from "./messages/NotificationMessage";
-import { DecorationMessage } from "./messages/DecorationMessage";
-import { LogLevel } from "./sdk/LogLevel";
-import { ReadyMessage } from "./messages/ReadyMessage";
+import { OutreachContext } from './context/OutreachContext';
+import { NotificationType } from './messages/NotificationType';
+import { NotificationMessage } from './messages/NotificationMessage';
+import { DecorationMessage } from './messages/DecorationMessage';
+import { LogLevel } from './sdk/LogLevel';
+import { ReadyMessage } from './messages/ReadyMessage';
 
-import { AccountContext } from "./context/AccountContext";
-import { OpportunityContext } from "./context/OpportunityContext";
-import { ProspectContext } from "./context/ProspectContext";
-import { UserContext } from "./context/UserContext";
+import { AccountContext } from './context/AccountContext';
+import { OpportunityContext } from './context/OpportunityContext';
+import { ProspectContext } from './context/ProspectContext';
+import { UserContext } from './context/UserContext';
 
-import runtime, { RuntimeContext } from "./sdk/RuntimeContext";
-import tokenService from "./services/tokenService";
-import authService from "./services/oauthService";
+import runtime, { RuntimeContext } from './sdk/RuntimeContext';
+import tokenService from './services/tokenService';
+import authService from './services/oauthService';
 
-import { Logger, ILogger } from "./sdk/Logger";
-import { Constants } from "./sdk/Constants";
-import { EventType } from "./sdk/EventType";
-import { EventOrigin } from "./sdk/EventOrigin";
-import { ConnectTokenMessage } from "./messages/ConnectTokenMessage";
-import { utils } from "./utils";
-import { ConfigureMessage } from "./messages/ConfigureMessage";
-import { DecorationType } from "./messages/DecorationType";
-import { NavigationDestination } from "./messages/NavigationDestination";
-import { NavigationMessage } from "./messages/NavigationMessage";
-import { ManifestHostEnvironment } from "./store/ManifestHostEnvironment";
-import { EnvironmentMessage } from "./messages/EnvironmentMessage";
-import { DiagnosticContext } from "./context/DiagnosticContext";
+import { Logger, ILogger } from './sdk/Logger';
+import { Constants } from './sdk/Constants';
+import { EventType } from './sdk/EventType';
+import { EventOrigin } from './sdk/EventOrigin';
+import { ConnectTokenMessage } from './messages/ConnectTokenMessage';
+import { utils } from './utils';
+import { ConfigureMessage } from './messages/ConfigureMessage';
+import { DecorationType } from './messages/DecorationType';
+import { NavigationDestination } from './messages/NavigationDestination';
+import { NavigationMessage } from './messages/NavigationMessage';
+import { ManifestHostEnvironment } from './store/ManifestHostEnvironment';
+import { EnvironmentMessage } from './messages/EnvironmentMessage';
+import { LoadInfoMessage } from './messages/LoadInfoMessage';
+import { LoadingContext } from './context/LoadingContext';
 
-export * from "./context/AccountContext";
-export * from "./context/ContextParam";
-export * from "./context/CustomContext";
-export * from "./context/OpportunityContext";
-export * from "./context/OutreachContext";
-export * from "./context/UserContext";
+export * from './context/AccountContext';
+export * from './context/ContextParam';
+export * from './context/CustomContext';
+export * from './context/LoadingContext';
+export * from './context/OpportunityContext';
+export * from './context/OutreachContext';
+export * from './context/UserContext';
 
-export * from "./messages/AddonMessage";
-export * from "./messages/AddonMessageType";
-export * from "./messages/ConnectTokenMessage";
-export * from "./messages/DecorationMessage";
-export * from "./messages/DecorationType";
-export * from "./messages/EnvironmentMessage";
-export * from "./messages/InitMessage";
-export * from "./messages/NavigationDestination";
-export * from "./messages/NavigationMessage";
-export * from "./messages/NotificationMessage";
-export * from "./messages/NotificationType";
-export * from "./messages/ReadyMessage";
+export * from './messages/AddonMessage';
+export * from './messages/AddonMessageType';
+export * from './messages/ConnectTokenMessage';
+export * from './messages/DecorationMessage';
+export * from './messages/DecorationType';
+export * from './messages/EnvironmentMessage';
+export * from './messages/InitMessage';
+export * from './messages/LoadInfoMessage';
+export * from './messages/NavigationDestination';
+export * from './messages/NavigationMessage';
+export * from './messages/NotificationMessage';
+export * from './messages/NotificationType';
+export * from './messages/ReadyMessage';
 
-export * from "./sdk/Constants";
-export * from "./sdk/Event";
-export * from "./sdk/EventOrigin";
-export * from "./sdk/EventType";
-export { ILogger } from "./sdk/Logger";
-export * from "./sdk/Locale";
-export * from "./sdk/LogLevel";
-export * from "./sdk/RuntimeContext";
-export * from "./sdk/Theme";
-export * from "./sdk/Validator";
+export * from './sdk/Constants';
+export * from './sdk/Event';
+export * from './sdk/EventOrigin';
+export * from './sdk/EventType';
+export { ILogger } from './sdk/Logger';
+export * from './sdk/Locale';
+export * from './sdk/LogLevel';
+export * from './sdk/RuntimeContext';
+export * from './sdk/Theme';
+export * from './sdk/Validator';
 
-export * from "./store/keys/AccountContextKeys";
-export * from "./store/keys/AllContextKeys";
-export * from "./store/keys/ClientContextKeys";
-export * from "./store/keys/OpportunityContextKeys";
-export * from "./store/keys/ProspectContextKeys";
-export * from "./store/keys/UserContextKeys";
-export * from "./store/AddonStore";
-export * from "./store/AddonType";
-export * from "./store/LocalizedString";
-export * from "./store/Manifest";
-export * from "./store/ManifestApi";
-export * from "./store/ManifestAuthor";
-export * from "./store/ManifestHost";
-export * from "./store/Scopes";
-export * from "./utils";
+export * from './store/keys/AccountContextKeys';
+export * from './store/keys/AllContextKeys';
+export * from './store/keys/ClientContextKeys';
+export * from './store/keys/OpportunityContextKeys';
+export * from './store/keys/ProspectContextKeys';
+export * from './store/keys/UserContextKeys';
+export * from './store/AddonStore';
+export * from './store/AddonType';
+export * from './store/LocalizedString';
+export * from './store/Manifest';
+export * from './store/ManifestApi';
+export * from './store/ManifestAuthor';
+export * from './store/ManifestHost';
+export * from './store/Scopes';
+export * from './utils';
 
 class Task<T> {
   public promise: Promise<T>;
@@ -117,6 +120,17 @@ class AddonsSdk {
    */
   public onInit: (context: OutreachContext) => void;
 
+  /**
+   * Load handler is being invoked after the addon is fully loaded,
+   * and it provides to addon creator performance information on addon loading.
+   * Default implementation would show a toast if addon loading times were longer than 2 seconds.
+   * Addon creator can implement its load handler and handle the received performance data
+   * differently (report it to its telemetry service, show a custom addon UI, etc.)
+   *
+   * @memberof AddonsSdk
+   */
+  public onLoad: (context: LoadingContext) => void;
+
   public onMessage: (message: AddonMessage) => void;
 
   public logger: ILogger = new Logger();
@@ -132,7 +146,7 @@ class AddonsSdk {
         type: EventType.MESSAGE,
         messageType: AddonMessageType.INIT,
         level: LogLevel.Info,
-        message: "[CXT] addon.onInit received initialization context",
+        message: '[CXT] addon.onInit received initialization context',
         context: [`context: ${JSON.stringify(context, null, 2)}`],
       });
     };
@@ -147,6 +161,23 @@ class AddonsSdk {
         context: [JSON.stringify(message)],
       });
     };
+
+    // Default implementation of a handler showing a toast if loading times are longer then 2 seconds
+    this.onLoad = (ctx: LoadingContext) => {
+      const sessionId = this.getRuntime().sessionId;
+
+      if (ctx.loadTime > 5000) {
+        this.notify(
+          `Addon loading takes longer than 5 seconds. Load time:${ctx.loadTime}. Ready time: ${ctx.readyTime}. SessionId: ${sessionId}`,
+          'error'
+        );
+      } else if (ctx.loadTime > 2000) {
+        this.notify(
+          `Addon loading takes longer than 2 seconds. Load time:${ctx.loadTime}. Ready time: ${ctx.readyTime}. SessionId: ${sessionId}`,
+          'warning'
+        );
+      }
+    };
   }
 
   /**
@@ -157,7 +188,7 @@ class AddonsSdk {
    * @deprecated Since version 0.10. Will be removed in version 1.0. Use instead await sdk.init()
    */
   public ready() {
-    console.warn("Ready function is depricated. Use instead await sdk.init()");
+    console.warn('Ready function is depricated. Use instead await sdk.init()');
 
     this.init();
   }
@@ -203,7 +234,7 @@ class AddonsSdk {
    * @param {DecorationType} [type='text'] Type of decoration update (text by default)
    * @memberof AddonsSdk
    */
-  public decorate = async (value: string, type: DecorationType = "text") => {
+  public decorate = async (value: string, type: DecorationType = 'text') => {
     await this.verifySdkInitialized();
 
     const message = new DecorationMessage();
@@ -294,7 +325,7 @@ class AddonsSdk {
 
       if (!this.activeListener) {
         this.activeListener = true;
-        window.addEventListener("message", this.handleReceivedMessage);
+        window.addEventListener('message', this.handleReceivedMessage);
       }
 
       const message = new ReadyMessage();
@@ -309,10 +340,10 @@ class AddonsSdk {
         context: [],
       });
 
-      window.parent.postMessage(postMessage, "*");
+      window.parent.postMessage(postMessage, '*');
 
       this.initTimer = window.setTimeout(() => {
-        const error = "[CXT] Addon initialization failed - timeout error";
+        const error = '[CXT] Addon initialization failed - timeout error';
         console.error(error);
         reject(error);
       }, 10 * 1000);
@@ -386,7 +417,7 @@ class AddonsSdk {
     this.logger.log({
       origin: EventOrigin.ADDON,
       type: EventType.INTERNAL,
-      message: "[CXT][AddonSdk]::authenticate-starting authorize promise",
+      message: '[CXT][AddonSdk]::authenticate-starting authorize promise',
       level: LogLevel.Debug,
       context: [],
     });
@@ -420,7 +451,7 @@ class AddonsSdk {
   public sendMessage<T extends AddonMessage>(message: T, logged?: boolean) {
     if (!runtime.origin) {
       console.error(
-        "You can not send messages before SDK is initialized",
+        'You can not send messages before SDK is initialized',
         message
       );
       return;
@@ -441,11 +472,29 @@ class AddonsSdk {
     window.parent.postMessage(postMessage, runtime.origin);
   }
 
+  private handleLoadInfoMessage = (message: LoadInfoMessage) => {
+    let logLevel = LogLevel.Debug;
+    if (message.loadTime > 2000) {
+      logLevel = LogLevel.Error;
+    } else if (message.loadTime > 1000) {
+      logLevel = LogLevel.Warning;
+    }
+
+    this.logger.log({
+      origin: EventOrigin.ADDON,
+      type: EventType.MESSAGE,
+      messageType: message.type,
+      level: logLevel,
+      message: `[CXT] Addon received message ${message.type} of type `,
+      context: [JSON.stringify(message)],
+    });
+  };
+
   private verifySdkInitialized = async () => {
     // check if sdk.init() was called
     if (!this.initTask) {
       const error =
-        "[CXT] Please initialize SDK by calling sdk.init() before performing any additional calls";
+        '[CXT] Please initialize SDK by calling sdk.init() before performing any additional calls';
       this.logger.log({
         origin: EventOrigin.ADDON,
         type: EventType.INTERNAL,
@@ -471,7 +520,7 @@ class AddonsSdk {
         type: EventType.INTERNAL,
         level: LogLevel.Trace,
         message:
-          "[CXT][AddonSdk]::handleReceivedMessage - ignoring event message as it is not addon message",
+          '[CXT][AddonSdk]::handleReceivedMessage - ignoring event message as it is not addon message',
         context: [messageEvent.origin, JSON.stringify(messageEvent.data)],
       });
       return;
@@ -496,6 +545,9 @@ class AddonsSdk {
       }
       case AddonMessageType.CONNECT_AUTH_TOKEN:
         this.handleRefreshTokenMessage(addonMessage as ConnectTokenMessage);
+        break;
+      case AddonMessageType.HOST_LOAD_INFO:
+        this.handleLoadInfoMessage(addonMessage as LoadInfoMessage);
         break;
       case AddonMessageType.READY:
       case AddonMessageType.REQUEST_DECORATION_UPDATE:
@@ -527,16 +579,6 @@ class AddonsSdk {
     }
   };
 
-  private handleDiagInfo = (diag: DiagnosticContext) => {
-    this.logger.log({
-      origin: EventOrigin.ADDON,
-      type: EventType.INTERNAL,
-      message: "[CXT][AddonSdk]::handleDiagInfo",
-      level: LogLevel.Debug,
-      context: [`diag: ${JSON.stringify(diag)}`],
-    });
-  };
-
   private preprocessInitMessage = (
     initMessage: InitMessage
   ): OutreachContext => {
@@ -545,12 +587,12 @@ class AddonsSdk {
     runtime.userIdentifier = initMessage.userIdentifier;
     runtime.manifest = initMessage.manifest;
     runtime.configuration = initMessage.configuration;
+    runtime.sessionId = initMessage.sessionId;
 
     const outreachContext = new OutreachContext();
     outreachContext.locale = runtime.locale;
     outreachContext.theme = runtime.theme;
     outreachContext.userIdentifier = runtime.userIdentifier;
-    outreachContext.diag = initMessage.diag;
 
     const accountContext = new AccountContext();
     const opportunityContext = new OpportunityContext();
@@ -601,7 +643,7 @@ class AddonsSdk {
       this.logger.log({
         origin: EventOrigin.ADDON,
         type: EventType.INTERNAL,
-        message: "[CXT][AddonSdk]::preprocessInitMessage- invalid manifest url",
+        message: '[CXT][AddonSdk]::preprocessInitMessage- invalid manifest url',
         level: LogLevel.Error,
         context: [`url: ${runtime.manifest.host.url}`, `e: ${e}`],
       });
@@ -610,16 +652,14 @@ class AddonsSdk {
     this.logger.log({
       origin: EventOrigin.ADDON,
       type: EventType.INTERNAL,
-      message: "[CXT][AddonSdk]::preprocessInitMessage",
+      message: '[CXT][AddonSdk]::preprocessInitMessage',
       level: LogLevel.Debug,
       context: [
         `message: ${JSON.stringify(initMessage)}`,
         `context: ${JSON.stringify(outreachContext)}`,
-        `origin: ${runtime.origin || "N/A"}`,
+        `origin: ${runtime.origin || 'N/A'}`,
       ],
     });
-
-    this.handleDiagInfo(initMessage.diag);
 
     return outreachContext;
   };
@@ -634,14 +674,14 @@ class AddonsSdk {
       this.logger.log({
         origin: EventOrigin.ADDON,
         type: EventType.INTERNAL,
-        message: "[CXT][AddonSdk]::onReceived-Resolving authorize promise",
+        message: '[CXT][AddonSdk]::onReceived-Resolving authorize promise',
         level: LogLevel.Debug,
         context: [],
       });
       if (tokenMessage.token) {
         this.authorizeTask.onfulfilled(tokenMessage.token);
       } else {
-        this.authorizeTask.onrejected("No token value received");
+        this.authorizeTask.onrejected('No token value received');
       }
     } else {
       this.logger.log({
@@ -671,7 +711,7 @@ class AddonsSdk {
         origin: EventOrigin.ADDON,
         type: EventType.INTERNAL,
         level: LogLevel.Trace,
-        message: "[CXT][AddonSdk]::getAddonMessage - invalid origin",
+        message: '[CXT][AddonSdk]::getAddonMessage - invalid origin',
         context: [
           messageEvent.origin,
           `host:${hostOrigin}`,
@@ -681,13 +721,13 @@ class AddonsSdk {
       return null;
     }
 
-    if (!messageEvent.data || typeof messageEvent.data !== "string") {
+    if (!messageEvent.data || typeof messageEvent.data !== 'string') {
       this.logger.log({
         origin: EventOrigin.ADDON,
         type: EventType.INTERNAL,
         level: LogLevel.Trace,
         message:
-          "[CXT][AddonSdk]::getAddonMessage - message event data is not a string",
+          '[CXT][AddonSdk]::getAddonMessage - message event data is not a string',
         context: [JSON.stringify(messageEvent.data)],
       });
       return null;
@@ -702,7 +742,7 @@ class AddonsSdk {
           type: EventType.INTERNAL,
           level: LogLevel.Debug,
           message:
-            "[CXT][AddonSdk]::getAddonMessage - invalid message data format",
+            '[CXT][AddonSdk]::getAddonMessage - invalid message data format',
           context: [messageEvent.data],
         });
 
@@ -713,7 +753,7 @@ class AddonsSdk {
         origin: EventOrigin.ADDON,
         type: EventType.INTERNAL,
         level: LogLevel.Debug,
-        message: "[CXT][AddonSdk]::getAddonMessage - not a json data",
+        message: '[CXT][AddonSdk]::getAddonMessage - not a json data',
         context: [messageEvent.data, JSON.stringify(e)],
       });
 
@@ -730,7 +770,7 @@ class AddonsSdk {
           origin: EventOrigin.ADDON,
           type: EventType.INTERNAL,
           level: LogLevel.Trace,
-          message: "[CXT][AddonSdk]::getAddonMessage - origin not initialized",
+          message: '[CXT][AddonSdk]::getAddonMessage - origin not initialized',
           context: [],
         });
         return null;
@@ -756,7 +796,7 @@ class AddonsSdk {
       origin: EventOrigin.ADDON,
       type: EventType.INTERNAL,
       level: LogLevel.Debug,
-      message: "[CXT][AddonSdk]::getAddonMessage- setting origin",
+      message: '[CXT][AddonSdk]::getAddonMessage- setting origin',
       context: [messageEvent.origin],
     });
 

@@ -7,14 +7,13 @@ import { Locale } from '../sdk/Locale';
 import { ProspectContext } from './ProspectContext';
 import { ConfigurationValue } from '../store/configuration/ConfigurationValue';
 import { HostContext } from './HostContext';
-import { DiagnosticContext } from './DiagnosticContext';
 
 export class OutreachContext {
   /**
    * Creates an instance of OutreachContext.
    * @memberof OutreachContext
    */
-  constructor () {
+  constructor() {
     this.host = new HostContext();
   }
 
@@ -90,12 +89,4 @@ export class OutreachContext {
    * @memberof OutreachContext
    */
   public config?: ConfigurationValue[];
-
-  /**
-   * Contains diagnostic information
-   *
-   * @type {DiagnosticContext}
-   * @memberof OutreachContext
-   */
-  public diag!: DiagnosticContext;
 }

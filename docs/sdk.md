@@ -5,7 +5,8 @@ Table of content
 
 - [Summary](#summary)
 - [Addon initialization](#addon-initialization)
-  - [Info event handler (optional)](#info-event-handler-optional)
+  - [Define log level (optional)](#define-log-level-optional)
+  - [Load event handler](#load-event-handler)
   - [Sdk initialization](#sdk-initialization)
     - [Outreach context](#outreach-context)
 - [Additional addon function](#additional-addon-function)
@@ -35,24 +36,35 @@ In case you don't want to use the NPM package, we are also publishing it as a ja
 
 In order for the addon to get into initialized state, there are a few simple steps to be performed on the addon host page:
 
-- Subscribe to [info event](#info-event-handler-optional) (optional)
+- Define log level [log level](#define-log-level-optional) (optional)
+- Subscribe to [load event](#load-event-handler-optional)
 - Sdk [initialization](#sdk-initialization).
 
-### Info event handler (optional)
-
-To support the case when the addon developer is interested in getting information on internal SDK events, we have added an optional onInfo handler, which by default, will be invoked every time when there is an error in SDK.
-
- ```javascript
-addonSdk.onInfo = (info: AddonInfo) => {
-    // addon process the message
-}
-```
+### Define log level (optional)
 
 In case there is a need for observing other types of events, addonSdk defines a logLevel property that can be set to one of the enum values.
 None| Debug  | Info | Warn | Error.
 
 ```javascript
 addonSdk.logLevel = LogLevel.Debug;
+```
+
+Default value is **Error** which means that only error logs will be sent to addon using sdk. 
+
+### Load event handler
+
+Load handler is being invoked after the addon is fully loaded, and it provides to addon creator performance information on addon loading.
+
+Default implementation would show a warning toast if addon loading times were longer than 2 seconds and error toast if loading times were longer then 5 seconds.
+
+Addon creator is encouraged to implement its load handler and handle the received performance data differently (report it to its telemetry service, show a custom addon UI, etc.)
+
+To support the case when the addon developer is interested in getting information on internal SDK events, we have added an optional onInfo handler, which by default, will be invoked every time when there is an error in SDK.
+
+ ```javascript
+addonSdk.onLoad = (ctx: LoadingContext) => {
+    // show custom UI, report to telemetry
+}
 ```
 
 ### Sdk initialization

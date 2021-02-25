@@ -54,4 +54,8 @@ export enum AddonMessageType {
    */
   REQUEST_ENVIRONMENT_UPDATE = 'ctx:sdk:environment',
 
+  /**
+   * Message sent from host to addon containing the diagnostic info on addon loading
+   */
+  HOST_LOAD_INFO = 'ctx:host:load',
 }
