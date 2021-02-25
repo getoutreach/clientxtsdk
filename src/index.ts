@@ -488,6 +488,13 @@ class AddonsSdk {
       message: `[CXT] Addon received message ${message.type} of type `,
       context: [JSON.stringify(message)],
     });
+
+    const loadCtx: LoadingContext = {
+      loadTime: message.loadTime,
+      readyTime: message.readyTime,
+    };
+
+    this.onLoad(loadCtx);
   };
 
   private verifySdkInitialized = async () => {
