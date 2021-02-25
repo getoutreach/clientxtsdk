@@ -6,6 +6,7 @@ import { Locale } from '../sdk/Locale';
 import { ContextParam } from '../context/ContextParam';
 import { Manifest } from '../store/Manifest';
 import { ConfigurationValue } from '../store/configuration/ConfigurationValue';
+import { UrlParam } from '../context/UrlParam';
 
 export class InitMessage extends AddonMessage {
   /**
@@ -45,6 +46,15 @@ export class InitMessage extends AddonMessage {
    * @memberof InitMessage
    */
   context: ContextParam[] = [];
+
+  /**
+   * Collection of window location search parameters
+   * in the moment of loading addons
+   *
+   * @type {UrlParam[]}
+   * @memberof InitMessage
+   */
+  locationSearchParams: UrlParam[] = [];
 
   /**
    * A manifest definition used to initialize this addon.

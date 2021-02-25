@@ -569,6 +569,12 @@ class AddonsSdk {
       }
     }
 
+    // collect all of the url params host sent
+    outreachContext.host = {
+      urlParams: initMessage.locationSearchParams
+    };
+
+    // collect all of the params in the manifest.host.url
     try {
       const url = new URL(runtime.manifest.host.url);
       const searchParams = new URLSearchParams(url.search);
