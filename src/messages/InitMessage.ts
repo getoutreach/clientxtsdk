@@ -7,13 +7,14 @@ import { ContextParam } from '../context/ContextParam';
 import { Manifest } from '../store/Manifest';
 import { ConfigurationValue } from '../store/configuration/ConfigurationValue';
 import { UrlParam } from '../context/UrlParam';
+import { DiagnosticContext } from '../context/DiagnosticContext';
 
 export class InitMessage extends AddonMessage {
   /**
    *Creates an instance of InitMessage.
    * @memberof InitMessage
    */
-  constructor () {
+  constructor() {
     super(AddonMessageType.INIT);
   }
 
@@ -72,4 +73,12 @@ export class InitMessage extends AddonMessage {
    * @memberof InitMessage
    */
   configuration: ConfigurationValue[];
+
+  /**
+   * Host diagnostic information about addon loading measurements.
+   *
+   * @type {DiagnosticContext}
+   * @memberof InitMessage
+   */
+  diag: DiagnosticContext;
 }

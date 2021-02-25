@@ -7,6 +7,7 @@ import { Locale } from '../sdk/Locale';
 import { ProspectContext } from './ProspectContext';
 import { ConfigurationValue } from '../store/configuration/ConfigurationValue';
 import { HostContext } from './HostContext';
+import { DiagnosticContext } from './DiagnosticContext';
 
 export class OutreachContext {
   /**
@@ -89,4 +90,12 @@ export class OutreachContext {
    * @memberof OutreachContext
    */
   public config?: ConfigurationValue[];
+
+  /**
+   * Contains diagnostic information
+   *
+   * @type {DiagnosticContext}
+   * @memberof OutreachContext
+   */
+  public diag!: DiagnosticContext;
 }

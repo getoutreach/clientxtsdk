@@ -1,24 +1,19 @@
 {
-    "compilerOptions": {
-      "target": "es5",
-      "lib": ["es5", "es6", "dom"],
-      "module": "commonjs",
-      "outDir": "build",
-      "sourceMap": true,
-      "declaration": true,
-      "strictNullChecks": true,
-      "noImplicitAny": true,
-      "noImplicitReturns": true,
-      "noImplicitThis": true,
-      "noImplicitUseStrict": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true
-       
-    },
-    "include": [
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "node_modules"
-    ]
-  }
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es5", "es6", "dom"],
+    "module": "commonjs",
+    "outDir": "build",
+    "sourceMap": true,
+    "declaration": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitUseStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
