@@ -58,7 +58,11 @@ Here is the sample manifest file of the hello world addon
   "host": {
     "type": "tab-opportunity",
     "url": "https://addon-host.com/something",
-    "icon": "https://addon-host.com/icon.png"
+    "icon": "https://addon-host.com/icon.png",
+    "environment": {
+      "fullWidth": "true",
+      "decoration": "simple" 
+    }
   },
   "author": {
     "websiteUrl": "https://addon-host.com/",
@@ -215,6 +219,14 @@ e.g., to remove right pane and show addon tab using whole page width
 ```javascript
 manifest.host.environment = {
   fullWidth: true
+}
+```
+
+e.g., to show a addon icon badge decoration
+
+```javascript
+manifest.host.environment = {
+  decoration: 'simple'
 }
 ```
 
