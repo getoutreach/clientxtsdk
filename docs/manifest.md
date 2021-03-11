@@ -55,55 +55,47 @@ Here is the sample manifest file of the hello world addon
     "en": "This is a sample addon created as a guide for Outreach addon creators,",
     "fr": "Il s’agit d’un addon échantillon créé comme un guide pour les créateurs addon Outreach"
   },
-  "host": {
-    "type": "tab-opportunity",
-    "url": "https://addon-host.com/something",
-    "icon": "https://addon-host.com/icon.png"
-  },
   "author": {
     "websiteUrl": "https://addon-host.com/",
     "privacyUrl": "https://addon-host.com/privacy",
     "termsOfUseUrl": "https://addon-host.com/tos"
   },
-  "context": ["usr.id", "opp.id", "pro.id"],
+  "host": {
+    "type": "tab-opportunity",
+    "url": "https://addon-host.com/something",
+    "icon": "https://addon-host.com/icon.png"
+  },
+  "context": [
+    "usr.id", 
+    "opp.id", 
+    "pro.id"
+  ],
   "api": {
     "token": "https://addon-host.com/token",
-    "scopes": ["prospects.read", "opportunities.read"],
+    "scopes": [
+      "prospects.read", 
+      "opportunities.read"
+    ],
     "applicationId": "AbCd123456qW",
     "redirectUri": "https://addon-host.com/hello-world",
     "connect": "https://addon-host.com/connect"
   },
-  "configuration": [
-    {
-      "key": "project",
-      "type": "string",
-      "required": true,
-      "urlInclude": true,
+  "configuration": [{
+      "key": "project", "type": "string", 
+      "required": true, "urlInclude": true,
       "text": {
         "en": "Project name."
       }
-    },
-    {
-      "key": "startDate",
-      "type": "date",
-      "required": true,
-      "urlInclude": true,
-      "text": {
-        "en": "Start date"
-      }
-    },
-    {
-      "key": "reference",
-      "type": "url",
-      "required": true,
-      "urlInclude": true,
-      "text": {
-        "en": "Reference documentation"
-      }
-    }
-  ]
+  }],
 }
 ```
+
+**Additional info**
+
+- List of all of the supported context properties, go to [context property page](context.md)
+
+- List of all of the API scopes can be found on [API Scopes page](scopes.md).
+
 
 ## Basic manifest properties
 
