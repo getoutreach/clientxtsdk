@@ -55,15 +55,19 @@ Here is the sample manifest file of the hello world addon
     "en": "This is a sample addon created as a guide for Outreach addon creators,",
     "fr": "Il s’agit d’un addon échantillon créé comme un guide pour les créateurs addon Outreach"
   },
+  "host": {
+    "type": "tab-opportunity",
+    "url": "https://addon-host.com/something",
+    "icon": "https://addon-host.com/icon.png",
+    "environment": {
+      "fullWidth": "true",
+      "decoration": "simple" 
+    }
+  },
   "author": {
     "websiteUrl": "https://addon-host.com/",
     "privacyUrl": "https://addon-host.com/privacy",
     "termsOfUseUrl": "https://addon-host.com/tos"
-  },
-  "host": {
-    "type": "tab-opportunity",
-    "url": "https://addon-host.com/something",
-    "icon": "https://addon-host.com/icon.png"
   },
   "context": [
     "usr.id", 
@@ -207,6 +211,14 @@ e.g., to remove right pane and show addon tab using whole page width
 ```javascript
 manifest.host.environment = {
   fullWidth: true
+}
+```
+
+e.g., to show a addon icon badge decoration
+
+```javascript
+manifest.host.environment = {
+  decoration: 'simple'
 }
 ```
 
