@@ -10,6 +10,13 @@
 export enum NavigationDestination {
 
   /**
+   * This navigation destination represents the page associated with the left sidebar addon.
+   * The url of the left sidebar addons is outreach.io/cxt/{ADDON_ID} so this navigation destination
+   * id parameter will contain an addon id value.
+   */
+   APP = 'app',
+
+  /**
    * Prospects page
    */
   PROSPECT = 'prospect',
