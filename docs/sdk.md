@@ -170,6 +170,12 @@ For example, to navigate addon iframe to an opportunity with id 123 and wanting 
 addonSdk.navigate(NavigationDestination.OPPORTUNITY, '123’, { 'abc': '1', 'xyz': '2' });
 ```
 
+In case SDK needs to navigate to a left side menu app addon, APP navigation destination should be used and ID parameter should be addon identifier
+
+```javascript
+addonSdk.navigate(NavigationDestination.APP, 'left-side-menu-hello');
+```
+
 ### Environment function
 
 Every addon can have some requirements from the Outreach host, which are needed for the addon's proper functioning.

@@ -278,7 +278,7 @@ class AddonsSdk {
    * Request from the host to navigate to a different part of the Outreach application.
    *
    * @param {NavigationDestination} destination Host destination of the navigation request.
-   * @param {string} [id] Identity value (if any)
+   * @param {string} [id] Entity or addon identity to which navigation should go.
    * @param {{ [key: string]: string}} [params] List of key value parameters to be sent to the navigation destination (if any)
    * @param {NavigationTarget} [target]
    */
