@@ -52,7 +52,7 @@ Here is the sample manifest file of the hello world addon
     "fr": "Salut tout le monde"
   },
   "description": {
-    "en": "This is a sample addon created as a guide for Outreach addon creators,",
+    "en": "This is a sample addon created as a guide for Outreach addon creators",
     "fr": "Il s’agit d’un addon échantillon créé comme un guide pour les créateurs addon Outreach"
   },
   "host": {
@@ -60,8 +60,8 @@ Here is the sample manifest file of the hello world addon
     "url": "https://addon-host.com/something",
     "icon": "https://addon-host.com/icon.png",
     "environment": {
-      "fullWidth": "true",
-      "decoration": "simple" 
+      "fullWidth": true,
+      "decoration": "simple"
     }
   },
   "author": {
@@ -70,14 +70,14 @@ Here is the sample manifest file of the hello world addon
     "termsOfUseUrl": "https://addon-host.com/tos"
   },
   "context": [
-    "usr.id", 
-    "opp.id", 
+    "usr.id",
+    "opp.id",
     "pro.id"
   ],
   "api": {
     "token": "https://addon-host.com/token",
     "scopes": [
-      "prospects.read", 
+      "prospects.read",
       "opportunities.read"
     ],
     "applicationId": "AbCd123456qW",
@@ -85,12 +85,12 @@ Here is the sample manifest file of the hello world addon
     "connect": "https://addon-host.com/connect"
   },
   "configuration": [{
-      "key": "project", "type": "string", 
+      "key": "project", "type": "string",
       "required": true, "urlInclude": true,
       "text": {
         "en": "Project name."
       }
-  }],
+  }]
 }
 ```
 
@@ -106,6 +106,10 @@ Here is the sample manifest file of the hello world addon
 ### identifier
 
 Unique identifier of the addon as defined by the addon creator
+
+### version
+
+A version of addon manifest in the format MAJOR.MINOR
 
 ### store
 
