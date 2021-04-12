@@ -86,8 +86,8 @@ Localized text of the label text is shown to a user explaining the configuration
 #### type
 
 Type of the configuration value data defining the type of UI component used to collect this configuration value.
-string - regular input control
 
+- string - regular input control
 - number - input type="number"
 - date - input type="date"
 - uri - input type="url"
