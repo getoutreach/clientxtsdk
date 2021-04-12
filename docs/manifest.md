@@ -100,6 +100,12 @@ Here is the sample manifest file of the hello world addon
 
 - List of all of the API scopes can be found on [API Scopes page](scopes.md).
 
+## Manifest JSON schema
+
+Internally we validate each submitted manifest using the following schema
+[Manifest JSON schema v1.0](schema/1.0/manifest.schema.json)
+
+A manifest can be validated using the [online tool](https://www.jsonschemavalidator.net/)
 
 ## Basic manifest properties
 

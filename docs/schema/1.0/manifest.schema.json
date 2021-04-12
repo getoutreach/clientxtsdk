@@ -92,7 +92,9 @@
                     "format": "uri"
                 }
             },
-            "required": ["websiteUrl"]
+            "required": [
+                "websiteUrl"
+            ]
         },
         "context": {
             "type": "array",
@@ -133,14 +135,21 @@
                         "type": "string"
                     },
                     "type": {
-                        "type": "string"
+                        "type": "string",
+                        "enum": [
+                            "number",
+                            "date",
+                            "uri",
+                            "options",
+                            "select",
+                            "string"
+                        ]
                     },
                     "required": {
                         "type": "boolean"
                     },
                     "urlInclude": {
-                        "type": "boolean",
-                        "format": "uri"
+                        "type": "boolean"
                     },
                     "text": {
                         "type": "object",
@@ -149,8 +158,25 @@
                                 "type": "string"
                             }
                         }
+                    },
+                    "defaultValue": {
+                        "type": "string"
+                    },
+                    "validator": {
+                        "type": "string"
+                    },
+                    "options": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     }
-                }
+                },
+                "required": [
+                    "key",
+                    "type",
+                    "text"
+                ]
             }
         }
     },
