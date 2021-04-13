@@ -1,5 +1,16 @@
 version: 2.1
 
+commands:
+    check-version:
+        description: Halt Circle CI step if pkg version did not change
+        steps:
+            - run: |
+                version_diff=$(git diff main | grep \"version\": | wc -l || :)
+                if [[ $version_diff -eq 0 ]]; then
+                  echo "Halt due to no updated version"
+                  circleci step halt
+                fi
+
 jobs:
     test:
         working_directory: ~/repo
@@ -26,6 +37,7 @@ jobs:
             - image: circleci/node:latest
         steps:
             - checkout
+            - check-version
             - run:
                 name: Installing package dependencies
                 command: yarn install --frozen-lockfile
