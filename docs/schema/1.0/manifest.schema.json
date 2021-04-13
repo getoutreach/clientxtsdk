@@ -1,190 +1,161 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/getoutreach/clientxtsdk/docs/schema/1.0/manifest.schema.json",
-    "properties": {
-        "version": {
-            "type": "string",
-            "pattern": "^[0-9]+\\.[0-9]+$",
-            "maxLength": 64
-        },
-        "identifier": {
-            "type": "string",
-            "maxLength": 128
-        },
-        "store": {
-            "type": "string",
-            "enum": [
-                "private",
-                "public",
-                "personal"
-            ]
-        },
-        "title": {
-            "type": "object",
-            "properties": {
-                "en": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "en"
-            ]
-        },
-        "description": {
-            "type": "object",
-            "properties": {
-                "en": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "en"
-            ]
-        },
-        "host": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "tab-account",
-                        "tab-opportunity",
-                        "tab-prospect",
-                        "left-side-menu"
-                    ]
-                },
-                "url": {
-                    "type": "string",
-                    "format": "uri"
-                },
-                "icon": {
-                    "type": "string"
-                },
-                "environment": {
-                    "type": "object",
-                    "properties": {
-                        "fullWidth": {
-                            "type": "boolean"
-                        },
-                        "decoration": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "required": [
-                "type"
-            ]
-        },
-        "author": {
-            "type": "object",
-            "properties": {
-                "websiteUrl": {
-                    "type": "string",
-                    "format": "uri"
-                },
-                "privacyUrl": {
-                    "type": "string",
-                    "format": "uri"
-                },
-                "termsOfUseUrl": {
-                    "type": "string",
-                    "format": "uri"
-                }
-            },
-            "required": [
-                "websiteUrl"
-            ]
-        },
-        "context": {
-            "type": "array",
-            "items": {
-                "type": "string"
-            }
-        },
-        "api": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                },
-                "scopes": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "applicationId": {
-                    "type": "string"
-                },
-                "redirectUri": {
-                    "type": "string",
-                    "format": "uri"
-                },
-                "connect": {
-                    "type": "string"
-                }
-            }
-        },
-        "configuration": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "key": {
-                        "type": "string"
-                    },
-                    "type": {
-                        "type": "string",
-                        "enum": [
-                            "number",
-                            "date",
-                            "uri",
-                            "options",
-                            "select",
-                            "string"
-                        ]
-                    },
-                    "required": {
-                        "type": "boolean"
-                    },
-                    "urlInclude": {
-                        "type": "boolean"
-                    },
-                    "text": {
-                        "type": "object",
-                        "properties": {
-                            "en": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "defaultValue": {
-                        "type": "string"
-                    },
-                    "validator": {
-                        "type": "string"
-                    },
-                    "options": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "required": [
-                    "key",
-                    "type",
-                    "text"
-                ]
-            }
-        }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/getoutreach/clientxtsdk/docs/schema/1.0/manifest.schema.json",
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "maxLength": 64
     },
-    "required": [
-        "version",
-        "identifier",
-        "title",
-        "host",
-        "author"
-    ]
+    "identifier": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "store": {
+      "type": "string",
+      "enum": ["private", "public", "personal"]
+    },
+    "title": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string"
+        }
+      },
+      "required": ["en"]
+    },
+    "description": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string"
+        }
+      },
+      "required": ["en"]
+    },
+    "host": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "tab-account",
+            "tab-opportunity",
+            "tab-prospect",
+            "left-side-menu"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object",
+          "properties": {
+            "fullWidth": {
+              "type": "boolean"
+            },
+            "decoration": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": ["type"]
+    },
+    "author": {
+      "type": "object",
+      "properties": {
+        "websiteUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "privacyUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "termsOfUseUrl": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": ["websiteUrl"]
+    },
+    "context": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "api": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "applicationId": {
+          "type": "string"
+        },
+        "redirectUri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "connect": {
+          "type": "string"
+        }
+      }
+    },
+    "configuration": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["number", "date", "uri", "options", "select", "string"]
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "urlInclude": {
+            "type": "boolean"
+          },
+          "text": {
+            "type": "object",
+            "properties": {
+              "en": {
+                "type": "string"
+              }
+            }
+          },
+          "defaultValue": {
+            "type": "string"
+          },
+          "validator": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["key", "type", "text"]
+      }
+    }
+  },
+  "required": ["version", "identifier", "title", "host", "author"]
 }
