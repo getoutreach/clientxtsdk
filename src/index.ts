@@ -37,6 +37,11 @@ import { LoadingContext } from './context/LoadingContext';
 export * from './context/AccountContext';
 export * from './context/ContextParam';
 export * from './context/CustomContext';
+
+export * from './context/ExternalProspectContext';
+export * from './context/ExternalProspectProvider';
+export * from './context/ExternalProspectUtils';
+
 export * from './context/LoadingContext';
 export * from './context/OpportunityContext';
 export * from './context/OutreachContext';
