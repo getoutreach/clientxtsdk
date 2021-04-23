@@ -11,7 +11,7 @@ export interface PackedProvider {
   lo?: Date | null;
 }
 
-export default class externalProspectUtils {
+export class ExternalProspectUtils {
   /**
    * Packs the contextual provider information to a shorter format
    * which is more suitable for url usage.
@@ -21,7 +21,7 @@ export default class externalProspectUtils {
    * @returns {string}
    * @memberof ExternalProspectUtils
    */
-  public static pack(contexts: ExternalProspectContext[]): string {
+  public static pack = (contexts: ExternalProspectContext[]): string => {
     const packedProviders: PackedProvider[] = [];
     contexts.forEach((context) => {
       packedProviders.push({
@@ -36,7 +36,7 @@ export default class externalProspectUtils {
     });
 
     return JSON.stringify(packedProviders);
-  }
+  };
 
   /**
    * Unpacks the packed format of the external prospect information

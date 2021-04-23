@@ -3,7 +3,7 @@ import { ProspectContextKeys } from '../store/keys/ProspectContextKeys';
 import { ContextParam } from './ContextParam';
 import { CustomContext } from './CustomContext';
 import { ExternalProspectContext } from './ExternalProspectContext';
-import externalProspectUtils from './ExternalProspectUtils';
+import { ExternalProspectUtils } from './ExternalProspectUtils';
 
 export class ProspectContext extends CustomContext {
   /**
@@ -103,7 +103,7 @@ export class ProspectContext extends CustomContext {
         this.title = param.value;
         break;
       case ProspectContextKeys.EXTERNAL:
-        this.externalInfo = externalProspectUtils.unpack(param.value);
+        this.externalInfo = ExternalProspectUtils.unpack(param.value);
         break;
       case ProspectContextKeys.CUSTOM_FIELD_1:
         this.customField1 = param.value;

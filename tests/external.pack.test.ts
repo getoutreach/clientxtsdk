@@ -1,5 +1,5 @@
 import { ExternalProspectContext, ExternalProspectProvider } from '../src';
-import externalProspectUtils from '../src/context/ExternalProspectUtils';
+import { ExternalProspectUtils } from '../src/context/ExternalProspectUtils';
 
 describe('ExternalProspectProviders tests', () => {
   test('pack/unpack works fine', () => {
@@ -25,8 +25,8 @@ describe('ExternalProspectProviders tests', () => {
       },
     ];
 
-    const packedContext = externalProspectUtils.pack(externalContexts);
-    const unpackedContext = externalProspectUtils.unpack(packedContext);
+    const packedContext = ExternalProspectUtils.pack(externalContexts);
+    const unpackedContext = ExternalProspectUtils.unpack(packedContext);
 
     expect(externalContexts).toStrictEqual(unpackedContext);
   });

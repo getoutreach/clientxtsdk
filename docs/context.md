@@ -6,11 +6,15 @@ Table of content:
 - [Account contextual information](#account-contextual-information)
 - [Opportunity contextual information](#opportunity-contextual-information)
 - [Prospect contextual information](#prospect-contextual-information)
+  - [Prospect external information](#prospect-external-information)
+    - [External information payload](#external-information-payload)
+    - [Accessing external information from SDK](#accessing-external-information-from-sdk)
+    - [External information from URL](#external-information-from-url)
 - [User contextual information](#user-contextual-information)
 
 Every addon can request one or more contextual values describing the current Outreach user.
 
-The properties are grouped in for groups: account, opportunity, prospect and user.
+The properties are grouped into four groups: account, opportunity, prospect, and user.
 
 *In case you would like to have additional contextual properties, please contact us on **cxt-sdk@outreach.io.***
 
@@ -30,9 +34,9 @@ Our end goal is to provide contextual access to any of the properties available 
 
 ## Opportunity contextual information
 
-If an addon needs contextual information about the current opportunity Outreach user is looking at, it will need to add to manifest one or more opportunity properties.
+If an addon needs contextual information about the current opportunity the Outreach user is looking at, it will need to add to manifest one or more opportunity properties.
 
-Our end goal is to provide contextual access to any of the properties available through the [Outreach API](https://api.outreach.io/api/v2/docs#opportunity), but at the moment we support in [SDK](../src/store/keys/OpportunityContextKeys.ts) next properties:
+Our end goal is to provide contextual access to any of the properties available through the [Outreach API](https://api.outreach.io/api/v2/docs#opportunity), but at the moment, we support in [SDK](../src/store/keys/OpportunityContextKeys.ts) next properties:
 
 - **opp.amnt** The amount the opportunity is worth.
 - **opp.desc** A description of the opportunity.
@@ -49,7 +53,7 @@ Our end goal is to provide contextual access to any of the properties available 
 
 If an addon needs contextual information about the current prospect Outreach user is looking at, it will need to add to manifest one or more prospect properties.
 
-Our end goal is to provide contextual access to any of the properties available through the [Outreach API](https://api.outreach.io/api/v2/docs#prospect), but at the moment we support in [SDK](../src/store/keys/ProspectContextKeys.ts) next properties:
+Our end goal is to provide contextual access to any of the properties available through the [Outreach API](https://api.outreach.io/api/v2/docs#prospect), but at the moment, we support in [SDK](../src/store/keys/ProspectContextKeys.ts) next properties:
 
 - **pro.avail** The date and time the prospect is available to contact again.
 - **pro.comp** The name of the prospect company. If associated with an account, this is the name of the account. (e.g. Acme International).
@@ -57,20 +61,57 @@ Our end goal is to provide contextual access to any of the properties available 
 - **pro.loc** The locality of the prospect's company.
 - **pro.id** Prospect id
 - **pro.tags** A list of tag values associated with the account (e.g. ["Interested", "2017 Expo"]).
-- **pro.tzone** The prospect's current timezone, preferably in the IANA format (e.g. "America/LosAngeles").
+- **pro.tzone** The prospect's current timezone, preferably in the IANA format (e.g., "America/LosAngeles").
 - **pro.title** The title of the prospect.
 - **pro.csf1** to **pro.csf120** the value of the (1-120) prospect's custom field.
+
+### Prospect external information
+
+Every Outreach user can have one or more plugins installed and connect Outreach with Salesforce, Dynamics and other providers. We have a dedicated manifest key **pro.ext** to receive this external prospect information, which addon creators select in the manifest when addon needs to get this external prospect information.
+
+#### External information payload
+
+The value of this property is a complex object array, where each one of the array items represents information of one of the plugins. For example, if Outreach user has installed plugins for Salesforce and Dynamics, the array will have two objects with prospect information in each one of these external systems.
+This external information object has a few external contextual properties:
+
+- **enabled**   is plugin intergation enabled?
+- **id**   external prospect id  (e.g. 00Q090000030WR6EAM)
+- **name**  external prospect name
+- **type**  external prospect type (e.g. LEAD)
+- **provider**   1 - Salesforce, 2 - Salesforce (sandbox), 3 - Dynamics
+- **lastInbound**  Last date when the prospect data are synced to Outreach from external system
+- **lastOutbound** Last date when the prospect data are synced to the external system from Outreach
+
+#### Accessing external information from SDK
+
+This information is a standard part of the [initialization Outreach context](https://github.com/getoutreach/clientxtsdk/blob/main/docs/sdk.md#outreach-context) external info property
+
+ctx.prospect.externalInfo : [ExternalProspectContext](https://github.com/getoutreach/clientxtsdk/blob/main/src/context/ExternalProspectContext.ts)
+
+#### External information from URL
+
+To reduce the length of the URL, external information is packed to the shorter format by using the **pack()** function of [ExternalProspectUtils](https://github.com/getoutreach/clientxtsdk/blob/main/src/context/ExternalProspectUtils.ts).
+
+The value is JSON serialized form of the contextual array with all the property names being abbreviated. To read the values addon creator has to use either **unpack()** function from the ExternalProspectUtils or manually deserialize the array and read the values using abbreviated property names.
+
+- **enabled**   -> e
+- **id**   -> i
+- **name**  -> n
+- **type**  -> t
+- **provider**   -> p
+- **lastInbound**  -> li
+- **lastOutbound** -> lo
 
 ## User contextual information
 
 If an addon needs contextual information about the current Outreach user, it will need to add to manifest one or more user properties.
 
-Our end goal is to provide contextual access to any of the properties available through the [Outreach API](https://api.outreach.io/api/v2/docs#user), but at the moment we support in [SDK](../src/store/keys/UserContextKeys.ts) next properties:
+Our end goal is to provide contextual access to any of the properties available through the [Outreach API](https://api.outreach.io/api/v2/docs#user), but at the moment, we support in [SDK](../src/store/keys/UserContextKeys.ts) next properties:
 
 - **usr.email** The email address of the user.
 - **usr.fname** The first name of the user.
 - **usr.id** user id.
 - **ust.lname** The last name of the user.
-- **usr.tit** The user's job title (e.g. "Staff Accountant").
+- **usr.tit** The user's job title (e.g., "Staff Accountant").
 - **usr.uname** A reader-friendly unique identifier of the user.
 - **usr.csf1** to **usr.csf5** the value of the (1-5) user's custom field.
