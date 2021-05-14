@@ -103,7 +103,7 @@ export class ProspectContext extends CustomContext {
         this.title = param.value;
         break;
       case ProspectContextKeys.EMAILS:
-        this.emails = JSON.parse(param.value) as string[];
+        this.emails = param.value.split(',');
         break;
       case ProspectContextKeys.EXTERNAL:
         this.externalInfo = ExternalProspectUtils.unpack(param.value);
