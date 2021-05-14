@@ -22,6 +22,12 @@ export enum ProspectContextKeys {
    * The locality of prospect’s company.
    */
   COMPANY_LOCALITY = 'pro.loc',
+
+  /**
+   * Collection of prospect emails
+   */
+  EMAILS = 'pro.emails',
+
   /**
    * Prospect id
    */
