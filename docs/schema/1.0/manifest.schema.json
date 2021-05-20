@@ -124,7 +124,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["number", "date", "uri", "options", "select", "string"]
+            "enum": ["number", "date", "url", "options", "select", "string"]
           },
           "required": {
             "type": "boolean"
