@@ -1,29 +1,19 @@
-<!-- omit in toc -->
-# Addon page host requirements
+# Query parameters parsing
 
-This document outlines the page's general add-on hosting requirements defined in [manifest.url](manifest.md#url). Outreach will create an iframe for the add-on and set its src property to this URL. Thus, the URL response needs to fulfill a few simple requirements for proper add-on functionality.
+Any time when the Outreach app loads an addon, it will set as iframe source an URL created out of:
 
-Table of content:
+- host.URL value [defined in the manifest](manifest.md#url)
+- query parameters representing [context values of current Outreach user](manifest.md#context) also defined in the manifest (e.g. "opp.id")
+- [config parameters](configuration.md) (if any) which have [urlInclude](configuration.md##urlinclude) property enabled.
+- query params which are always sent regardless of the manifest:
+  - locale='en',
+  - theme='light'
+  - uid={usr.id}
 
-- [Content Security Policies (CSP)](#content-security-policies-csp)
-- [Valid response codes](#valid-response-codes)
-- [Expected response times](#expected-response-times)
+That's how the resulting URL which Outreach will set as a source of iframe will be something like this:
 
-## Content Security Policies (CSP)
+```http
+    https://addon-host.com/something?locale=en&uid=a1234&opp.id=123456
+```
 
-Response served from manifest URL address has to enable embedding the page content. The most secure way to achieve that is utilizing [framew ancestor](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors) policy, which explicitly defines what domains are allowed to host an iframe that will load the add-on page.
-
-That is why the response needs to have the next header:
-
-content-security-policy: frame-ancestor 'self' *.outreach.io
-
-## Valid response codes
-
-In most cases, the response will contain 200 (OK) status code, but as described in [url parsing](URL-parsing.md) document, it can sometimes result in 404 (NOT FOUND) status code (add-on host has no content to serve for provided Outreach context) and 302 (FOUND) in case additional Outreach needs to make a further request for the add-on to works properly.
-
-Outreach host will treat any other response codes as invalid and not load the add-on in that case.
-
-## Expected response times
-
-In case the add-on determines that, with a received set of parameters, there is nothing to be shown in the Outreach app, it will just return **404 (NOT FOUND)** response and the Outreach app will hide the add-on in that case.
-An alternative to this "do not show add-on" approach, we recommend, is to create a landing page that will offer the creation of the new add-on resources so the user will be onboarded with that.
+When the add-on loading request comes, the add-on has to parse out of request query parameter values and based on them to return some of the next responses as described in [url parsing section](url-parsing.md)
