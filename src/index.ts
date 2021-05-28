@@ -38,9 +38,9 @@ export * from './context/AccountContext';
 export * from './context/ContextParam';
 export * from './context/CustomContext';
 
-export * from './context/ExternalProspectContext';
-export * from './context/ExternalProspectProvider';
-export * from './context/ExternalProspectUtils';
+export * from './context/ExternalInfoContext';
+export * from './context/ExternalInfoProvider';
+export * from './context/ExternalInfoUtils';
 
 export * from './context/LoadingContext';
 export * from './context/OpportunityContext';

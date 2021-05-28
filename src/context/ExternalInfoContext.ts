@@ -1,26 +1,26 @@
-import { ExternalProspectProvider } from './ExternalProspectProvider';
+import { ExternalInfoProvider } from './ExternalInfoProvider';
 
 /**
  * Definition of the prospect in the external data provider
  * which is linked with Outreach prospect data.
  *
  * @export
- * @class ExternalProspectContext
+ * @class ExternalInfoContext
  */
-export class ExternalProspectContext {
+export class ExternalInfoContext {
   /**
    *Type of external prospect data provider.
    *
-   * @type {ExternalProspectProvider}
-   * @memberof ExternalProspectContext
+   * @type {ExternalInfoProvider}
+   * @memberof ExternalInfoContext
    */
-  public provider: ExternalProspectProvider;
+  public provider: ExternalInfoProvider;
 
   /**
    * Is external provider plugin integration enabled?
    *
    * @type {boolean}
-   * @memberof ExternalProspectContext
+   * @memberof ExternalInfoContext
    */
   public enabled: boolean;
 
@@ -28,7 +28,7 @@ export class ExternalProspectContext {
    * External data provider prospect id
    *
    * @type {string}
-   * @memberof ExternalProspectContext
+   * @memberof ExternalInfoContext
    */
   public id: string;
 
@@ -36,7 +36,7 @@ export class ExternalProspectContext {
    * External data provider prospect name
    *
    * @type {(string | null)}
-   * @memberof ExternalProspectContext
+   * @memberof ExternalInfoContext
    */
   public name?: string | null;
 
@@ -44,7 +44,7 @@ export class ExternalProspectContext {
    * External data provider type.
    *
    * @type {string}
-   * @memberof ExternalProspectContext
+   * @memberof ExternalInfoContext
    */
   public type: string;
 
@@ -52,7 +52,7 @@ export class ExternalProspectContext {
    * The date of last data inbound operation.
    *
    * @type {Date}
-   * @memberof ExternalProspectContext
+   * @memberof ExternalInfoContext
    */
   public lastInbound?: Date | null;
 
@@ -60,7 +60,7 @@ export class ExternalProspectContext {
    * The date of last data outbound operation.
    *
    * @type {(Date | null)}
-   * @memberof ExternalProspectContext
+   * @memberof ExternalInfoContext
    */
   public lastOutbound?: Date | null;
 }

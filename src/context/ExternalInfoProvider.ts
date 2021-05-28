@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-export enum ExternalProspectProvider {
+export enum ExternalInfoProvider {
   /**
    * Usage of this enum value points to application error.
    */

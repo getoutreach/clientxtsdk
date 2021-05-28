@@ -1,15 +1,15 @@
-import { ExternalProspectContext, ExternalProspectProvider } from '../src';
-import { ExternalProspectUtils } from '../src/context/ExternalProspectUtils';
+import { ExternalInfoContext, ExternalInfoProvider } from '../src';
+import { ExternalInfoUtils } from '../src/context/ExternalInfoUtils';
 
-describe('ExternalProspectProviders tests', () => {
+describe('ExternalInfoProviders tests', () => {
   test('pack/unpack works fine', () => {
     const now = new Date();
-    const externalContexts: ExternalProspectContext[] = [
+    const externalContexts: ExternalInfoContext[] = [
       {
         enabled: true,
         id: '123',
         name: null,
-        provider: ExternalProspectProvider.SALESFORCE,
+        provider: ExternalInfoProvider.SALESFORCE,
         type: 'Lead',
         lastInbound: now,
         lastOutbound: null,
@@ -18,15 +18,15 @@ describe('ExternalProspectProviders tests', () => {
         enabled: false,
         id: '456',
         name: 'name',
-        provider: ExternalProspectProvider.SALESFORCE_SANDBOX,
+        provider: ExternalInfoProvider.SALESFORCE_SANDBOX,
         type: 'Test',
         lastInbound: null,
         lastOutbound: now,
       },
     ];
 
-    const packedContext = ExternalProspectUtils.pack(externalContexts);
-    const unpackedContext = ExternalProspectUtils.unpack(packedContext);
+    const packedContext = ExternalInfoUtils.pack(externalContexts);
+    const unpackedContext = ExternalInfoUtils.unpack(packedContext);
 
     expect(externalContexts).toStrictEqual(unpackedContext);
   });

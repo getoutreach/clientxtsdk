@@ -2,8 +2,8 @@ import { ProspectContextKeys } from '../store/keys/ProspectContextKeys';
 // eslint-disable-next-line no-unused-vars
 import { ContextParam } from './ContextParam';
 import { CustomContext } from './CustomContext';
-import { ExternalProspectContext } from './ExternalProspectContext';
-import { ExternalProspectUtils } from './ExternalProspectUtils';
+import { ExternalInfoContext } from './ExternalInfoContext';
+import { ExternalInfoUtils } from './ExternalInfoUtils';
 
 export class ProspectContext extends CustomContext {
   /**
@@ -69,10 +69,10 @@ export class ProspectContext extends CustomContext {
    * Collection of zero or more external provider data current prospect has in external systems
    * which are linked through installed Outreach plugins.
    *
-   * @type {ExternalProspectContext[]}
+   * @type {ExternalInfoContext[]}
    * @memberof ProspectContext
    */
-  externalInfo: ExternalProspectContext[] = [];
+  externalInfo: ExternalInfoContext[] = [];
 
   /**
    * Attempts to initialize the opportunity context with a given parameter.
@@ -106,7 +106,7 @@ export class ProspectContext extends CustomContext {
         this.emails = param.value.split(',');
         break;
       case ProspectContextKeys.EXTERNAL:
-        this.externalInfo = ExternalProspectUtils.unpack(param.value);
+        this.externalInfo = ExternalInfoUtils.unpack(param.value);
         break;
       case ProspectContextKeys.CUSTOM_FIELD_1:
         this.customField1 = param.value;

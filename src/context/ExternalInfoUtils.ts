@@ -1,27 +1,27 @@
-import { ExternalProspectContext } from './ExternalProspectContext';
-import { ExternalProspectProvider } from './ExternalProspectProvider';
+import { ExternalInfoContext } from './ExternalInfoContext';
+import { ExternalInfoProvider } from './ExternalInfoProvider';
 
 export interface PackedProvider {
   e: boolean;
   i: string;
   n?: string | null;
-  p: ExternalProspectProvider;
+  p: ExternalInfoProvider;
   t: string;
   li?: Date | null;
   lo?: Date | null;
 }
 
-export class ExternalProspectUtils {
+export class ExternalInfoUtils {
   /**
    * Packs the contextual provider information to a shorter format
    * which is more suitable for url usage.
    *
    * @static
-   * @param {ExternalProspectContext[]} contexts
+   * @param {ExternalInfoContext[]} contexts
    * @returns {string}
-   * @memberof ExternalProspectUtils
+   * @memberof ExternalInfoUtils
    */
-  public static pack = (contexts: ExternalProspectContext[]): string => {
+  public static pack = (contexts: ExternalInfoContext[]): string => {
     const packedProviders: PackedProvider[] = [];
     contexts.forEach((context) => {
       packedProviders.push({
@@ -41,10 +41,10 @@ export class ExternalProspectUtils {
   /**
    * Unpacks the packed format of the external prospect information
    *
-   * @memberof ExternalProspectContexts
+   * @memberof ExternalInfoUtils
    */
-  public static unpack = (packed: string): ExternalProspectContext[] => {
-    const providers: ExternalProspectContext[] = [];
+  public static unpack = (packed: string): ExternalInfoContext[] => {
+    const providers: ExternalInfoContext[] = [];
     try {
       const packedProviders = JSON.parse(packed) as PackedProvider[];
       packedProviders.forEach((pp) => {
@@ -56,7 +56,7 @@ export class ExternalProspectUtils {
           name: pp.n,
           provider: pp.p,
           type: pp.t,
-        } as ExternalProspectContext);
+        } as ExternalInfoContext);
       });
     } catch (err) {
       console.error("Can't unpack the provider info", { err, packed });
