@@ -6,8 +6,10 @@ Table of content:
 
 - [Manifest file](#manifest-file)
   - [Sample manifest](#sample-manifest)
+  - [Manifest JSON schema](#manifest-json-schema)
   - [Basic manifest properties](#basic-manifest-properties)
     - [identifier](#identifier)
+    - [version](#version)
     - [store](#store)
     - [title](#title)
     - [description](#description)

@@ -67,14 +67,20 @@ Our end goal is to provide contextual access to any of the properties available 
 
 ### Prospect external information
 
-Every Outreach user can have one or more plugins installed and connect Outreach with Salesforce, Dynamics and other providers. We have a dedicated manifest key **pro.ext** to receive this external prospect information, which addon creators select in the manifest when addon needs to get this external prospect information.
+Every Outreach user can have one or more plugins installed and connect Outreach with Salesforce, Dynamics and other providers.
+Once a plugin is installed (Settings/Plugins) and synchronizing data with the external data source prospect page will show a  new section with external prospect information.
+
+![alt text](assets/prospect_plugin.png "Salesforce prospect plugin")
+
+We have on SDK level a dedicated manifest key **pro.ext** created to enable addon creators to receive this external prospect information and use it to link accounts in their own dataset with the outreach account through the same shared external ID used in both systems.
 
 #### External information payload
 
 The value of this property is a complex object array, where each one of the array items represents information of one of the plugins. For example, if Outreach user has installed plugins for Salesforce and Dynamics, the array will have two objects with prospect information in each one of these external systems.
-This external information object has a few external contextual properties:
 
-- **enabled**   is plugin intergation enabled?
+This external information object has a few external contextual properties (all of them shown in Outreach prospect page as shown above):
+
+- **enabled**   is plugin integration enabled?
 - **id**   external prospect id  (e.g. 00Q090000030WR6EAM)
 - **name**  external prospect name
 - **type**  external prospect type (e.g. LEAD)
@@ -82,11 +88,13 @@ This external information object has a few external contextual properties:
 - **lastInbound**  Last date when the prospect data are synced to Outreach from external system
 - **lastOutbound** Last date when the prospect data are synced to the external system from Outreach
 
+As all the other contextual properties you can access this values: either through your own parsing of the addon hosting URL or using the SDK doing that for you automatically.
+
 #### Accessing external information from SDK
 
 This information is a standard part of the [initialization Outreach context](https://github.com/getoutreach/clientxtsdk/blob/main/docs/sdk.md#outreach-context) external info property
 
-ctx.prospect.externalInfo : [ExternalProspectContext](https://github.com/getoutreach/clientxtsdk/blob/main/src/context/ExternalProspectContext.ts)
+simply read the value of **ctx.prospect.externalInfo** : [ExternalProspectContext](https://github.com/getoutreach/clientxtsdk/blob/main/src/context/ExternalProspectContext.ts) and it will contain an array of the all the external information prospect has.
 
 #### External information from URL
 
