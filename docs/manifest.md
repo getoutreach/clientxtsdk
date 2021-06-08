@@ -67,6 +67,7 @@ Here is the sample manifest file of the hello world addon
     }
   },
   "author": {
+    "company": "Contoso Ltd",
     "websiteUrl": "https://addon-host.com/",
     "privacyUrl": "https://addon-host.com/privacy",
     "termsOfUseUrl": "https://addon-host.com/tos"
