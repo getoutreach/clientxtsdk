@@ -34,7 +34,8 @@ export const validate = (manifest: Manifest): string[] => {
     }
     if (!urlValidation(manifest.api.token)) {
       issues.push(
-        'Manifest Api section needs to have a valid token endpoint url. Value: ' + manifest.api.token
+        'Manifest Api section needs to have a valid token endpoint url. Value: ' +
+          manifest.api.token
       );
     }
 
@@ -189,14 +190,25 @@ const hostUrlValidation = (manifest: Manifest): boolean => {
   }
 };
 
-const urlValidation = (url: string): boolean => {
+export const urlValidation = (url: string): boolean => {
   if (!url) {
     return false;
   }
 
   try {
-    const validatedUrl = new URL(url);
-    return validatedUrl.toString() === url;
+    const validatedUrl = new URL(url).toString();
+    if (validatedUrl === url) {
+      return true;
+    }
+
+    if (validatedUrl.endsWith('/')) {
+      const trimmedUrl = validatedUrl.substring(0, validatedUrl.length - 1);
+      if (trimmedUrl === url) {
+        return true;
+      }
+    }
+
+    return false;
   } catch (e) {
     return false;
   }

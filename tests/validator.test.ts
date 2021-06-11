@@ -3,11 +3,10 @@ import { AddonType } from '../src/store/AddonType';
 import { OpportunityContextKeys } from '../src/store/keys/OpportunityContextKeys';
 import { UserContextKeys } from '../src/store/keys/UserContextKeys';
 import { Manifest } from '../src/store/Manifest';
-import {validate} from '../src/sdk/Validator';
+import { urlValidation, validate } from '../src/sdk/Validator';
 import { Scopes } from '../src/store/Scopes';
 
 describe('manifest tests', () => {
- 
   describe('valid', () => {
     test('only valid manifest should be acceptable', () => {
       const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
@@ -22,7 +21,9 @@ describe('manifest tests', () => {
       manifest.author.privacyUrl = 'bananas';
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Author privacy url is invalid url. Value: bananas");
+      expect(issues[0]).toBe(
+        'Author privacy url is invalid url. Value: bananas'
+      );
     });
 
     test('termsOfUseUrl should be url', () => {
@@ -30,7 +31,9 @@ describe('manifest tests', () => {
       manifest.author.termsOfUseUrl = 'bananas';
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Author terms of use url is invalid url. Value: bananas");
+      expect(issues[0]).toBe(
+        'Author terms of use url is invalid url. Value: bananas'
+      );
     });
 
     test('websiteUrl should be url', () => {
@@ -38,16 +41,20 @@ describe('manifest tests', () => {
       manifest.author.websiteUrl = 'bananas';
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Author website url is invalid url. Value: bananas");
+      expect(issues[0]).toBe(
+        'Author website url is invalid url. Value: bananas'
+      );
     });
   });
 
   describe('api', () => {
     test('only valid scope should be acceptable', () => {
-      const manifest: Manifest = JSON.parse(JSON.stringify(invalidScopeTypeManifest));
+      const manifest: Manifest = JSON.parse(
+        JSON.stringify(invalidScopeTypeManifest)
+      );
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Invalid api scope value. Value: BANANA");
+      expect(issues[0]).toBe('Invalid api scope value. Value: BANANA');
     });
 
     test('applicationId should be defined', () => {
@@ -55,34 +62,42 @@ describe('manifest tests', () => {
       delete manifest.api!.applicationId;
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Manifest Api section needs to have applicationId value.");
+      expect(issues[0]).toBe(
+        'Manifest Api section needs to have applicationId value.'
+      );
     });
 
     test('redirectUri should be valid URL', () => {
       const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
       manifest.api!.redirectUri = 'bananas';
-      
+
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Manifest Api section needs to have a valid redirect url. Value: bananas");
+      expect(issues[0]).toBe(
+        'Manifest Api section needs to have a valid redirect url. Value: bananas'
+      );
     });
 
     test('token endpoint should be valid URL', () => {
       const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
       manifest.api!.token = 'bananas';
-      
+
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Manifest Api section needs to have a valid token endpoint url. Value: bananas");
+      expect(issues[0]).toBe(
+        'Manifest Api section needs to have a valid token endpoint url. Value: bananas'
+      );
     });
 
     test('connect endpoint should be valid URL', () => {
       const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
       manifest.api!.connect = 'bananas';
-      
+
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Manifest Api section needs to have a valid connect endpoint url. Value: bananas");
+      expect(issues[0]).toBe(
+        'Manifest Api section needs to have a valid connect endpoint url. Value: bananas'
+      );
     });
   });
 
@@ -92,7 +107,7 @@ describe('manifest tests', () => {
       delete manifest.host;
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Host section is missing.");
+      expect(issues[0]).toBe('Host section is missing.');
     });
 
     test('host.url - only url should be acceptable', () => {
@@ -100,12 +115,12 @@ describe('manifest tests', () => {
       manifest.host.url = 'bananas';
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Host url is invalid. Value: bananas");
+      expect(issues[0]).toBe('Host url is invalid. Value: bananas');
     });
 
     test('host.url - tokenized url should be acceptable', () => {
       const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
-      manifest.host.url = "https://tokenizedurl.com/{opp.id}?uid={usr.id}";
+      manifest.host.url = 'https://tokenizedurl.com/{opp.id}?uid={usr.id}';
       var issues = validate(manifest);
       expect(issues.length).toBe(0);
     });
@@ -115,24 +130,34 @@ describe('manifest tests', () => {
       manifest.host.icon = 'bananas';
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Host icon definition is invalid url. Value: bananas");
+      expect(issues[0]).toBe(
+        'Host icon definition is invalid url. Value: bananas'
+      );
     });
 
     test('only valid type should be acceptable', () => {
-      const manifest: Manifest = JSON.parse(JSON.stringify(invalidHostTypeManifest));
+      const manifest: Manifest = JSON.parse(
+        JSON.stringify(invalidHostTypeManifest)
+      );
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Host type  is invalid. Value: BANANAS");
+      expect(issues[0]).toBe('Host type  is invalid. Value: BANANAS');
     });
   });
 
   describe('context', () => {
     test('only valid contexts should be acceptable', () => {
-      const manifest: Manifest = JSON.parse(JSON.stringify(invalidContextManifest));
+      const manifest: Manifest = JSON.parse(
+        JSON.stringify(invalidContextManifest)
+      );
       var issues = validate(manifest);
       expect(issues.length).toBe(2);
-      expect(issues[0]).toBe("Context key is not one of the valid values. Key: bananas");
-      expect(issues[1]).toBe("Context key is not one of the valid values. Key: apples");
+      expect(issues[0]).toBe(
+        'Context key is not one of the valid values. Key: bananas'
+      );
+      expect(issues[1]).toBe(
+        'Context key is not one of the valid values. Key: apples'
+      );
     });
   });
 
@@ -141,8 +166,13 @@ describe('manifest tests', () => {
       const manifest = JSON.parse(JSON.stringify(invalidStoreTypeManifest));
       var issues = validate(manifest);
       expect(issues.length).toBe(1);
-      expect(issues[0]).toBe("Store value is invalid. Value:BANANAS");
-      
+      expect(issues[0]).toBe('Store value is invalid. Value:BANANAS');
+    });
+  });
+
+  describe('urlValidation', () => {
+    test('url with no trailing / is valid', () => {
+      expect(urlValidation('https://somedomain.com')).toBe(true);
     });
   });
 });
@@ -151,49 +181,49 @@ const validManifest = {
   author: {
     privacyUrl: 'https://someurl.com/privacy',
     termsOfUseUrl: 'https://someurl.com/tos',
-    websiteUrl: 'https://someurl.com/'
+    websiteUrl: 'https://someurl.com/',
   },
   context: [UserContextKeys.ID, OpportunityContextKeys.ID],
   description: {
-    en: 'Some description (en)'
+    en: 'Some description (en)',
   },
   title: {
-    en: 'Some title (en)'
+    en: 'Some title (en)',
   },
   host: {
     icon: 'http://someurl.com/favicon.png',
     type: AddonType.OpportunityTab,
-    url: 'http://someurl.com/host'
+    url: 'http://someurl.com/host',
   },
   identifier: 'addon-identifier',
   store: AddonStore.Personal,
   version: '0.10',
   api: {
     scopes: [Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
-    applicationId: "AbCd123456qW",
-    redirectUri: "https://addon-host.com/hello-world",
+    applicationId: 'AbCd123456qW',
+    redirectUri: 'https://addon-host.com/hello-world',
     token: 'https://someurl.com/token',
-    connect: 'https://someurl.com/connect'
-  }
+    connect: 'https://someurl.com/connect',
+  },
 } as Manifest;
 
 const invalidContextManifest = {
   author: {
     privacyUrl: 'https://someurl.com/privacy',
     termsOfUseUrl: 'https://someurl.com/tos',
-    websiteUrl: 'https://someurl.com/'
+    websiteUrl: 'https://someurl.com/',
   },
   context: ['bananas', OpportunityContextKeys.ID, 'apples'],
   description: {
-    en: 'Some description (en)'
+    en: 'Some description (en)',
   },
   title: {
-    en: 'Some title (en)'
+    en: 'Some title (en)',
   },
   host: {
     icon: 'http://someurl.com/favicon.png',
     type: AddonType.OpportunityTab,
-    url: 'http://someurl.com/host'
+    url: 'http://someurl.com/host',
   },
   identifier: 'addon-identifier',
   store: AddonStore.Personal,
@@ -201,29 +231,29 @@ const invalidContextManifest = {
   api: {
     scopes: [Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
     token: 'https://someurl.com/token',
-    applicationId: "AbCd123456qW",
-    redirectUri: "https://addon-host.com/hello-world",
-    connect: 'https://someurl.com/connect'
-  }
+    applicationId: 'AbCd123456qW',
+    redirectUri: 'https://addon-host.com/hello-world',
+    connect: 'https://someurl.com/connect',
+  },
 } as Manifest;
 
 const invalidHostTypeManifest = {
   author: {
     privacyUrl: 'https://someurl.com/privacy',
     termsOfUseUrl: 'https://someurl.com/tos',
-    websiteUrl: 'https://someurl.com/'
+    websiteUrl: 'https://someurl.com/',
   },
   context: [UserContextKeys.ID, OpportunityContextKeys.ID],
   description: {
-    en: 'Some description (en)'
+    en: 'Some description (en)',
   },
   title: {
-    en: 'Some title (en)'
+    en: 'Some title (en)',
   },
   host: {
     icon: 'http://someurl.com/favicon.png',
     type: 'BANANAS',
-    url: 'http://someurl.com/host'
+    url: 'http://someurl.com/host',
   },
   identifier: 'addon-identifier',
   store: AddonStore.Personal,
@@ -231,29 +261,29 @@ const invalidHostTypeManifest = {
   api: {
     scopes: [Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
     token: 'https://someurl.com/token',
-    applicationId: "AbCd123456qW",
-    redirectUri: "https://addon-host.com/hello-world",
-    connect: 'https://someurl.com/connect'
-  }
+    applicationId: 'AbCd123456qW',
+    redirectUri: 'https://addon-host.com/hello-world',
+    connect: 'https://someurl.com/connect',
+  },
 };
 
 const invalidStoreTypeManifest = {
   author: {
     privacyUrl: 'https://someurl.com/privacy',
     termsOfUseUrl: 'https://someurl.com/tos',
-    websiteUrl: 'https://someurl.com/'
+    websiteUrl: 'https://someurl.com/',
   },
   context: [UserContextKeys.ID, OpportunityContextKeys.ID],
   description: {
-    en: 'Some description (en)'
+    en: 'Some description (en)',
   },
   title: {
-    en: 'Some title (en)'
+    en: 'Some title (en)',
   },
   host: {
     icon: 'http://someurl.com/favicon.png',
     type: AddonType.OpportunityTab,
-    url: 'http://someurl.com/host'
+    url: 'http://someurl.com/host',
   },
   identifier: 'addon-identifier',
   store: 'BANANAS',
@@ -261,38 +291,38 @@ const invalidStoreTypeManifest = {
   api: {
     scopes: [Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
     token: 'https://someurl.com/token',
-    applicationId: "AbCd123456qW",
-    redirectUri: "https://addon-host.com/hello-world",
-    connect: 'https://someurl.com/connect'
-  }
+    applicationId: 'AbCd123456qW',
+    redirectUri: 'https://addon-host.com/hello-world',
+    connect: 'https://someurl.com/connect',
+  },
 };
 
 const invalidScopeTypeManifest = {
   author: {
     privacyUrl: 'https://someurl.com/privacy',
     termsOfUseUrl: 'https://someurl.com/tos',
-    websiteUrl: 'https://someurl.com/'
+    websiteUrl: 'https://someurl.com/',
   },
   context: [UserContextKeys.ID, OpportunityContextKeys.ID],
   description: {
-    en: 'Some description (en)'
+    en: 'Some description (en)',
   },
   title: {
-    en: 'Some title (en)'
+    en: 'Some title (en)',
   },
   host: {
     icon: 'http://someurl.com/favicon.png',
     type: AddonType.OpportunityTab,
-    url: 'http://someurl.com/host'
+    url: 'http://someurl.com/host',
   },
   identifier: 'addon-identifier',
   store: AddonStore.Personal,
   version: '0.10',
   api: {
-    scopes: ['BANANA',Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
+    scopes: ['BANANA', Scopes.ACCOUNTS_ALL, Scopes.CALLS_ALL],
     token: 'https://someurl.com/token',
-    applicationId: "AbCd123456qW",
-    redirectUri: "https://addon-host.com/hello-world",
-    connect: 'https://someurl.com/connect'
-  }
+    applicationId: 'AbCd123456qW',
+    redirectUri: 'https://addon-host.com/hello-world',
+    connect: 'https://someurl.com/connect',
+  },
 } as Manifest;
