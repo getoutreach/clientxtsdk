@@ -29,7 +29,7 @@ export enum AddonCategory {
   /**
    * Direct mail extension category
    */
-  DIRECT_MAIL = 'direct mail',
+  DIRECT_MAIL = 'direct_mail',
 
   /**
    * Inbox extension category
