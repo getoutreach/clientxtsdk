@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { AddonCategory } from './AddonCategory';
 import { AddonStore } from './AddonStore';
 import { ConfigurationItem } from './configuration/ConfigurationItem';
 import { AllContextKeys } from './keys/AllContextKeys';
@@ -39,6 +40,14 @@ export class Manifest {
    * @memberof Manifest
    */
   public author: ManifestAuthor;
+
+  /**
+   * Collection of one or more extension categories.
+   *
+   * @type {AddonCategory[]}
+   * @memberof Manifest
+   */
+  public categories: AddonCategory[] = [];
 
   /**
    * In this section, the addon author defines a list of predefined context information that addon needs from Outreach

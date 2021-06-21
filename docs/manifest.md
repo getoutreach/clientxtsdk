@@ -13,6 +13,7 @@ Table of content:
     - [store](#store)
     - [title](#title)
     - [description](#description)
+    - [categories](#categories)
     - [host](#host)
       - [type](#type)
       - [url](#url)
@@ -72,6 +73,10 @@ Here is the sample manifest file of the hello world addon
     "privacyUrl": "https://addon-host.com/privacy",
     "termsOfUseUrl": "https://addon-host.com/tos"
   },
+  "categories" : [
+    "sales_productivity",
+    "marketing"
+  ],
   "context": [
     "usr.id",
     "opp.id",
@@ -143,6 +148,11 @@ The localized addon title is shown in the addon store and Outreach app as a tab 
 ### description
 
 A localized addon description is shown in the addon store to explain what the addon does and why someone would want to install it.
+
+### categories
+
+A collection of one or more categories to which the addon belongs.
+It is used to enable Outreach customers finding the best extension fulfilling their needs.
 
 ### host
 
