@@ -78,6 +78,7 @@ export * from './store/keys/ClientContextKeys';
 export * from './store/keys/OpportunityContextKeys';
 export * from './store/keys/ProspectContextKeys';
 export * from './store/keys/UserContextKeys';
+export * from './store/AddonCategory';
 export * from './store/AddonStore';
 export * from './store/AddonType';
 export * from './store/LocalizedString';
