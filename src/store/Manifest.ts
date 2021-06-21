@@ -7,6 +7,7 @@ import { LocalizedString } from './LocalizedString';
 import { ManifestApi } from './ManifestApi';
 import { ManifestAuthor } from './ManifestAuthor';
 import { ManifestHost } from './ManifestHost';
+import { ManifestMedia } from './ManifestMedia';
 
 /**
  * Definition of the manifest file containing all the information
@@ -47,7 +48,7 @@ export class Manifest {
    * @type {AddonCategory[]}
    * @memberof Manifest
    */
-  public categories?: AddonCategory[] = [];
+  public categories: AddonCategory[] = [];
 
   /**
    * In this section, the addon author defines a list of predefined context information that addon needs from Outreach
@@ -105,6 +106,17 @@ export class Manifest {
    * @memberof Manifest
    */
   public identifier: string = '';
+
+  /**
+   * Collection of zero or more manifest media file used in extension marketplace
+   * to explain to Outreach user what extension does.
+   *
+   * @see https://github.com/getoutreach/clientxtsdk/blob/master/docs/manifest.md#media
+   *
+   * @type {ManifestMedia}
+   * @memberof Manifest
+   */
+  public medias?: ManifestMedia[] = [];
 
   /**
    * The localized addon title is shown in the addon store and Outreach app as a tab tile.

@@ -81,6 +81,68 @@ export const validate = (manifest: Manifest): string[] => {
     }
   }
 
+  if (!manifest.categories) {
+    issues.push('Categories section is missing');
+  } else {
+    if (!Array.isArray(manifest.categories)) {
+      issues.push('Categories is not an array. Value: ' + manifest.categories);
+    } else {
+      if (manifest.categories.length === 0) {
+        issues.push(
+          'There are no categories selected for addon. Value: ' +
+            manifest.categories
+        );
+      }
+    }
+  }
+
+  if (manifest.medias) {
+    if (!Array.isArray(manifest.medias)) {
+      issues.push(
+        'Medias section value is not a valid array. Value: ' + manifest.medias
+      );
+    } else {
+      const indexes: number[] = [];
+
+      manifest.medias.forEach((media) => {
+        if (!media.uri) {
+          issues.push('Uri value is missing');
+        } else {
+          const validUrl = urlValidation(media.uri);
+          if (!validUrl) {
+            issues.push('Uri value is not a valid url. Value: ' + media.uri);
+          }
+        }
+
+        if (!media.title) {
+          issues.push('Title value is missing');
+        }
+        if (!media.type) {
+          issues.push('Type value is missing');
+        } else {
+          if (media.type !== 'image' && media.type !== 'video') {
+            issues.push('Type value is invalid. Value: ' + media.type);
+          }
+        }
+
+        if (media.index === undefined) {
+          issues.push('Index value is missing');
+        } else {
+          if (isNaN(parseInt(media.index.toString()))) {
+            issues.push('Index value is not a number. Value: ' + media.index);
+          }
+
+          const existingIndex = indexes.findIndex((i) => i === media.index);
+          if (existingIndex > -1) {
+            issues.push('Index value: ' + media.index + ' is not unique');
+          }
+
+          indexes.push(media.index);
+        }
+      });
+    }
+  }
+
   if (!manifest.context) {
     issues.push('Context section is missing');
   } else {

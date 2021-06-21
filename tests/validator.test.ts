@@ -5,6 +5,7 @@ import { UserContextKeys } from '../src/store/keys/UserContextKeys';
 import { Manifest } from '../src/store/Manifest';
 import { urlValidation, validate } from '../src/sdk/Validator';
 import { Scopes } from '../src/store/Scopes';
+import { AddonCategory } from '../src';
 
 describe('manifest tests', () => {
   describe('valid', () => {
@@ -145,6 +146,25 @@ describe('manifest tests', () => {
     });
   });
 
+  describe('categories', () => {
+    test('no categories section is not acceptable', () => {
+      const manifest: any = JSON.parse(JSON.stringify(validManifest));
+      delete manifest.categories;
+      var issues = validate(manifest);
+      expect(issues.length).toBe(1);
+      expect(issues[0]).toBe('Categories section is missing');
+    });
+    test('empty categories section is not acceptable', () => {
+      const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+      manifest.categories = [];
+      var issues = validate(manifest);
+      expect(issues.length).toBe(1);
+      expect(issues[0]).toBe(
+        'There are no categories selected for addon. Value: '
+      );
+    });
+  });
+
   describe('context', () => {
     test('only valid contexts should be acceptable', () => {
       const manifest: Manifest = JSON.parse(
@@ -158,6 +178,157 @@ describe('manifest tests', () => {
       expect(issues[1]).toBe(
         'Context key is not one of the valid values. Key: apples'
       );
+    });
+  });
+
+  describe('medias', () => {
+    test('no medias section is acceptable', () => {
+      const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+      delete manifest.medias;
+      var issues = validate(manifest);
+      expect(issues.length).toBe(0);
+    });
+
+    test('no medias section is acceptable', () => {
+      const manifest: any = JSON.parse(JSON.stringify(validManifest));
+      manifest.medias = 'invalid-media-value';
+      var issues = validate(manifest);
+      expect(issues.length).toBe(1);
+      expect(issues[0]).toBe(
+        'Medias section value is not a valid array. Value: invalid-media-value'
+      );
+    });
+
+    describe('Invalid media file info is not acceptable', () => {
+      test('No uri', () => {
+        const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+        manifest.medias = [
+          {
+            index: 0,
+            title: 'Some title',
+            type: 'image',
+          } as any,
+        ];
+        var issues = validate(manifest);
+        expect(issues.length).toBe(1);
+        expect(issues[0]).toBe('Uri value is missing');
+      });
+
+      test('Uri not a valid url', () => {
+        const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+        manifest.medias = [
+          {
+            index: 0,
+            title: 'Some title',
+            type: 'image',
+            uri: 'not-a-valid-url',
+          },
+        ];
+        var issues = validate(manifest);
+        expect(issues.length).toBe(1);
+        expect(issues[0]).toBe(
+          'Uri value is not a valid url. Value: not-a-valid-url'
+        );
+      });
+
+      test('No index', () => {
+        const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+        manifest.medias = [
+          {
+            title: 'Some title',
+            type: 'image',
+            uri: 'https://www.site.com/image.png',
+          } as any,
+        ];
+        var issues = validate(manifest);
+
+        expect(issues.length).toBe(1);
+        expect(issues[0]).toBe('Index value is missing');
+      });
+      test('Index is not a number', () => {
+        const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+        manifest.medias = [
+          {
+            index: 'not-a-number',
+            title: 'Some title',
+            type: 'image',
+            uri: 'https://www.site.com/image.png',
+          } as any,
+        ];
+        var issues = validate(manifest);
+
+        expect(issues.length).toBe(1);
+        expect(issues[0]).toBe(
+          'Index value is not a number. Value: not-a-number'
+        );
+      });
+      test('Index is duplicated', () => {
+        const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+        manifest.medias = [
+          {
+            index: 0,
+            title: 'Some title',
+            type: 'image',
+            uri: 'https://www.site.com/image.png',
+          },
+          {
+            index: 0,
+            title: 'Some title',
+            type: 'image',
+            uri: 'https://www.site.com/image.png',
+          },
+        ];
+        var issues = validate(manifest);
+
+        expect(issues.length).toBe(1);
+        expect(issues[0]).toBe('Index value: 0 is not unique');
+      });
+
+      test('Title is missing', () => {
+        const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+        manifest.medias = [
+          {
+            index: 0,
+            type: 'image',
+            uri: 'https://www.site.com/image.png',
+          } as any,
+        ];
+        var issues = validate(manifest);
+
+        expect(issues.length).toBe(1);
+        expect(issues[0]).toBe('Title value is missing');
+      });
+
+      test('Type is missing', () => {
+        const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+        manifest.medias = [
+          {
+            index: 0,
+            title: 'Some title',
+            uri: 'https://www.site.com/image.png',
+          } as any,
+        ];
+        var issues = validate(manifest);
+
+        expect(issues.length).toBe(1);
+        expect(issues[0]).toBe('Type value is missing');
+      });
+
+      test('Type is invalid', () => {
+        const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+        manifest.medias = [
+          {
+            index: 0,
+            title: 'Some title',
+            type: 'invalid-type',
+            uri: 'https://www.site.com/image.png',
+          } as any,
+        ];
+        var issues = validate(manifest);
+
+        expect(issues.length).toBe(1);
+        expect(issues[0]).toBe('Type value is invalid. Value: invalid-type');
+      });
     });
   });
 
@@ -183,6 +354,7 @@ const validManifest = {
     termsOfUseUrl: 'https://someurl.com/tos',
     websiteUrl: 'https://someurl.com/',
   },
+  categories: [AddonCategory.ACCOUNT_BASED_MARKETING],
   context: [UserContextKeys.ID, OpportunityContextKeys.ID],
   description: {
     en: 'Some description (en)',
@@ -213,6 +385,7 @@ const invalidContextManifest = {
     termsOfUseUrl: 'https://someurl.com/tos',
     websiteUrl: 'https://someurl.com/',
   },
+  categories: [AddonCategory.ACCOUNT_BASED_MARKETING],
   context: ['bananas', OpportunityContextKeys.ID, 'apples'],
   description: {
     en: 'Some description (en)',
@@ -243,6 +416,7 @@ const invalidHostTypeManifest = {
     termsOfUseUrl: 'https://someurl.com/tos',
     websiteUrl: 'https://someurl.com/',
   },
+  categories: [AddonCategory.ACCOUNT_BASED_MARKETING],
   context: [UserContextKeys.ID, OpportunityContextKeys.ID],
   description: {
     en: 'Some description (en)',
@@ -273,6 +447,7 @@ const invalidStoreTypeManifest = {
     termsOfUseUrl: 'https://someurl.com/tos',
     websiteUrl: 'https://someurl.com/',
   },
+  categories: [AddonCategory.ACCOUNT_BASED_MARKETING],
   context: [UserContextKeys.ID, OpportunityContextKeys.ID],
   description: {
     en: 'Some description (en)',
@@ -303,6 +478,7 @@ const invalidScopeTypeManifest = {
     termsOfUseUrl: 'https://someurl.com/tos',
     websiteUrl: 'https://someurl.com/',
   },
+  categories: [AddonCategory.ACCOUNT_BASED_MARKETING],
   context: [UserContextKeys.ID, OpportunityContextKeys.ID],
   description: {
     en: 'Some description (en)',
