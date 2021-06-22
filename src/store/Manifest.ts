@@ -48,7 +48,7 @@ export class Manifest {
    * @type {AddonCategory[]}
    * @memberof Manifest
    */
-  public categories: AddonCategory[] = [];
+  public categories?: AddonCategory[] = [];
 
   /**
    * In this section, the addon author defines a list of predefined context information that addon needs from Outreach
