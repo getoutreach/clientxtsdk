@@ -58,7 +58,7 @@ export enum OpportunityContextKeys {
    */
   EXTERNAL = 'opp.ext',
 
-  CUSTOM_FIELD_1 = 'opp.csf5',
+  CUSTOM_FIELD_1 = 'opp.csf1',
   CUSTOM_FIELD_2 = 'opp.csf2',
   CUSTOM_FIELD_3 = 'opp.csf3',
   CUSTOM_FIELD_4 = 'opp.csf4',
