@@ -144,6 +144,42 @@ describe('manifest tests', () => {
       expect(issues.length).toBe(1);
       expect(issues[0]).toBe('Host type  is invalid. Value: BANANAS');
     });
+
+    test('host.notificationUrl - is optional property', () => {
+      const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+      delete manifest.host.notificationsUrl;
+      var issues = validate(manifest);
+      expect(issues.length).toBe(0);
+    });
+
+    test('host.notificationUrl - can be defined on addons other then left side menu extensions', () => {
+      const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+      manifest.host.type = AddonType.AccountTab;
+      manifest.host.notificationsUrl = 'https://someurl.com/endpoint';
+      var issues = validate(manifest);
+      expect(issues.length).toBe(1);
+      expect(issues[0]).toBe(
+        'Notifications url can be defined only for left-side-menu addon. Type: tab-account'
+      );
+    });
+
+    test('host.notificationUrl - only url should be acceptable', () => {
+      const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+      manifest.host.type = AddonType.LeftSideMenu;
+      manifest.host.notificationsUrl = 'bananas';
+      var issues = validate(manifest);
+      expect(issues.length).toBe(1);
+      expect(issues[0]).toBe(
+        'Notifications url definition is invalid url. Value: bananas'
+      );
+    });
+
+    test('host.notificationUrl - tokenized url should be acceptable', () => {
+      const manifest: Manifest = JSON.parse(JSON.stringify(validManifest));
+      manifest.host.url = 'https://tokenizedurl.com/{opp.id}?uid={usr.id}';
+      var issues = validate(manifest);
+      expect(issues.length).toBe(0);
+    });
   });
 
   describe('categories', () => {

@@ -204,6 +204,22 @@ export const validate = (manifest: Manifest): string[] => {
     ) {
       issues.push('Host type  is invalid. Value: ' + manifest.host.type);
     }
+
+    if (manifest.host.notificationsUrl) {
+      if (!urlValidation(manifest.host.notificationsUrl)) {
+        issues.push(
+          'Notifications url definition is invalid url. Value: ' +
+            manifest.host.notificationsUrl
+        );
+      }
+
+      if (manifest.host.type !== AddonType.LeftSideMenu) {
+        issues.push(
+          'Notifications url can be defined only for left-side-menu addon. Type: ' +
+            manifest.host.type
+        );
+      }
+    }
   }
 
   if (!manifest.identifier) {
