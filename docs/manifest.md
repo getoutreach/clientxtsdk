@@ -18,6 +18,7 @@ Table of content:
       - [type](#type)
       - [url](#url)
       - [icon](#icon)
+      - [notificationsUrl](#notificationsurl)
       - [environment](#environment)
     - [author](#author)
   - [Integration manifest properties](#integration-manifest-properties)
@@ -60,12 +61,13 @@ Here is the sample manifest file of the hello world addon
   },
   "host": {
     "type": "tab-opportunity",
-    "url": "https://addon-host.com/something",
+    "url": "https://addon-host.com/addon",
     "icon": "https://addon-host.com/icon.png",
     "environment": {
       "fullWidth": true,
       "decoration": "simple"
-    }
+    },
+    "notificationsUrl": "https://addon-host.com/notification",
   },
   "author": {
     "company": "Contoso Ltd",
@@ -224,6 +226,15 @@ http://somesite.com/something/456?oid=123
 #### icon
 
 base64 string represents the icon to be shown in the addon store and (if possible) in the Outreach client.
+
+#### notificationsUrl
+
+This is optional address of the endpoint serving notification centric version of the addon experience.
+
+If defined, this endpoint will serve an empty HTML page with SDK on it, and the Outreach app will load it early without the need for user interaction. 
+That's how addon can update badge decoration and invite Outreach user to open full addon experience as defined in host.url property.
+
+Only addons of AddonType.LeftSideMenu type can only use this property.
 
 #### environment
 
