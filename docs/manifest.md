@@ -172,8 +172,6 @@ _, e.g., **type: "tab-opportunity"** will result with addon being loaded as an a
 - tab-prospect
 - left-side-menu
 
-![alt text](assets/tab-addon-example.png "Tab addon example") ![alt text](assets/left-side-menu-addon-example.png "Left side menu addon example")
-
 #### url
 
 Address where the addon hosting web page is hosted.
@@ -234,7 +232,9 @@ This is optional address of the endpoint serving notification centric version of
 If defined, this endpoint will serve an empty HTML page with SDK on it, and the Outreach app will load it early without the need for user interaction. 
 That's how addon can update badge decoration and invite Outreach user to open full addon experience as defined in host.url property.
 
-Only addons of AddonType.LeftSideMenu type can only use this property.
+Only appllication addons of AddonType.LeftSideMenu type can only use this property.
+
+_To see a sample of how to use this in your addon code look at the [Beacon addon sample addon](https://github.com/getoutreach/clientxtdocs/blob/master/samples/beacon/src/App.tsx)_
 
 #### environment
 
