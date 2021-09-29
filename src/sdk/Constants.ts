@@ -7,7 +7,7 @@ export class Constants {
    * @static
    * @memberof Constants
    */
-  public static AUTH_TOKEN_CACHE_KEY = 'cxt-sdk-token-v2';
+  public static AUTH_TOKEN_CACHE_KEY = 'cxt-sdk-token';
 
   /**
    * Name of the cookie storing the identifier of the
