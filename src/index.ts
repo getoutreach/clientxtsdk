@@ -105,7 +105,7 @@ class AddonsSdk {
   public activeListener: boolean = false;
 
   /**
-   * Setting of the cookie cxt-sdk-user
+   * Setting of the cookie cxt-sdk-user-v2
    *
    * @see https://github.com/getoutreach/clientxtsdk/blob/main/docs/outreach-api.md#caching-the-tokens
    * @memberof AddonsSdk
@@ -798,10 +798,25 @@ class AddonsSdk {
     messageEvent: MessageEvent
   ) => {
     if (hostMessage.type !== AddonMessageType.INIT) {
+      this.logger.log({
+        origin: EventOrigin.ADDON,
+        type: EventType.INTERNAL,
+        level: LogLevel.Debug,
+        message: '[CXT][AddonSdk]::initializeOrigin- NO ORIGIN -> WRONG TYPE',
+        context: [JSON.stringify(hostMessage), JSON.stringify(messageEvent)],
+      });
       return null;
     }
 
     if (!utils.validHostOrigin(messageEvent.origin, this.logger)) {
+      this.logger.log({
+        origin: EventOrigin.ADDON,
+        type: EventType.INTERNAL,
+        level: LogLevel.Debug,
+        message:
+          '[CXT][AddonSdk]::initializeOrigin- NO ORIGIN -> INVALID HOST ORIGIN',
+        context: [JSON.stringify(messageEvent)],
+      });
       return null;
     }
 

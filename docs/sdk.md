@@ -216,7 +216,7 @@ This function addon calls anytime it needs a token to access Outreach API - no n
 
 This function will:
 
-- check if local storage has an item with key **cxt-sdk-token**
+- check if local storage has an item with key **cxt-sdk-token-v2**
 - it will check if the cached access token didn't expire
 - if the cached token is still active, the promise will resolve, and the addon creator will get a token.
 
@@ -238,4 +238,4 @@ If a sdk.getToken() function fails, addon creator has to show some clickable ele
 
 In case of an addon, the creator will call authorize() function after user-provided content. Outreach users will briefly see a popup being loaded and immediately closed after a very brief period.
 
-An important implementation detail of this function is that before a popup is shown, sdk will create a cookie called "cxt-sdk-token" where the user identifier will be stored so the addon host can read that value later for [caching tokens](outreach-api.md#caching-the-tokens) implementation.
+An important implementation detail of this function is that before a popup is shown, sdk will create a cookie called "cxt-sdk-token-v2" where the user identifier will be stored so the addon host can read that value later for [caching tokens](outreach-api.md#caching-the-tokens) implementation.
