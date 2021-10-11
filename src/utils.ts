@@ -34,7 +34,7 @@ export class utils {
 
     return {
       url,
-      params
+      params,
     };
   };
 
@@ -56,7 +56,7 @@ export class utils {
 
     return `${utils.getUrlDomain(hostUrl)}${
       hostUrl.pathname
-    }?${hostParamsString}`;
+    }?${hostParamsString}${hostUrl.hash}`;
   };
 
   public static getUrlDomain = (url: URL): string => {
@@ -69,7 +69,10 @@ export class utils {
     return originHost;
   };
 
-  public static validHostOrigin = (origin: string, logger: ILogger): boolean => {
+  public static validHostOrigin = (
+    origin: string,
+    logger: ILogger
+  ): boolean => {
     if (!origin) {
       return false;
     }
@@ -84,7 +87,7 @@ export class utils {
         type: EventType.INTERNAL,
         level: LogLevel.Trace,
         message: '[CXT][AddonSdk]::validHostOrigin - invalid origin',
-        context: []
+        context: [],
       });
       return false;
     }
@@ -92,7 +95,10 @@ export class utils {
     return true;
   };
 
-  public static validConnectOrigin = (origin: string, logger: ILogger): boolean => {
+  public static validConnectOrigin = (
+    origin: string,
+    logger: ILogger
+  ): boolean => {
     if (!origin) {
       return false;
     }
@@ -107,7 +113,7 @@ export class utils {
         type: EventType.INTERNAL,
         level: LogLevel.Trace,
         message: '[CXT][AddonSdk]::connectOrigin - no manifest api',
-        context: []
+        context: [],
       });
       return false;
     }
@@ -122,8 +128,9 @@ export class utils {
         origin: EventOrigin.ADDON,
         type: EventType.INTERNAL,
         level: LogLevel.Trace,
-        message: '[CXT][AddonSdk]::connectOrigin - invalid connect origin received',
-        context: [origin, connectOrigin]
+        message:
+          '[CXT][AddonSdk]::connectOrigin - invalid connect origin received',
+        context: [origin, connectOrigin],
       });
       return false;
     }
@@ -132,6 +139,6 @@ export class utils {
   };
 
   public static objectValues = (data: any) => {
-    return Object.keys(data).map(key => data[key]);
-  }
+    return Object.keys(data).map((key) => data[key]);
+  };
 }
