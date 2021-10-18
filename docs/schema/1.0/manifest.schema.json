@@ -42,7 +42,14 @@
             "tab-account",
             "tab-opportunity",
             "tab-prospect",
-            "left-side-menu"
+            "left-side-menu",
+            "shell-action",
+            "shell-application",
+            "shell-companion",
+            "shell-knowledge",
+            "shell-tool",
+            "tab-prospect-sidebar",
+            "tab-prospect-action"
           ]
         },
         "url": {
